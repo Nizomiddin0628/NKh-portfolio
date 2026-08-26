@@ -1,0 +1,294 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio 1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "About"
+msgstr "Über mich"
+
+msgid "All"
+msgstr "Alle"
+
+msgid "All projects"
+msgstr "Alle Projekte"
+
+msgid "All work"
+msgstr "Alle Arbeiten"
+
+msgid "Back home"
+msgstr "Zur Startseite"
+
+msgid "Based in"
+msgstr "Standort"
+
+msgid "Built with Django and plain JavaScript."
+msgstr "Gebaut mit Django und reinem JavaScript."
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Context"
+msgstr "Kontext"
+
+msgid "Describe what you are building and where it hurts. I reply to every message, usually within a day."
+msgstr "Beschreiben Sie, was Sie bauen und wo es hakt. Ich antworte auf jede Nachricht, meist innerhalb eines Tages."
+
+msgid "Direct"
+msgstr "Direkt"
+
+msgid "Download as PDF"
+msgstr "Als PDF herunterladen"
+
+msgid "Download file"
+msgstr "Datei herunterladen"
+
+msgid "Each project below has a full write-up: the problem, the constraints, what I chose and what I would change today."
+msgstr "Jedes Projekt hat eine vollständige Beschreibung: das Problem, die Einschränkungen, meine Entscheidungen und was ich heute anders machen würde."
+
+msgid "Education"
+msgstr "Ausbildung"
+
+msgid "Elsewhere"
+msgstr "Anderswo"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Engineering habits"
+msgstr "Engineering-Gewohnheiten"
+
+msgid "Experience"
+msgstr "Berufserfahrung"
+
+msgid "For"
+msgstr "Für"
+
+msgid "Get in touch"
+msgstr "Kontakt aufnehmen"
+
+msgid "Have a system that needs building?"
+msgstr "Haben Sie ein System, das gebaut werden muss?"
+
+msgid "How I work"
+msgstr "Wie ich arbeite"
+
+msgid "Languages"
+msgstr "Sprachen"
+
+msgid "Let's talk about the problem"
+msgstr "Sprechen wir über das Problem"
+
+msgid "Live"
+msgstr "Live"
+
+msgid "My role"
+msgstr "Meine Rolle"
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "Next step"
+msgstr "Nächster Schritt"
+
+msgid "No projects match that filter yet."
+msgstr "Keine Projekte für diesen Filter."
+
+msgid "Open résumé"
+msgstr "Lebenslauf öffnen"
+
+msgid "Period"
+msgstr "Zeitraum"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Recognition"
+msgstr "Auszeichnungen"
+
+msgid "Résumé"
+msgstr "Lebenslauf"
+
+msgid "See the work"
+msgstr "Arbeiten ansehen"
+
+msgid "Selected projects"
+msgstr "Ausgewählte Projekte"
+
+msgid "Selected work"
+msgstr "Ausgewählte Arbeiten"
+
+msgid "Send message"
+msgstr "Nachricht senden"
+
+msgid "Shipped projects"
+msgstr "Ausgelieferte Projekte"
+
+msgid "Skills"
+msgstr "Fähigkeiten"
+
+msgid "Skip to content"
+msgstr "Zum Inhalt springen"
+
+msgid "Something broke on my side"
+msgstr "Auf meiner Seite ist etwas schiefgelaufen"
+
+msgid "Source"
+msgstr "Quellcode"
+
+msgid "Source code is private"
+msgstr "Quellcode ist privat"
+
+msgid "Stack"
+msgstr "Stack"
+
+msgid "Systems I have shipped"
+msgstr "Systeme, die ich gebaut habe"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Tell me what the problem is. I will tell you honestly whether I am the right person for it."
+msgstr "Sagen Sie mir, worin das Problem besteht. Ich sage Ihnen ehrlich, ob ich der Richtige dafür bin."
+
+msgid "The error is logged. Try again in a moment."
+msgstr "Der Fehler wurde protokolliert. Bitte versuchen Sie es gleich erneut."
+
+msgid "The résumé fits on one page and prints cleanly."
+msgstr "Der Lebenslauf passt auf eine Seite und druckt sauber."
+
+msgid "This page moved or never existed"
+msgstr "Diese Seite wurde verschoben oder gab es nie"
+
+msgid "Try the work index, or press ⌘K to jump anywhere."
+msgstr "Probieren Sie die Projektübersicht oder drücken Sie ⌘K."
+
+msgid "Want the short version?"
+msgstr "Lieber die Kurzfassung?"
+
+msgid "Work"
+msgstr "Arbeiten"
+
+msgid "images"
+msgstr "Bilder"
+
+msgid "present"
+msgstr "heute"
+
+msgid "Main"
+msgstr "Haupt"
+
+msgid "Menu"
+msgstr "Menü"
+
+msgid "Toggle theme"
+msgstr "Design wechseln"
+
+msgid "Open command palette"
+msgstr "Befehlspalette öffnen"
+
+msgid "Command palette"
+msgstr "Befehlspalette"
+
+msgid "Jump to a page or project…"
+msgstr "Zu Seite oder Projekt springen…"
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "Nothing found"
+msgstr "Nichts gefunden"
+
+msgid "Pages"
+msgstr "Seiten"
+
+msgid "Projects"
+msgstr "Projekte"
+
+msgid "Links"
+msgstr "Links"
+
+msgid "Home"
+msgstr "Start"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Previous image"
+msgstr "Vorheriges Bild"
+
+msgid "Next image"
+msgstr "Nächstes Bild"
+
+msgid "Image viewer"
+msgstr "Bildanzeige"
+
+msgid "Open image full size"
+msgstr "Bild in voller Größe öffnen"
+
+msgid "Your name"
+msgstr "Ihr Name"
+
+msgid "What is this about?"
+msgstr "Worum geht es?"
+
+msgid "A few sentences are enough."
+msgstr "Ein paar Sätze genügen."
+
+msgid "Spam detected."
+msgstr "Spam erkannt."
+
+msgid "Please write at least 20 characters so I can reply properly."
+msgstr "Bitte schreiben Sie mindestens 20 Zeichen, damit ich sinnvoll antworten kann."
+
+msgid "Thanks — your message arrived. I usually reply within a day."
+msgstr "Danke — Ihre Nachricht ist angekommen. Ich antworte meist innerhalb eines Tages."
+
+msgid "Too many messages from this address. Please try again later."
+msgstr "Zu viele Nachrichten von dieser Adresse. Bitte später erneut versuchen."
+
+msgid "Open to opportunities"
+msgstr "Offen für Angebote"
+
+msgid "Open to selected projects"
+msgstr "Offen für ausgewählte Projekte"
+
+msgid "Not available right now"
+msgstr "Derzeit nicht verfügbar"
+
+msgid "In production"
+msgstr "Im Einsatz"
+
+msgid "Research"
+msgstr "Forschung"
+
+msgid "In progress"
+msgstr "In Arbeit"
+
+msgid "Archived"
+msgstr "Archiviert"
+
+msgid "Problem"
+msgstr "Problem"
+
+msgid "Constraints"
+msgstr "Einschränkungen"
+
+msgid "Decisions & trade-offs"
+msgstr "Entscheidungen & Kompromisse"
+
+msgid "Architecture"
+msgstr "Architektur"
+
+msgid "Outcome"
+msgstr "Ergebnis"
+
+msgid "What I'd do differently"
+msgstr "Was ich anders machen würde"
+
+msgid "Custom section"
+msgstr "Eigener Abschnitt"

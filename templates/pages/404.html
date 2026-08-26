@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}404 — {{ site.full_name }}{% endblock %}
+{% block content %}
+<section class="wrap error-page">
+  <p class="error-page__code">404</p>
+  <h1 style="font-size:var(--step-2)">{% trans "This page moved or never existed" %}</h1>
+  <p class="lead">{% trans "Try the work index, or press ⌘K to jump anywhere." %}</p>
+  <p><a class="btn btn--primary" href="{% url 'core:home' %}">{% trans "Back home" %}</a></p>
+</section>
+{% endblock %}

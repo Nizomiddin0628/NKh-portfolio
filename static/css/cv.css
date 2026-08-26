@@ -1,0 +1,37 @@
+/* ══ CV — ekran va bosma ═════════════════════════════════════════════════ */
+.cv { max-width: 800px; margin-inline: auto; }
+.cv__head { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between;
+  align-items: flex-start; padding-bottom: 1.25rem; border-bottom: 2px solid var(--text); }
+.cv__name { font-size: var(--step-3); }
+.cv__title { color: var(--text-soft); margin-top: 0.3rem; }
+.cv__contacts { display: grid; gap: 0.25rem; font-family: var(--font-mono);
+  font-size: var(--step--2); color: var(--text-soft); text-align: right; }
+.cv__contacts a { text-decoration: none; }
+.cv__section { margin-top: var(--sp-6); }
+.cv__section > h2 { font-size: var(--step-0); text-transform: uppercase;
+  letter-spacing: 0.14em; font-family: var(--font-mono); font-weight: 500;
+  color: var(--text-faint); padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+  margin-bottom: 1.1rem; }
+.cv__entry { margin-bottom: 1.4rem; break-inside: avoid; }
+.cv__entry-head { display: flex; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; align-items: baseline; }
+.cv__entry-title { font-weight: 600; }
+.cv__entry-meta { font-family: var(--font-mono); font-size: var(--step--2); color: var(--text-faint); }
+.cv__entry ul { margin-top: 0.5rem; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
+.cv__entry li { font-size: var(--step--1); color: var(--text-soft); }
+.cv__two { display: grid; gap: 1.25rem; }
+@media (min-width: 700px) { .cv__two { grid-template-columns: 1fr 1fr; } }
+.cv__actions { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: var(--sp-6); }
+
+@media print {
+  @page { margin: 14mm 12mm; }
+  :root { --bg: #fff; --surface: #fff; --text: #000; --text-soft: #333;
+          --text-faint: #666; --border: #ccc; }
+  html, body { background: #fff !important; color: #000 !important; font-size: 10.5pt; }
+  .header, .footer, .field, .grain, .cmdk, .cv__actions, .skip-link, .lightbox { display: none !important; }
+  .section { padding-block: 0 !important; }
+  .cv { max-width: none; }
+  a { text-decoration: none; color: #000; }
+  .cv__section { break-inside: auto; }
+  h2, h3 { break-after: avoid; }
+}

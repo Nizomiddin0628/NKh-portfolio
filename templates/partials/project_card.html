@@ -1,0 +1,29 @@
+{% load i18n site_extras %}
+<a class="card" href="{{ project.get_absolute_url }}" data-reveal
+   data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
+  {% with cover=project.cover %}
+    {% if cover %}
+      <div class="card__img">
+        <img src="{{ cover.image.url }}" alt="{{ cover|tr:'alt_text' }}"
+             {% if cover.width %}width="{{ cover.width }}" height="{{ cover.height }}"{% endif %}
+             loading="lazy" decoding="async">
+        {% if project.image_count > 1 %}<span class="card__count">{{ project.image_count }} {% trans "images" %}</span>{% endif %}
+      </div>
+    {% else %}
+      <div class="card__img card__img--empty"><span>{{ project.title }}</span></div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="card__body">
+    <div class="card__meta">
+      {% if project.period %}<span>{{ project.period }}</span>{% endif %}
+      {% if project.organisation %}<span>· {{ project.organisation }}</span>{% endif %}
+      <span class="badge {% if project.status == 'research' %}badge--research{% elif project.status == 'archived' %}badge--archived{% endif %}">{{ project.get_status_display }}</span>
+    </div>
+    <h3>{{ project.title }}</h3>
+    <p class="card__tagline">{{ project|tr:"tagline" }}</p>
+    <div class="card__tech">
+      {% for tech in project.technologies.all|slice:":5" %}<span class="chip">{{ tech.name }}</span>{% endfor %}
+    </div>
+  </div>
+</a>

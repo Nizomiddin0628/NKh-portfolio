@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n site_extras %}
+{% block title %}{% trans "Work" %} — {{ site.full_name }}{% endblock %}
+{% block description %}{% blocktrans with n=total %}{{ n }} engineering projects: computer vision, backend systems and internal platforms.{% endblocktrans %}{% endblock %}
+
+{% block content %}
+<section class="section wrap">
+  <p class="eyebrow">{% trans "Work" %}</p>
+  <h1 style="margin:1.2rem 0 1rem;max-width:16ch">{% trans "Systems I have shipped" %}</h1>
+  <p class="lead" style="max-width:56ch">
+    {% trans "Each project below has a full write-up: the problem, the constraints, what I chose and what I would change today." %}
+  </p>
+
+  <div class="filters" style="margin-top:2.5rem">
+    <a class="filter {% if not active_tech %}is-active{% endif %}" data-filter="" href="?">{% trans "All" %} <span data-result-count>{{ total }}</span></a>
+    {% for tech in technologies %}
+      <a class="filter {% if active_tech == tech.slug %}is-active{% endif %}"
+         data-filter="{{ tech.slug }}" href="?tech={{ tech.slug }}">{{ tech.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="projects projects--two" data-project-grid>
+    {% for project in projects %}{% include "partials/project_card.html" %}{% empty %}{% endfor %}
+  </div>
+
+  <div class="empty-state" data-filter-empty {% if projects %}hidden{% endif %}>
+    <p>{% trans "No projects match that filter yet." %}</p>
+  </div>
+</section>
+{% endblock %}

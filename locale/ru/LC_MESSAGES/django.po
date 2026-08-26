@@ -1,0 +1,294 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio 1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "About"
+msgstr "Обо мне"
+
+msgid "All"
+msgstr "Все"
+
+msgid "All projects"
+msgstr "Все проекты"
+
+msgid "All work"
+msgstr "Все работы"
+
+msgid "Back home"
+msgstr "На главную"
+
+msgid "Based in"
+msgstr "Локация"
+
+msgid "Built with Django and plain JavaScript."
+msgstr "Сделано на Django и чистом JavaScript."
+
+msgid "Contact"
+msgstr "Контакты"
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Describe what you are building and where it hurts. I reply to every message, usually within a day."
+msgstr "Опишите, что вы строите и где болит. Отвечаю на каждое сообщение, обычно в течение дня."
+
+msgid "Direct"
+msgstr "Напрямую"
+
+msgid "Download as PDF"
+msgstr "Скачать в PDF"
+
+msgid "Download file"
+msgstr "Скачать файл"
+
+msgid "Each project below has a full write-up: the problem, the constraints, what I chose and what I would change today."
+msgstr "У каждого проекта ниже есть полный разбор: проблема, ограничения, что я выбрал и что изменил бы сегодня."
+
+msgid "Education"
+msgstr "Образование"
+
+msgid "Elsewhere"
+msgstr "Другие площадки"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Engineering habits"
+msgstr "Инженерные привычки"
+
+msgid "Experience"
+msgstr "Опыт"
+
+msgid "For"
+msgstr "Для"
+
+msgid "Get in touch"
+msgstr "Написать"
+
+msgid "Have a system that needs building?"
+msgstr "Есть система, которую нужно построить?"
+
+msgid "How I work"
+msgstr "Как я работаю"
+
+msgid "Languages"
+msgstr "Языки"
+
+msgid "Let's talk about the problem"
+msgstr "Давайте обсудим задачу"
+
+msgid "Live"
+msgstr "Онлайн"
+
+msgid "My role"
+msgstr "Моя роль"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "Next step"
+msgstr "Следующий шаг"
+
+msgid "No projects match that filter yet."
+msgstr "Проектов по этому фильтру нет."
+
+msgid "Open résumé"
+msgstr "Открыть резюме"
+
+msgid "Period"
+msgstr "Период"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Recognition"
+msgstr "Признание"
+
+msgid "Résumé"
+msgstr "Резюме"
+
+msgid "See the work"
+msgstr "Смотреть работы"
+
+msgid "Selected projects"
+msgstr "Избранные проекты"
+
+msgid "Selected work"
+msgstr "Избранные работы"
+
+msgid "Send message"
+msgstr "Отправить"
+
+msgid "Shipped projects"
+msgstr "Завершённых проектов"
+
+msgid "Skills"
+msgstr "Навыки"
+
+msgid "Skip to content"
+msgstr "Перейти к содержимому"
+
+msgid "Something broke on my side"
+msgstr "Что-то сломалось на моей стороне"
+
+msgid "Source"
+msgstr "Исходники"
+
+msgid "Source code is private"
+msgstr "Исходный код закрыт"
+
+msgid "Stack"
+msgstr "Стек"
+
+msgid "Systems I have shipped"
+msgstr "Системы, которые я построил"
+
+msgid "Team"
+msgstr "Команда"
+
+msgid "Tell me what the problem is. I will tell you honestly whether I am the right person for it."
+msgstr "Расскажите, в чём задача. Я честно скажу, подхожу ли я для неё."
+
+msgid "The error is logged. Try again in a moment."
+msgstr "Ошибка записана. Попробуйте ещё раз через минуту."
+
+msgid "The résumé fits on one page and prints cleanly."
+msgstr "Резюме умещается на одну страницу и чисто печатается."
+
+msgid "This page moved or never existed"
+msgstr "Страница переехала или никогда не существовала"
+
+msgid "Try the work index, or press ⌘K to jump anywhere."
+msgstr "Откройте список работ или нажмите ⌘K."
+
+msgid "Want the short version?"
+msgstr "Нужна короткая версия?"
+
+msgid "Work"
+msgstr "Работы"
+
+msgid "images"
+msgstr "фото"
+
+msgid "present"
+msgstr "наст. время"
+
+msgid "Main"
+msgstr "Основное"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "Toggle theme"
+msgstr "Сменить тему"
+
+msgid "Open command palette"
+msgstr "Открыть палитру команд"
+
+msgid "Command palette"
+msgstr "Палитра команд"
+
+msgid "Jump to a page or project…"
+msgstr "Перейти к странице или проекту…"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Nothing found"
+msgstr "Ничего не найдено"
+
+msgid "Pages"
+msgstr "Страницы"
+
+msgid "Projects"
+msgstr "Проекты"
+
+msgid "Links"
+msgstr "Ссылки"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Previous image"
+msgstr "Предыдущее фото"
+
+msgid "Next image"
+msgstr "Следующее фото"
+
+msgid "Image viewer"
+msgstr "Просмотр изображений"
+
+msgid "Open image full size"
+msgstr "Открыть изображение полностью"
+
+msgid "Your name"
+msgstr "Ваше имя"
+
+msgid "What is this about?"
+msgstr "О чём речь?"
+
+msgid "A few sentences are enough."
+msgstr "Достаточно нескольких предложений."
+
+msgid "Spam detected."
+msgstr "Обнаружен спам."
+
+msgid "Please write at least 20 characters so I can reply properly."
+msgstr "Напишите хотя бы 20 символов, чтобы я мог ответить по существу."
+
+msgid "Thanks — your message arrived. I usually reply within a day."
+msgstr "Спасибо — сообщение получено. Обычно отвечаю в течение дня."
+
+msgid "Too many messages from this address. Please try again later."
+msgstr "Слишком много сообщений с этого адреса. Попробуйте позже."
+
+msgid "Open to opportunities"
+msgstr "Открыт к предложениям"
+
+msgid "Open to selected projects"
+msgstr "Открыт к отдельным проектам"
+
+msgid "Not available right now"
+msgstr "Сейчас занят"
+
+msgid "In production"
+msgstr "В продакшене"
+
+msgid "Research"
+msgstr "Исследование"
+
+msgid "In progress"
+msgstr "В работе"
+
+msgid "Archived"
+msgstr "Архив"
+
+msgid "Problem"
+msgstr "Проблема"
+
+msgid "Constraints"
+msgstr "Ограничения"
+
+msgid "Decisions & trade-offs"
+msgstr "Решения и компромиссы"
+
+msgid "Architecture"
+msgstr "Архитектура"
+
+msgid "Outcome"
+msgstr "Результат"
+
+msgid "What I'd do differently"
+msgstr "Что бы я сделал иначе"
+
+msgid "Custom section"
+msgstr "Свой раздел"

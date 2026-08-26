@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load i18n site_extras %}
+
+{% block content %}
+<section class="hero wrap">
+  <div class="hero__inner">
+    <span class="hero__name">{{ site.full_name }}{% if site.location %} · {{ site.location }}{% endif %}</span>
+
+    {% if site.availability_is_open %}
+      <span class="status status--open">
+        <span class="status__dot" aria-hidden="true"></span>
+        {{ site|tr:"availability_note"|default:site.get_availability_display }}
+      </span>
+    {% endif %}
+
+    <h1>{% with headline=site|tr:"headline" %}
+      {% if headline %}{{ headline|safe }}{% else %}{{ site.job_title }}{% endif %}
+    {% endwith %}</h1>
+
+    <p class="lead hero__intro">{{ site|tr:"intro" }}</p>
+
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{% url 'projects:list' %}">
+        {% trans "See the work" %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn--ghost" href="{% url 'core:cv' %}">{% trans "Résumé" %}</a>
+      {% if site.email %}<a class="btn btn--quiet" href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}
+    </div>
+
+    <div class="hero__facts">
+      {% if current_role %}
+        <div><div class="fact__value">{{ current_role.company }}</div>
+        <div class="fact__label">{{ current_role|tr:"role" }}</div></div>
+      {% endif %}
+      <div><div class="fact__value">{{ project_total }}</div>
+      <div class="fact__label">{% trans "Shipped projects" %}</div></div>
+      {% for award in awards|slice:":1" %}
+        <div><div class="fact__value">{{ award.year }}</div>
+        <div class="fact__label">{{ award|tr:"title"|truncatechars:34 }}</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if featured_projects %}
+<section class="section wrap" aria-labelledby="work-heading">
+  <p class="eyebrow" data-reveal>{% trans "Selected work" %}</p>
+  <h2 id="work-heading" class="sr-only">{% trans "Selected work" %}</h2>
+  <div class="projects projects--two" style="margin-top:2rem">
+    {% for project in featured_projects %}{% include "partials/project_card.html" %}{% endfor %}
+  </div>
+  <p style="margin-top:2rem" data-reveal>
+    <a class="btn btn--ghost" href="{% url 'projects:list' %}">{% trans "All projects" %} ({{ project_total }})</a>
+  </p>
+</section>
+{% endif %}
+
+{% if principles %}
+<section class="section section--tight wrap" aria-labelledby="how-heading">
+  <p class="eyebrow" data-reveal>{% trans "How I work" %}</p>
+  <h2 id="how-heading" style="margin:1rem 0 1.5rem;max-width:20ch">{% trans "Engineering habits" %}</h2>
+  {% with philosophy=site|tr:"work_philosophy" %}
+    {% if philosophy %}<div class="prose" style="margin-bottom:2rem" data-reveal>{{ philosophy|markdown }}</div>{% endif %}
+  {% endwith %}
+  <div class="principles" data-reveal>
+    {% for p in principles %}
+      <article class="principle">
+        <h3>{{ p|tr:"title" }}</h3>
+        <p>{{ p|tr:"body" }}</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if skill_groups %}
+<section class="section section--tight wrap" aria-labelledby="stack-heading">
+  <p class="eyebrow" data-reveal>{% trans "Stack" %}</p>
+  <h2 id="stack-heading" class="sr-only">{% trans "Stack" %}</h2>
+  <div class="skill-groups" style="margin-top:1.75rem" data-reveal>
+    {% for group in skill_groups %}
+      <div class="skill-group">
+        <h3>{{ group|tr:"name" }}</h3>
+        <ul class="skill-list">
+          {% for skill in group.skills.all %}
+            <li class="skill {% if skill.depth == 'core' %}skill--core{% endif %}">{{ skill.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section wrap">
+  <div class="cta" data-reveal>
+    <p class="eyebrow" style="width:100%">{% trans "Next step" %}</p>
+    <h2 style="max-width:16ch">{% trans "Have a system that needs building?" %}</h2>
+    <p class="lead" style="max-width:52ch">{% trans "Tell me what the problem is. I will tell you honestly whether I am the right person for it." %}</p>
+    <a class="btn btn--primary" href="{% url 'core:contact' %}">{% trans "Get in touch" %}</a>
+  </div>
+</section>
+{% endblock %}

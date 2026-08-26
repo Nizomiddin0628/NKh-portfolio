@@ -1,0 +1,72 @@
+{% load static i18n site_extras %}<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f8fa">
+
+{# Tema FOUC'siz: sahifa chizilishidan oldin qo'llanadi #}
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  })();
+</script>
+
+<title>{% block title %}{{ site.full_name }} — {{ site.job_title }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ site|tr:'meta_description' }}{% endblock %}">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+{% for code, name in LANGUAGES %}
+  <link rel="alternate" hreflang="{{ code }}" href="{% switch_lang_url code %}">
+{% endfor %}
+
+{# Open Graph #}
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:title" content="{% block og_title %}{{ site.full_name }} — {{ site.job_title }}{% endblock %}">
+<meta property="og:description" content="{% block og_description %}{{ site|tr:'meta_description' }}{% endblock %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% block og_image %}{% if site.og_image %}<meta property="og:image" content="{{ site.og_image.url }}">{% endif %}{% endblock %}
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/components.css' %}">
+{% block extra_css %}{% endblock %}
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person",
+ "name":"{{ site.full_name }}","jobTitle":"{{ site.job_title }}",
+ "address":{"@type":"PostalAddress","addressLocality":"{{ site.location }}"},
+ "url":"{{ request.build_absolute_uri }}"}
+</script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
+
+{# Signature: abr maydoni #}
+<div class="field" aria-hidden="true">
+  <div class="field__blob field__blob--a"></div>
+  <div class="field__blob field__blob--b"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+{% include "partials/header.html" %}
+
+<main id="main">{% block content %}{% endblock %}</main>
+
+{% include "partials/footer.html" %}
+{% include "partials/cmdk.html" %}
+
+<script type="module" src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

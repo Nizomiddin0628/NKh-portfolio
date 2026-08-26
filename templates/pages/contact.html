@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n site_extras %}
+{% block title %}{% trans "Contact" %} — {{ site.full_name }}{% endblock %}
+
+{% block content %}
+<section class="section wrap">
+  <p class="eyebrow">{% trans "Contact" %}</p>
+  <h1 style="margin:1.2rem 0 1.2rem;max-width:15ch">{% trans "Let's talk about the problem" %}</h1>
+  <p class="lead" style="max-width:52ch">
+    {% trans "Describe what you are building and where it hurts. I reply to every message, usually within a day." %}
+  </p>
+
+  {% if site.availability_is_open %}
+    <p style="margin-top:1.5rem">
+      <span class="status status--open"><span class="status__dot" aria-hidden="true"></span>
+        {{ site|tr:"availability_note"|default:site.get_availability_display }}</span>
+    </p>
+  {% endif %}
+
+  <div class="skill-groups" style="margin-top:3rem;align-items:start">
+    <div>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert--{{ message.tags }}" style="margin-bottom:1.25rem" role="status">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form class="form" method="post" novalidate>
+        {% csrf_token %}
+        {{ form.website }}
+        {% if form.non_field_errors %}<div class="alert alert--error">{{ form.non_field_errors }}</div>{% endif %}
+
+        {% for field in form.visible_fields %}
+          <div class="field-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span aria-hidden="true" style="color:var(--brass)">*</span>{% endif %}</label>
+            {{ field }}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          </div>
+        {% endfor %}
+
+        <div><button class="btn btn--primary" type="submit">{% trans "Send message" %}</button></div>
+      </form>
+    </div>
+
+    <div data-reveal>
+      <p class="eyebrow">{% trans "Direct" %}</p>
+      <dl class="facts" style="margin-top:1.5rem">
+        {% if site.email %}<div><dt>{% trans "Email" %}</dt><dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>{% endif %}
+        {% if site.phone %}<div><dt>{% trans "Phone" %}</dt><dd><a href="tel:{{ site.phone }}">{{ site.phone }}</a></dd></div>{% endif %}
+        {% if site.location %}<div><dt>{% trans "Based in" %}</dt><dd>{{ site.location }}</dd></div>{% endif %}
+        {% if social_links %}
+          <div><dt>{% trans "Elsewhere" %}</dt>
+            <dd>{% for link in social_links %}<a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a>{% if not forloop.last %} · {% endif %}{% endfor %}</dd>
+          </div>
+        {% endif %}
+      </dl>
+    </div>
+  </div>
+</section>
+{% endblock %}

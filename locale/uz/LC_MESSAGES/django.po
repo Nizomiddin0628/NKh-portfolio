@@ -1,0 +1,294 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio 1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uz\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "About"
+msgstr "Men haqimda"
+
+msgid "All"
+msgstr "Hammasi"
+
+msgid "All projects"
+msgstr "Barcha loyihalar"
+
+msgid "All work"
+msgstr "Barcha ishlar"
+
+msgid "Back home"
+msgstr "Bosh sahifaga"
+
+msgid "Based in"
+msgstr "Joylashuv"
+
+msgid "Built with Django and plain JavaScript."
+msgstr "Django va sof JavaScript'da qurilgan."
+
+msgid "Contact"
+msgstr "Bog'lanish"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Describe what you are building and where it hurts. I reply to every message, usually within a day."
+msgstr "Nima qurayotganingizni va qayeri og'riyotganini yozing. Har bir xabarga javob beraman, odatda bir kun ichida."
+
+msgid "Direct"
+msgstr "To'g'ridan-to'g'ri"
+
+msgid "Download as PDF"
+msgstr "PDF qilib yuklab olish"
+
+msgid "Download file"
+msgstr "Faylni yuklab olish"
+
+msgid "Each project below has a full write-up: the problem, the constraints, what I chose and what I would change today."
+msgstr "Quyidagi har bir loyihaning to'liq tavsifi bor: muammo, cheklovlar, nimani tanladim va bugun nimani o'zgartirardim."
+
+msgid "Education"
+msgstr "Ta'lim"
+
+msgid "Elsewhere"
+msgstr "Boshqa joylarda"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Engineering habits"
+msgstr "Muhandislik odatlari"
+
+msgid "Experience"
+msgstr "Tajriba"
+
+msgid "For"
+msgstr "Kim uchun"
+
+msgid "Get in touch"
+msgstr "Bog'lanish"
+
+msgid "Have a system that needs building?"
+msgstr "Qurilishi kerak bo'lgan tizim bormi?"
+
+msgid "How I work"
+msgstr "Qanday ishlayman"
+
+msgid "Languages"
+msgstr "Tillar"
+
+msgid "Let's talk about the problem"
+msgstr "Keling, muammo haqida gaplashaylik"
+
+msgid "Live"
+msgstr "Jonli"
+
+msgid "My role"
+msgstr "Mening rolim"
+
+msgid "Next"
+msgstr "Keyingi"
+
+msgid "Next step"
+msgstr "Keyingi qadam"
+
+msgid "No projects match that filter yet."
+msgstr "Bu filtrga mos loyiha topilmadi."
+
+msgid "Open résumé"
+msgstr "Rezyumeni ochish"
+
+msgid "Period"
+msgstr "Davr"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Recognition"
+msgstr "E'tirof"
+
+msgid "Résumé"
+msgstr "Rezyume"
+
+msgid "See the work"
+msgstr "Ishlarni ko'rish"
+
+msgid "Selected projects"
+msgstr "Tanlangan loyihalar"
+
+msgid "Selected work"
+msgstr "Tanlangan ishlar"
+
+msgid "Send message"
+msgstr "Xabar yuborish"
+
+msgid "Shipped projects"
+msgstr "Yakunlangan loyihalar"
+
+msgid "Skills"
+msgstr "Ko'nikmalar"
+
+msgid "Skip to content"
+msgstr "Asosiy qismga o'tish"
+
+msgid "Something broke on my side"
+msgstr "Mening tomonimda nimadir buzildi"
+
+msgid "Source"
+msgstr "Kodi"
+
+msgid "Source code is private"
+msgstr "Manba kodi yopiq"
+
+msgid "Stack"
+msgstr "Texnologiyalar"
+
+msgid "Systems I have shipped"
+msgstr "Men qurgan tizimlar"
+
+msgid "Team"
+msgstr "Jamoa"
+
+msgid "Tell me what the problem is. I will tell you honestly whether I am the right person for it."
+msgstr "Muammo nimada ekanini ayting. Men bu ish uchun to'g'ri odam ekanimni halol aytaman."
+
+msgid "The error is logged. Try again in a moment."
+msgstr "Xato yozib olindi. Birozdan keyin qayta urinib ko'ring."
+
+msgid "The résumé fits on one page and prints cleanly."
+msgstr "Rezyume bir betga sig'adi va toza chop etiladi."
+
+msgid "This page moved or never existed"
+msgstr "Bu sahifa ko'chirilgan yoki umuman bo'lmagan"
+
+msgid "Try the work index, or press ⌘K to jump anywhere."
+msgstr "Ishlar ro'yxatini ko'ring yoki istalgan joyga o'tish uchun ⌘K bosing."
+
+msgid "Want the short version?"
+msgstr "Qisqa variant kerakmi?"
+
+msgid "Work"
+msgstr "Ishlar"
+
+msgid "images"
+msgstr "rasm"
+
+msgid "present"
+msgstr "hozir"
+
+msgid "Main"
+msgstr "Asosiy"
+
+msgid "Menu"
+msgstr "Menyu"
+
+msgid "Toggle theme"
+msgstr "Mavzuni almashtirish"
+
+msgid "Open command palette"
+msgstr "Buyruq palitrasini ochish"
+
+msgid "Command palette"
+msgstr "Buyruq palitrasi"
+
+msgid "Jump to a page or project…"
+msgstr "Sahifa yoki loyihaga o'tish…"
+
+msgid "Search"
+msgstr "Qidirish"
+
+msgid "Nothing found"
+msgstr "Hech narsa topilmadi"
+
+msgid "Pages"
+msgstr "Sahifalar"
+
+msgid "Projects"
+msgstr "Loyihalar"
+
+msgid "Links"
+msgstr "Havolalar"
+
+msgid "Home"
+msgstr "Bosh sahifa"
+
+msgid "Close"
+msgstr "Yopish"
+
+msgid "Previous image"
+msgstr "Oldingi rasm"
+
+msgid "Next image"
+msgstr "Keyingi rasm"
+
+msgid "Image viewer"
+msgstr "Rasm ko'ruvchi"
+
+msgid "Open image full size"
+msgstr "Rasmni to'liq o'lchamda ochish"
+
+msgid "Your name"
+msgstr "Ismingiz"
+
+msgid "What is this about?"
+msgstr "Mavzu nima haqida?"
+
+msgid "A few sentences are enough."
+msgstr "Bir necha jumla yetarli."
+
+msgid "Spam detected."
+msgstr "Spam aniqlandi."
+
+msgid "Please write at least 20 characters so I can reply properly."
+msgstr "Iltimos, kamida 20 ta belgi yozing — shunda to'g'ri javob bera olaman."
+
+msgid "Thanks — your message arrived. I usually reply within a day."
+msgstr "Rahmat — xabaringiz yetib keldi. Odatda bir kun ichida javob beraman."
+
+msgid "Too many messages from this address. Please try again later."
+msgstr "Bu manzildan juda ko'p xabar keldi. Keyinroq urinib ko'ring."
+
+msgid "Open to opportunities"
+msgstr "Takliflarga ochiq"
+
+msgid "Open to selected projects"
+msgstr "Tanlangan loyihalarga ochiq"
+
+msgid "Not available right now"
+msgstr "Hozir band"
+
+msgid "In production"
+msgstr "Ishlab turibdi"
+
+msgid "Research"
+msgstr "Tadqiqot"
+
+msgid "In progress"
+msgstr "Jarayonda"
+
+msgid "Archived"
+msgstr "Arxiv"
+
+msgid "Problem"
+msgstr "Muammo"
+
+msgid "Constraints"
+msgstr "Cheklovlar"
+
+msgid "Decisions & trade-offs"
+msgstr "Qarorlar va murosalar"
+
+msgid "Architecture"
+msgstr "Arxitektura"
+
+msgid "Outcome"
+msgstr "Natija"
+
+msgid "What I'd do differently"
+msgstr "Nimani boshqacha qilardim"
+
+msgid "Custom section"
+msgstr "Maxsus bo'lim"

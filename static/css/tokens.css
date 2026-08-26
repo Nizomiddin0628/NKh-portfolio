@@ -1,0 +1,90 @@
+/* ══ Dizayn tizimi — "Abr" ═══════════════════════════════════════════════════
+   Konsepsiya: abr (ikat) matosida ranglar chetlari xiralashib bir-biriga
+   oqib o'tadi. Saytdagi barcha gradientlarda qattiq chegara yo'q.
+   Jez rangi (--brass) faqat holat indikatorlari uchun — 2% dan ko'p emas.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Brend */
+  --turquoise: #18b7be;
+  --turquoise-deep: #0e8f95;
+  --indigo: #3a4fd8;
+  --indigo-deep: #2a3bb0;
+  --brass: #d9a15b;
+
+  /* Light (standart) */
+  --bg: #f7f8fa;
+  --bg-alt: #eef1f5;
+  --surface: #ffffff;
+  --surface-2: #f2f4f8;
+  --border: #e2e7ee;
+  --border-strong: #cfd6e0;
+  --text: #0f1729;
+  --text-soft: #59647a;
+  --text-faint: #8b95a8;
+  --accent: var(--indigo);
+  --accent-contrast: #ffffff;
+  --shadow-sm: 0 1px 2px rgb(15 23 41 / 0.05);
+  --shadow-md: 0 4px 20px -6px rgb(15 23 41 / 0.10);
+  --shadow-lg: 0 24px 60px -20px rgb(15 23 41 / 0.20);
+  --grain-opacity: 0.035;
+  --field-opacity: 0.5;
+
+  /* Tipografika */
+  --font-display: "Unbounded", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Onest", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --step--2: clamp(0.72rem, 0.70rem + 0.08vw, 0.77rem);
+  --step--1: clamp(0.83rem, 0.80rem + 0.15vw, 0.92rem);
+  --step-0:  clamp(1.00rem, 0.96rem + 0.22vw, 1.10rem);
+  --step-1:  clamp(1.20rem, 1.12rem + 0.42vw, 1.48rem);
+  --step-2:  clamp(1.45rem, 1.28rem + 0.85vw, 2.05rem);
+  --step-3:  clamp(1.75rem, 1.42rem + 1.62vw, 2.85rem);
+  --step-4:  clamp(2.10rem, 1.50rem + 3.00vw, 4.00rem);
+
+  /* Masofa */
+  --sp-1: 0.25rem; --sp-2: 0.5rem;  --sp-3: 0.75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem;  --sp-6: 2rem;    --sp-7: 3rem;    --sp-8: 4rem;
+  --sp-9: 6rem;    --sp-10: 8rem;
+
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  --content: 1140px;
+  --content-narrow: 720px;
+  --gutter: clamp(1.15rem, 4vw, 2.5rem);
+
+  /* Harakat — butun saytda bitta easing */
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 150ms;
+  --dur: 300ms;
+  --dur-slow: 500ms;
+
+  --header-h: 64px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c1220;
+  --bg-alt: #0a0f1a;
+  --surface: #131b2c;
+  --surface-2: #182135;
+  --border: #212c42;
+  --border-strong: #2e3c57;
+  --text: #e6eaf2;
+  --text-soft: #97a2b8;
+  --text-faint: #6b7896;
+  --accent: #6f83ff;
+  --accent-contrast: #0c1220;
+  --turquoise: #35d6dd;
+  --indigo: #6f83ff;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 24px -8px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 28px 70px -24px rgb(0 0 0 / 0.8);
+  --grain-opacity: 0.055;
+  --field-opacity: 0.42;
+  color-scheme: dark;
+}

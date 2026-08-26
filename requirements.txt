@@ -1,0 +1,20 @@
+# Asosiy
+Django==5.2.*
+python-dotenv==1.*
+Pillow==11.*
+markdown==3.*
+whitenoise==6.*
+
+# API qatlami
+djangorestframework==3.*
+drf-spectacular==0.28.*
+
+# Production
+gunicorn==23.*
+psycopg[binary]==3.*
+redis==5.*
+
+# Dasturlash (ixtiyoriy)
+# pytest==8.*
+# pytest-django==4.*
+# ruff==0.*

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load i18n site_extras %}
+
+{% block title %}{{ project.title }} — {{ site.full_name }}{% endblock %}
+{% block description %}{{ project|tr:"tagline" }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ project.title }}{% endblock %}
+{% block og_description %}{{ project|tr:"tagline" }}{% endblock %}
+{% block og_image %}{% with c=project.cover %}{% if c %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ c.image.url }}">{% endif %}{% endwith %}{% endblock %}
+
+{% block content %}
+<article>
+  <header class="section section--tight wrap">
+    <p class="mono muted" style="margin-bottom:1.2rem">
+      <a href="{% url 'projects:list' %}" style="text-decoration:none">{% trans "Work" %}</a> / {{ project.title }}
+    </p>
+
+    <div class="card__meta" style="margin-bottom:1rem">
+      {% if project.period %}<span>{{ project.period }}</span>{% endif %}
+      {% if project.organisation %}<span>· {{ project.organisation }}</span>{% endif %}
+      <span class="badge {% if project.status == 'research' %}badge--research{% elif project.status == 'archived' %}badge--archived{% endif %}">{{ project.get_status_display }}</span>
+    </div>
+
+    <h1 style="max-width:18ch">{{ project.title }}</h1>
+    <p class="lead" style="max-width:60ch;margin-top:1.2rem">{{ project|tr:"tagline" }}</p>
+
+    <div class="hero__actions" style="margin-top:1.75rem">
+      {% if project.live_url %}
+        <a class="btn btn--ghost" href="{{ project.live_url }}" target="_blank" rel="noopener">{% trans "Live" %} ↗</a>
+      {% endif %}
+      {% if project.repo_url and not project.is_confidential %}
+        <a class="btn btn--ghost" href="{{ project.repo_url }}" target="_blank" rel="noopener">{% trans "Source" %} ↗</a>
+      {% elif project.is_confidential %}
+        <span class="status"><span class="status__dot" aria-hidden="true"></span>{% trans "Source code is private" %}</span>
+      {% endif %}
+    </div>
+  </header>
+
+  {# ── Galereya ──────────────────────────────────────────────────────────── #}
+  {% if images %}
+  <section class="wrap" style="margin-bottom:clamp(2.5rem,6vw,4.5rem)" data-reveal>
+    <div class="gallery" data-gallery='{{ gallery_json }}'>
+      {% with first=images.0 %}
+        <button class="gallery__main" data-gallery-main type="button"
+                aria-label="{% trans 'Open image full size' %}">
+          <img src="{{ first.image.url }}" alt="{{ first|tr:'alt_text' }}"
+               {% if first.width %}width="{{ first.width }}" height="{{ first.height }}"
+               style="aspect-ratio:{{ first.aspect }}"{% endif %}
+               fetchpriority="high" decoding="async">
+        </button>
+        <p class="gallery__caption" data-gallery-caption>{{ first|tr:"caption" }}</p>
+      {% endwith %}
+
+      {% if images|length > 1 %}
+        <div class="gallery__thumbs">
+          {% for img in images %}
+            <button class="gallery__thumb" data-gallery-thumb data-index="{{ forloop.counter0 }}"
+                    type="button" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                    aria-label="{{ img|tr:'alt_text' }}">
+              <img src="{{ img.image.url }}" alt="" loading="lazy" decoding="async">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  {# ── Asosiy qism ───────────────────────────────────────────────────────── #}
+  <div class="wrap">
+    <div class="case">
+      <div>
+        {% with summary=project|tr:"summary" %}
+          {% if summary %}<div class="prose" style="font-size:var(--step-1)" data-reveal>{{ summary|markdown }}</div>{% endif %}
+        {% endwith %}
+
+        {% if project.metrics.all %}
+          <div class="metrics" style="margin-top:2.5rem" data-reveal>
+            {% for m in project.metrics.all %}
+              <div class="metric">
+                <div class="metric__label">{{ m|tr:"label" }}</div>
+                <div class="metric__values">
+                  {% if m.value_before %}
+                    <span class="metric__before">{{ m.value_before }}</span>
+                    <span class="metric__arrow" aria-hidden="true">→</span>
+                  {% endif %}
+                  <span class="metric__after">{{ m.value_after }}</span>
+                </div>
+                {% with note=m|tr:"note" %}{% if note %}<p class="metric__note">{{ note }}</p>{% endif %}{% endwith %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% for section in project.sections.all %}
+          <section class="case-section" data-reveal>
+            <span class="case-section__kind">{{ section.get_kind_display }}</span>
+            <h2>{{ section.title }}</h2>
+            <div class="prose">{{ section|tr:"body"|markdown }}</div>
+          </section>
+        {% endfor %}
+      </div>
+
+      <aside class="case__aside" data-reveal>
+        <dl class="facts">
+          {% with role=project|tr:"role" %}
+            {% if role %}<div><dt>{% trans "My role" %}</dt><dd>{{ role }}</dd></div>{% endif %}
+          {% endwith %}
+          {% if project.team_size %}
+            <div><dt>{% trans "Team" %}</dt><dd>{% blocktrans count n=project.team_size %}{{ n }} person{% plural %}{{ n }} people{% endblocktrans %}</dd></div>
+          {% endif %}
+          {% if project.period %}<div><dt>{% trans "Period" %}</dt><dd>{{ project.period }}</dd></div>{% endif %}
+          {% if project.organisation %}<div><dt>{% trans "For" %}</dt><dd>{{ project.organisation }}</dd></div>{% endif %}
+          <div>
+            <dt>{% trans "Stack" %}</dt>
+            <dd><div class="card__tech" style="padding-top:0.35rem">
+              {% for tech in project.technologies.all %}<span class="chip">{{ tech.name }}</span>{% endfor %}
+            </div></dd>
+          </div>
+          {% with ctx_text=project|tr:"context" %}
+            {% if ctx_text %}<div><dt>{% trans "Context" %}</dt><dd class="muted">{{ ctx_text }}</dd></div>{% endif %}
+          {% endwith %}
+        </dl>
+      </aside>
+    </div>
+
+    <nav class="pager">
+      <a class="btn btn--quiet" href="{% url 'projects:list' %}">← {% trans "All work" %}</a>
+      {% if next_project %}
+        <a class="btn btn--ghost" href="{% url 'projects:detail' slug=next_project.slug %}">
+          {% trans "Next" %}: {{ next_project.title }} →
+        </a>
+      {% endif %}
+    </nav>
+  </div>
+</article>
+
+{# ── Lightbox ────────────────────────────────────────────────────────────── #}
+<div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="{% trans 'Image viewer' %}">
+  <button class="icon-btn lightbox__close" data-lightbox-close type="button" aria-label="{% trans 'Close' %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  {% if images|length > 1 %}
+    <button class="lightbox__nav lightbox__nav--prev" data-lightbox-prev type="button" aria-label="{% trans 'Previous image' %}">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="lightbox__nav lightbox__nav--next" data-lightbox-next type="button" aria-label="{% trans 'Next image' %}">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  {% endif %}
+  <img src="" alt="">
+  <div class="lightbox__bar">
+    <span data-lightbox-counter></span>
+    <span data-lightbox-caption></span>
+  </div>
+</div>
+{% endblock %}

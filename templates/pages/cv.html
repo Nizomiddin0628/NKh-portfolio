@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load i18n site_extras static %}
+{% block title %}{% trans "Résumé" %} — {{ site.full_name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/cv.css' %}">{% endblock %}
+
+{% block content %}
+<section class="section wrap">
+  <div class="cv">
+    <div class="cv__actions">
+      <button class="btn btn--primary" type="button" onclick="window.print()">
+        {% trans "Download as PDF" %}
+      </button>
+      {% if site.cv_file %}
+        <a class="btn btn--ghost" href="{{ site.cv_file.url }}" download>{% trans "Download file" %}</a>
+      {% endif %}
+      <a class="btn btn--quiet" href="{% url 'core:contact' %}">{% trans "Contact" %}</a>
+    </div>
+
+    <header class="cv__head">
+      <div>
+        <h1 class="cv__name">{{ site.full_name }}</h1>
+        <p class="cv__title">{{ site.job_title }}</p>
+      </div>
+      <div class="cv__contacts">
+        {% if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}
+        {% if site.phone %}<a href="tel:{{ site.phone }}">{{ site.phone }}</a>{% endif %}
+        {% if site.location %}<span>{{ site.location }}</span>{% endif %}
+        {% for link in social_links|slice:":3" %}<span>{{ link.url|cut:"https://" }}</span>{% endfor %}
+      </div>
+    </header>
+
+    {% with intro=site|tr:"intro" %}
+      {% if intro %}<section class="cv__section"><p>{{ intro }}</p></section>{% endif %}
+    {% endwith %}
+
+    {% if experiences %}
+    <section class="cv__section">
+      <h2>{% trans "Experience" %}</h2>
+      {% for job in experiences %}
+        <div class="cv__entry">
+          <div class="cv__entry-head">
+            <span class="cv__entry-title">{{ job|tr:"role" }} — {{ job.company }}</span>
+            <span class="cv__entry-meta">{{ job.start_date|date:"M Y" }} – {% if job.end_date %}{{ job.end_date|date:"M Y" }}{% else %}{% trans "present" %}{% endif %}</span>
+          </div>
+          {% if job.bullets.all %}<ul>{% for b in job.bullets.all %}<li>{{ b|tr:"text" }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if projects %}
+    <section class="cv__section">
+      <h2>{% trans "Selected projects" %}</h2>
+      {% for p in projects %}
+        <div class="cv__entry">
+          <div class="cv__entry-head">
+            <span class="cv__entry-title">{{ p.title }}</span>
+            <span class="cv__entry-meta">{{ p.period }}</span>
+          </div>
+          <p style="font-size:var(--step--1);color:var(--text-soft)">{{ p|tr:"tagline" }}</p>
+          <p class="cv__entry-meta" style="margin-top:0.25rem">{% for t in p.technologies.all %}{{ t.name }}{% if not forloop.last %} · {% endif %}{% endfor %}</p>
+        </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    <div class="cv__two">
+      {% if skill_groups %}
+      <section class="cv__section">
+        <h2>{% trans "Skills" %}</h2>
+        {% for g in skill_groups %}
+          <div class="cv__entry" style="margin-bottom:0.8rem">
+            <span class="cv__entry-title">{{ g|tr:"name" }}</span>
+            <p style="font-size:var(--step--1);color:var(--text-soft)">{% for s in g.skills.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+          </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <div>
+        {% if education %}
+        <section class="cv__section">
+          <h2>{% trans "Education" %}</h2>
+          {% for ed in education %}
+            <div class="cv__entry">
+              <div class="cv__entry-head">
+                <span class="cv__entry-title">{{ ed|tr:"degree" }}</span>
+                <span class="cv__entry-meta">{{ ed.end_year }}</span>
+              </div>
+              <p style="font-size:var(--step--1);color:var(--text-soft)">{{ ed.institution }}{% if ed.grade %} · {{ ed.grade }}{% endif %}</p>
+            </div>
+          {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if languages %}
+        <section class="cv__section">
+          <h2>{% trans "Languages" %}</h2>
+          {% for l in languages %}
+            <div class="cv__entry" style="margin-bottom:0.4rem">
+              <div class="cv__entry-head">
+                <span class="cv__entry-title">{{ l|tr:"name" }}</span>
+                <span class="cv__entry-meta">{{ l|tr:"level" }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if awards %}
+        <section class="cv__section">
+          <h2>{% trans "Recognition" %}</h2>
+          {% for a in awards %}
+            <div class="cv__entry" style="margin-bottom:0.5rem">
+              <div class="cv__entry-head">
+                <span class="cv__entry-title">{{ a|tr:"title" }}</span>
+                <span class="cv__entry-meta">{{ a.year }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </section>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

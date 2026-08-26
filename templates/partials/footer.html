@@ -1,0 +1,13 @@
+{% load i18n %}
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div>
+      <p>{{ site.full_name }} — {{ site.job_title }}</p>
+      <p class="footer__note">{% trans "Built with Django and plain JavaScript." %}</p>
+    </div>
+    <div class="footer__links">
+      {% for link in social_links %}<a href="{{ link.url }}" rel="me noopener" target="_blank">{{ link.label }}</a>{% endfor %}
+      <a href="/api/docs/">API</a>
+    </div>
+  </div>
+</footer>

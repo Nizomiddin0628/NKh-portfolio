@@ -1,0 +1,9 @@
+{% load i18n %}
+<div class="cmdk" data-cmdk='{{ cmdk_json }}' data-empty-text="{% trans 'Nothing found' %}"
+     role="dialog" aria-modal="true" aria-label="{% trans 'Command palette' %}">
+  <div class="cmdk__panel">
+    <input class="cmdk__input" data-cmdk-input type="text"
+           placeholder="{% trans 'Jump to a page or project…' %}" aria-label="{% trans 'Search' %}">
+    <div class="cmdk__list" data-cmdk-list role="listbox"></div>
+  </div>
+</div>

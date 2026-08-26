@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load i18n site_extras %}
+{% block title %}{% trans "About" %} — {{ site.full_name }}{% endblock %}
+
+{% block content %}
+<section class="section wrap">
+  <p class="eyebrow">{% trans "About" %}</p>
+  <h1 style="margin:1.2rem 0 1.5rem;max-width:14ch">{{ site.full_name }}</h1>
+  <div class="prose" style="font-size:var(--step-1)">{{ site|tr:"about"|markdown }}</div>
+</section>
+
+{% if experiences %}
+<section class="section section--tight wrap" aria-labelledby="exp-heading">
+  <p class="eyebrow" data-reveal>{% trans "Experience" %}</p>
+  <h2 id="exp-heading" class="sr-only">{% trans "Experience" %}</h2>
+  <div class="timeline" style="margin-top:2rem">
+    {% for job in experiences %}
+      <article class="timeline__item {% if job.is_current %}timeline__item--current{% endif %}" data-reveal>
+        <p class="timeline__period">
+          {{ job.start_date|date:"M Y" }} — {% if job.end_date %}{{ job.end_date|date:"M Y" }}{% else %}{% trans "present" %}{% endif %}
+          {% with type=job|tr:"employment_type" %}{% if type %} · {{ type }}{% endif %}{% endwith %}
+        </p>
+        <div>
+          <h3 class="timeline__role">{{ job|tr:"role" }}</h3>
+          <p class="timeline__company">
+            {% if job.company_url %}<a href="{{ job.company_url }}" target="_blank" rel="noopener">{{ job.company }}</a>{% else %}{{ job.company }}{% endif %}
+            {% if job.location %} · {{ job.location }}{% endif %}
+          </p>
+        </div>
+        {% with summary=job|tr:"summary" %}{% if summary %}<div class="prose">{{ summary|markdown }}</div>{% endif %}{% endwith %}
+        {% if job.bullets.all %}
+          <ul class="timeline__bullets">
+            {% for b in job.bullets.all %}<li>{{ b|tr:"text" }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if skill_groups %}
+<section class="section section--tight wrap">
+  <p class="eyebrow" data-reveal>{% trans "Stack" %}</p>
+  <div class="skill-groups" style="margin-top:1.75rem" data-reveal>
+    {% for group in skill_groups %}
+      <div class="skill-group">
+        <h3>{{ group|tr:"name" }}</h3>
+        {% with note=group|tr:"note" %}{% if note %}<p class="muted mono" style="margin-bottom:0.7rem">{{ note }}</p>{% endif %}{% endwith %}
+        <ul class="skill-list">
+          {% for skill in group.skills.all %}<li class="skill {% if skill.depth == 'core' %}skill--core{% endif %}">{{ skill.name }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section section--tight wrap">
+  <div class="skill-groups">
+    {% if education %}
+      <div data-reveal>
+        <p class="eyebrow">{% trans "Education" %}</p>
+        <div class="timeline" style="margin-top:1.5rem">
+          {% for ed in education %}
+            <article class="timeline__item">
+              <p class="timeline__period">{{ ed.start_year }} — {{ ed.end_year }}{% if ed.grade %} · {{ ed.grade }}{% endif %}</p>
+              <div>
+                <h3 class="timeline__role" style="font-size:var(--step-0)">{{ ed|tr:"degree" }}</h3>
+                <p class="timeline__company">{{ ed.institution }}{% with f=ed|tr:"field_of_study" %}{% if f %} · {{ f }}{% endif %}{% endwith %}</p>
+              </div>
+              {% with note=ed|tr:"note" %}{% if note %}<div class="prose">{{ note|markdown }}</div>{% endif %}{% endwith %}
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div data-reveal>
+      {% if languages %}
+        <p class="eyebrow">{% trans "Languages" %}</p>
+        <dl class="facts" style="margin-top:1.5rem">
+          {% for lang in languages %}
+            <div><dt>{{ lang|tr:"name" }}</dt><dd>{{ lang|tr:"level" }}</dd></div>
+          {% endfor %}
+        </dl>
+      {% endif %}
+
+      {% if awards %}
+        <p class="eyebrow" style="margin-top:2.5rem">{% trans "Recognition" %}</p>
+        <dl class="facts" style="margin-top:1.5rem">
+          {% for a in awards %}
+            <div>
+              <dt>{{ a.year }}{% if a.issuer %} · {{ a.issuer }}{% endif %}</dt>
+              <dd>{% if a.url %}<a href="{{ a.url }}" target="_blank" rel="noopener">{{ a|tr:"title" }}</a>{% else %}{{ a|tr:"title" }}{% endif %}</dd>
+            </div>
+          {% endfor %}
+        </dl>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="cta" data-reveal>
+    <h2 style="max-width:18ch">{% trans "Want the short version?" %}</h2>
+    <p class="lead">{% trans "The résumé fits on one page and prints cleanly." %}</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{% url 'core:cv' %}">{% trans "Open résumé" %}</a>
+      <a class="btn btn--ghost" href="{% url 'core:contact' %}">{% trans "Contact" %}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

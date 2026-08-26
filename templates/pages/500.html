@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}500{% endblock %}
+{% block content %}
+<section class="wrap error-page">
+  <p class="error-page__code">500</p>
+  <h1 style="font-size:var(--step-2)">{% trans "Something broke on my side" %}</h1>
+  <p class="lead">{% trans "The error is logged. Try again in a moment." %}</p>
+  <p><a class="btn btn--primary" href="/">{% trans "Back home" %}</a></p>
+</section>
+{% endblock %}
