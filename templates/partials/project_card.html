@@ -1,16 +1,19 @@
 {% load i18n site_extras %}
-<a class="card" href="{{ project.get_absolute_url }}" data-reveal
+<a class="card" href="{{ project.get_absolute_url }}"
+   data-tilt data-cursor="view" data-cursor-label="{% trans 'View case' %}"
    data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
   {% with cover=project.cover %}
     {% if cover %}
       <div class="card__img">
         <img src="{{ cover.image.url }}" alt="{{ cover|tr:'alt_text' }}"
              {% if cover.width %}width="{{ cover.width }}" height="{{ cover.height }}"{% endif %}
-             loading="lazy" decoding="async">
-        {% if project.image_count > 1 %}<span class="card__count">{{ project.image_count }} {% trans "images" %}</span>{% endif %}
+             loading="lazy" decoding="async" data-tilt-media>
+        {% if project.image_count > 1 %}
+          <span class="card__count">{{ project.image_count }} {% trans "images" %}</span>
+        {% endif %}
       </div>
     {% else %}
-      <div class="card__img card__img--empty"><span>{{ project.title }}</span></div>
+      <div class="card__img card__img--empty" data-tilt-media><span>{{ project.title }}</span></div>
     {% endif %}
   {% endwith %}
 
@@ -20,10 +23,17 @@
       {% if project.organisation %}<span>· {{ project.organisation }}</span>{% endif %}
       <span class="badge {% if project.status == 'research' %}badge--research{% elif project.status == 'archived' %}badge--archived{% endif %}">{{ project.get_status_display }}</span>
     </div>
-    <h3>{{ project.title }}</h3>
+
+    <h3 class="card__title">{{ project.title }}</h3>
     <p class="card__tagline">{{ project|tr:"tagline" }}</p>
-    <div class="card__tech">
-      {% for tech in project.technologies.all|slice:":5" %}<span class="chip">{{ tech.name }}</span>{% endfor %}
+
+    <div class="card__foot">
+      <div class="card__tech">
+        {% for tech in project.technologies.all|slice:":4" %}<span class="chip">{{ tech.name }}</span>{% endfor %}
+      </div>
+      <span class="card__arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
     </div>
   </div>
 </a>

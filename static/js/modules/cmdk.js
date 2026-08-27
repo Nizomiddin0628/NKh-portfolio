@@ -33,7 +33,7 @@ export function initCmdK() {
   function open() {
     lastFocus = document.activeElement;
     palette.dataset.open = "true";
-    document.body.style.overflow = "hidden";
+    window.scrollLock?.(true);
     input.value = "";
     filtered = items; cursor = 0;
     render();
@@ -42,7 +42,7 @@ export function initCmdK() {
 
   function close() {
     palette.dataset.open = "false";
-    document.body.style.overflow = "";
+    window.scrollLock?.(false);
     lastFocus?.focus();
   }
 

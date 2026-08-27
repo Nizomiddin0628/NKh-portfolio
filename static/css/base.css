@@ -124,6 +124,10 @@ button { cursor: pointer; background: none; border: none; }
   animation: drift-b 41s var(--ease) infinite alternate;
 }
 
+/* JS ishga tushgach harakatni field.js boshqaradi —
+   CSS keyframe'lari bilan to'qnashmasligi uchun o'chiriladi */
+.field[data-js="true"] .field__blob { animation: none; }
+
 @keyframes drift-a {
   from { transform: translate3d(0, 0, 0) scale(1); }
   to   { transform: translate3d(6vw, 7vh, 0) scale(1.14); }
@@ -140,13 +144,7 @@ button { cursor: pointer; background: none; border: none; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ── Skroll reveal ── */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
-}
-[data-reveal].is-visible { opacity: 1; transform: none; }
+/* Reveal holati motion.css da — u yerda JS bilan birga boshqariladi */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

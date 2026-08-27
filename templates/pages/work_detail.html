@@ -7,9 +7,10 @@
 {% block og_title %}{{ project.title }}{% endblock %}
 {% block og_description %}{{ project|tr:"tagline" }}{% endblock %}
 {% block og_image %}{% with c=project.cover %}{% if c %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ c.image.url }}">{% endif %}{% endwith %}{% endblock %}
+{% block progress %}<div class="progress" data-progress aria-hidden="true"></div>{% endblock %}
 
 {% block content %}
-<article>
+<article data-progress-target>
   <header class="section section--tight wrap">
     <p class="mono muted" style="margin-bottom:1.2rem">
       <a href="{% url 'projects:list' %}" style="text-decoration:none">{% trans "Work" %}</a> / {{ project.title }}
@@ -21,7 +22,7 @@
       <span class="badge {% if project.status == 'research' %}badge--research{% elif project.status == 'archived' %}badge--archived{% endif %}">{{ project.get_status_display }}</span>
     </div>
 
-    <h1 style="max-width:18ch">{{ project.title }}</h1>
+    <h1 style="max-width:18ch;view-transition-name:page-title" data-split>{{ project.title }}</h1>
     <p class="lead" style="max-width:60ch;margin-top:1.2rem">{{ project|tr:"tagline" }}</p>
 
     <div class="hero__actions" style="margin-top:1.75rem">
@@ -42,11 +43,12 @@
     <div class="gallery" data-gallery='{{ gallery_json }}'>
       {% with first=images.0 %}
         <button class="gallery__main" data-gallery-main type="button"
+                data-cursor="view" data-cursor-label="{% trans 'Expand' %}"
                 aria-label="{% trans 'Open image full size' %}">
           <img src="{{ first.image.url }}" alt="{{ first|tr:'alt_text' }}"
                {% if first.width %}width="{{ first.width }}" height="{{ first.height }}"
                style="aspect-ratio:{{ first.aspect }}"{% endif %}
-               fetchpriority="high" decoding="async">
+               fetchpriority="high" decoding="async" data-hero-media>
         </button>
         <p class="gallery__caption" data-gallery-caption>{{ first|tr:"caption" }}</p>
       {% endwith %}

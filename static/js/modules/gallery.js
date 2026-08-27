@@ -49,13 +49,13 @@ export function initGallery() {
     lastFocus = document.activeElement;
     render();
     lightbox.dataset.open = "true";
-    document.body.style.overflow = "hidden";
+    window.scrollLock?.(true);
     lightbox.querySelector("[data-lightbox-close]")?.focus();
   }
 
   function close() {
     lightbox.dataset.open = "false";
-    document.body.style.overflow = "";
+    window.scrollLock?.(false);
     lastFocus?.focus();
   }
 

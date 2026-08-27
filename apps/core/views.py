@@ -41,10 +41,8 @@ def home(request):
             .prefetch_related("images", "technologies", "metrics")[:4]
         ),
         "project_total": Project.objects.filter(is_published=True).count(),
-        "principles": Principle.objects.filter(is_published=True),
+        "principles": Principle.objects.filter(is_published=True)[:3],
         "current_role": Experience.objects.filter(is_published=True, end_date__isnull=True).first(),
-        "skill_groups": SkillGroup.objects.prefetch_related("skills"),
-        "awards": Award.objects.all()[:3],
     })
     return render(request, "pages/home.html", ctx)
 

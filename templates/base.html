@@ -24,7 +24,6 @@
   <link rel="alternate" hreflang="{{ code }}" href="{% switch_lang_url code %}">
 {% endfor %}
 
-{# Open Graph #}
 <meta property="og:type" content="{% block og_type %}website{% endblock %}">
 <meta property="og:title" content="{% block og_title %}{{ site.full_name }} — {{ site.job_title }}{% endblock %}">
 <meta property="og:description" content="{% block og_description %}{{ site|tr:'meta_description' }}{% endblock %}">
@@ -34,12 +33,28 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/components.css' %}">
+<link rel="stylesheet" href="{% static 'css/motion.css' %}">
 {% block extra_css %}{% endblock %}
+
+{#
+  Animatsiya kutubxonalari CDN'dan ESM sifatida keladi — build bosqichi yo'q.
+  Ikkalasi ham dinamik import bilan yuklanadi: yetib kelmasa sayt
+  animatsiyasiz, lekin to'liq ishlaydigan holatda qoladi.
+#}
+<script type="importmap">
+{
+  "imports": {
+    "motion": "https://cdn.jsdelivr.net/npm/motion@11.15.0/+esm",
+    "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"
+  }
+}
+</script>
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person",
@@ -52,12 +67,14 @@
 <body>
 <a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
 
-{# Signature: abr maydoni #}
+{# Fon: sichqoncha ortidan suriladigan gradient #}
 <div class="field" aria-hidden="true">
   <div class="field__blob field__blob--a"></div>
   <div class="field__blob field__blob--b"></div>
 </div>
 <div class="grain" aria-hidden="true"></div>
+
+{% block progress %}{% endblock %}
 
 {% include "partials/header.html" %}
 

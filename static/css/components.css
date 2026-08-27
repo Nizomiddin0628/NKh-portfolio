@@ -184,17 +184,37 @@
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); overflow: hidden;
   text-decoration: none; height: 100%;
-  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease),
-              box-shadow var(--dur) var(--ease);
+  position: relative;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-.card:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: var(--shadow-md); }
-.card:hover .card__img img { transform: scale(1.03); }
+.card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-lg); }
+
+/* Hover'da chetidan yumshoq nur o'tadi */
+.card::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--turquoise), var(--indigo));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+  pointer-events: none;
+  z-index: 1;
+}
+.card:hover::before { opacity: 0.55; }
 
 .card__img {
   aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-2);
   border-bottom: 1px solid var(--border); position: relative;
 }
-.card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease); }
+.card__img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.06);
+  transition: transform 700ms var(--ease-out);
+}
 .card__img--empty {
   display: grid; place-items: center;
   background: linear-gradient(135deg,
@@ -210,7 +230,34 @@
   padding: 3px 8px; border-radius: var(--radius-full);
 }
 
-.card__body { padding: var(--sp-5); display: flex; flex-direction: column; gap: 0.7rem; flex: 1; }
+.card__body {
+  padding: var(--sp-5); display: flex; flex-direction: column;
+  gap: 0.7rem; flex: 1; position: relative; z-index: 2;
+}
+
+.card__title { transition: color var(--dur-fast) var(--ease); }
+
+.card__foot {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 1rem; margin-top: auto; padding-top: 0.9rem;
+}
+
+.card__arrow {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--border);
+  color: var(--text-soft);
+  transform: translateX(-6px);
+  opacity: 0;
+  transition: transform 420ms var(--ease-out), opacity 320ms var(--ease-out),
+              background 320ms var(--ease), color 320ms var(--ease),
+              border-color 320ms var(--ease);
+}
+.card__arrow svg { width: 15px; height: 15px; }
+.card:hover .card__arrow {
+  transform: none; opacity: 1;
+  background: var(--text); color: var(--bg); border-color: var(--text);
+}
 .card__meta {
   display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
   font-family: var(--font-mono); font-size: var(--step--2);
@@ -218,7 +265,7 @@
 }
 .card h3 { font-size: var(--step-1); }
 .card__tagline { color: var(--text-soft); font-size: var(--step--1); }
-.card__tech { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: auto; padding-top: 0.6rem; }
+.card__tech { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 
 .chip {
   font-family: var(--font-mono); font-size: var(--step--2);
@@ -532,3 +579,38 @@
   background: linear-gradient(120deg, var(--turquoise), var(--indigo));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+/* ══ Bo'lim sarlavhalari — bir xil ritm ══════════════════════════════════ */
+.section__head {
+  max-width: 44ch;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  display: grid;
+  gap: 0.9rem;
+}
+.section__head h2 { font-size: var(--step-2); }
+.section__head .lead { font-size: var(--step-0); }
+.section__more { margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* Bosh sahifada birinchi kartochka kengroq turadi */
+@media (min-width: 900px) {
+  .projects--two > .card:first-child { grid-column: 1 / -1; }
+  .projects--two > .card:first-child { flex-direction: row; }
+  .projects--two > .card:first-child .card__img {
+    flex: 0 0 52%; aspect-ratio: auto; border-bottom: none;
+    border-right: 1px solid var(--border);
+  }
+  .projects--two > .card:first-child .card__body { justify-content: center; }
+  .projects--two > .card:first-child .card__title { font-size: var(--step-2); }
+}
+
+/* Prinsip raqami */
+.principle { position: relative; }
+.principle__index {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+}
+
+/* CTA ichidagi tipografika */
+.cta h2 { font-size: var(--step-2); max-width: 16ch; }
+.cta .lead { max-width: 52ch; font-size: var(--step-0); }
