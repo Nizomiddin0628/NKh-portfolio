@@ -1,188 +1,124 @@
 /* ══ Harakat qatlami ══════════════════════════════════════════════════════
-   Bu yerda faqat animatsiyaga tegishli narsalar turadi. Layout yoki rang
-   yo'q — shu sababli `prefers-reduced-motion` bilan butun faylni
-   deyarli to'liq o'chirib qo'yish mumkin.
+   Faqat animatsiyaga tegishli uslublar. Layout va rang yo'q — shu sababli
+   `prefers-reduced-motion` bilan deyarli butunlay o'chirib qo'yish mumkin.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Lenis (silliq skroll) ── */
+/* ── Lenis ── */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-/* ── Sahifalar orasidagi o'tish ── */
-@view-transition { navigation: auto; }
-
-::view-transition-old(root) {
-  animation: vt-out 260ms var(--ease-out) both;
-}
-::view-transition-new(root) {
-  animation: vt-in 420ms var(--ease-out) both;
-}
-
-@keyframes vt-out {
-  to { opacity: 0; transform: translateY(-8px); }
-}
-@keyframes vt-in {
-  from { opacity: 0; transform: translateY(14px); }
-}
-
-/* Rasm bir sahifadan ikkinchisiga "uchadi" */
-::view-transition-group(project-media) {
-  animation-duration: 560ms;
-  animation-timing-function: var(--ease-out);
-}
-::view-transition-old(project-media),
-::view-transition-new(project-media) {
-  animation: none;
-  mix-blend-mode: normal;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Sarlavha ham kuzatib boradi */
-::view-transition-group(page-title) {
-  animation-duration: 520ms;
-  animation-timing-function: var(--ease-out);
-}
-
-/* Header va fon o'tish paytida qimirlamaydi */
-.header { view-transition-name: site-header; }
-.field  { view-transition-name: none; }
-
-/* Firefox uchun fallback */
-:root.is-leaving main { opacity: 0; transform: translateY(-6px); }
-:root.is-leaving main {
-  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
-}
-
-/* ── Maxsus kursor ── */
-:root.has-cursor,
-:root.has-cursor a,
-:root.has-cursor button { cursor: none; }
-
-.cursor {
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 300;
+/* ── Sahifa o'tish paneli ── */
+.transition {
+  position: fixed; inset: 0;
+  z-index: 200;
+  visibility: hidden;
   pointer-events: none;
-  mix-blend-mode: difference;
-  opacity: 0;
-  transition: opacity 200ms var(--ease-out);
-  will-change: transform;
+  background: linear-gradient(160deg, var(--indigo), var(--turquoise-deep));
 }
-:root.cursor-active .cursor { opacity: 1; }
-
-.cursor--dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #fff;
+.transition__mark {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(2rem, 7vw, 4.5rem); letter-spacing: -0.05em;
+  color: rgb(255 255 255 / 0.16);
 }
 
-.cursor--ring {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  border: 1px solid rgb(255 255 255 / 0.7);
-  display: grid;
-  place-items: center;
-  transition: width 320ms var(--ease-out), height 320ms var(--ease-out),
-              background 320ms var(--ease-out), border-color 200ms var(--ease-out),
-              opacity 200ms var(--ease-out);
-}
-.cursor--ring[data-mode="link"] {
-  width: 52px; height: 52px;
-  background: rgb(255 255 255 / 0.12);
-  border-color: transparent;
-}
-.cursor--ring[data-mode="view"] {
-  width: 92px; height: 92px;
-  background: #fff;
-  border-color: transparent;
-  mix-blend-mode: normal;
-}
-.cursor--ring[data-pressed="true"] { transform-origin: center; }
-
-.cursor__label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #0c1220;
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
-  white-space: nowrap;
-}
-.cursor--ring[data-mode="view"] .cursor__label {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* ── So'zma-so'z chiqadigan sarlavha ── */
-.split__word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
-}
-.split__inner {
-  display: inline-block;
+/* ── SplitText qatorlari ──
+   Plagin har qatorga `.line` beradi; `mask: "lines"` esa uning ustiga
+   `overflow: hidden` bo'lgan o'rovchi qo'yadi. Descender'lar (g, y, q)
+   kesilmasligi uchun ozgina joy qoldiramiz. */
+[data-split] .line {
+  display: block;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
   will-change: transform;
 }
 
-/* ── Reveal boshlang'ich holati ──
-   JS yuklanmasa yoki xato bersa kontent baribir ko'rinishi kerak,
-   shuning uchun yashirish faqat `.is-ready` sinfi qo'yilganda ishlaydi. */
-:root.is-ready [data-reveal]:not(.is-visible) { opacity: 0; }
-:root.is-ready [data-reveal-group]:not(.is-visible) > * { opacity: 0; }
+/* ── Parallaks ── */
+[data-parallax] { overflow: hidden; }
+[data-parallax] img { will-change: transform; }
 
-/* ── Kartochka egilishi ── */
-[data-tilt] {
-  transform-style: preserve-3d;
-  will-change: transform;
+/* ── Sticky stack ── */
+@media (min-width: 900px) {
+  [data-stack] { display: block; }
+  [data-stack-item] {
+    position: sticky;
+    top: calc(var(--header-h) + 3rem);
+    will-change: transform;
+  }
+  [data-stack-item] + [data-stack-item] { margin-top: 1.25rem; }
 }
-[data-tilt-media] { will-change: transform; }
-
-/* ── Magnit tugmalar ── */
-[data-magnetic] { will-change: transform; }
 
 /* ── O'qish progressi ── */
 .progress {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  z-index: 80;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px; z-index: 80;
+  transform: scaleX(0); transform-origin: 0 50%;
   background: linear-gradient(90deg, var(--turquoise), var(--indigo));
   will-change: transform;
 }
 
-/* ── Havola tagidagi chiziq chapdan o'ngga ── */
-.link-underline {
-  position: relative;
-  text-decoration: none;
+/* ── Marquee — cheksiz aylanuvchi lenta ──
+   Ikki nusxa yonma-yon; birinchisi to'liq siljigach ikkinchisi aynan
+   o'sha joyda turadi, shuning uchun uzilish sezilmaydi. */
+.marquee {
+  --marquee-duration: 42s;
+  overflow: hidden;
+  padding-block: 1.1rem;
+  border-block: 1px solid var(--border);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -2px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: 100% 50%;
-  transition: transform 420ms var(--ease-out);
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration) linear infinite;
 }
-.link-underline:hover::after {
-  transform: scaleX(1);
-  transform-origin: 0 50%;
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__group {
+  display: flex; align-items: center; gap: 2.5rem;
+  padding-right: 2.5rem;
+  flex: none;
+}
+.marquee__item {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-faint);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease);
+}
+.marquee__item:hover { color: var(--text); }
+.marquee__dot { color: var(--brass); font-size: 7px; }
+
+@keyframes marquee {
+  to { transform: translate3d(-50%, 0, 0); }
 }
 
-/* ── Hammasini o'chirish ── */
+/* ── Magnit tugmalar ── */
+[data-magnetic] { will-change: transform; }
+
+/* ── Havola tagidagi chiziq chapdan o'ngga ── */
+.link-underline { position: relative; text-decoration: none; }
+.link-underline::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -2px;
+  height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: 100% 50%;
+  transition: transform 460ms var(--ease-out);
+}
+.link-underline:hover::after { transform: scaleX(1); transform-origin: 0 50%; }
+
+/* ── Animatsiya yo'q holati ──
+   GSAP yuklanmasa yoki foydalanuvchi harakatni o'chirgan bo'lsa,
+   hech narsa yashirin qolmasligi kerak. */
+:root.no-anim [data-reveal],
+:root.no-anim [data-reveal-group] > * { opacity: 1 !important; transform: none !important; }
+:root.no-anim .transition { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  @view-transition { navigation: none; }
-  .cursor, .progress { display: none; }
-  :root.is-ready [data-reveal],
-  :root.is-ready [data-reveal-group] > * { opacity: 1 !important; }
-  :root.has-cursor, :root.has-cursor a, :root.has-cursor button { cursor: auto; }
+  .transition, .progress { display: none !important; }
+  .marquee__track { animation: none; }
+  [data-stack-item] { position: static; }
+  [data-parallax] img { transform: none !important; }
 }

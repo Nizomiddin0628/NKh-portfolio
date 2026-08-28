@@ -7,7 +7,7 @@ from django.utils import translation
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
-from apps.projects.models import Project
+from apps.projects.models import Project,Technology
 from apps.resume.models import Award, Education, Experience, LanguageSkill, SkillGroup
 
 from .forms import ContactForm
@@ -42,6 +42,7 @@ def home(request):
         ),
         "project_total": Project.objects.filter(is_published=True).count(),
         "principles": Principle.objects.filter(is_published=True)[:3],
+        "technologies": Technology.objects.filter(projects__is_published=True).distinct()[:14],
         "current_role": Experience.objects.filter(is_published=True, end_date__isnull=True).first(),
     })
     return render(request, "pages/home.html", ctx)

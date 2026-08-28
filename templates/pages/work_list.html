@@ -1,26 +1,42 @@
 {% extends "base.html" %}
 {% load i18n site_extras %}
 {% block title %}{% trans "Work" %} — {{ site.full_name }}{% endblock %}
-{% block description %}{% blocktrans with n=total %}{{ n }} engineering projects: computer vision, backend systems and internal platforms.{% endblocktrans %}{% endblock %}
 
 {% block content %}
 <section class="section wrap">
-  <p class="eyebrow">{% trans "Work" %}</p>
-  <h1 style="margin:1.2rem 0 1rem;max-width:16ch">{% trans "Systems I have shipped" %}</h1>
-  <p class="lead" style="max-width:56ch">
-    {% trans "Each project below has a full write-up: the problem, the constraints, what I chose and what I would change today." %}
+  <p class="eyebrow" data-reveal>{% trans "Work" %}</p>
+  <h1 class="page-title" data-split="load">{% trans "Systems I have shipped" %}</h1>
+  <p class="lead page-lead" data-reveal data-reveal-delay="300">
+    {% trans "Each project has a full write-up: the problem, the constraints, what I chose and what I would change today." %}
   </p>
 
-  <div class="filters" style="margin-top:2.5rem">
-    <a class="filter {% if not active_tech %}is-active{% endif %}" data-filter="" href="?">{% trans "All" %} <span data-result-count>{{ total }}</span></a>
+  <div class="filters" data-reveal data-reveal-delay="400">
+    <a class="filter {% if not active_tech %}is-active{% endif %}" data-filter="" href="?">
+      {% trans "All" %} <span data-result-count>{{ total }}</span>
+    </a>
     {% for tech in technologies %}
       <a class="filter {% if active_tech == tech.slug %}is-active{% endif %}"
          data-filter="{{ tech.slug }}" href="?tech={{ tech.slug }}">{{ tech.name }}</a>
     {% endfor %}
   </div>
 
-  <div class="projects projects--two" data-project-grid>
-    {% for project in projects %}{% include "partials/project_card.html" %}{% empty %}{% endfor %}
+  <div class="preview" data-preview-list data-project-grid>
+    {% for project in projects %}{% include "partials/project_row.html" %}{% endfor %}
+
+    {# Sichqoncha ortidan yuradigan rasm qatlami #}
+    <div class="preview__layer" data-preview-layer aria-hidden="true">
+      {% for project in projects %}
+        {% with cover=project.cover %}
+          <div class="preview__image" data-preview-image>
+            {% if cover %}
+              <img src="{{ cover.image.url }}" alt="" loading="lazy" decoding="async">
+            {% else %}
+              <span class="preview__placeholder">{{ project.title }}</span>
+            {% endif %}
+          </div>
+        {% endwith %}
+      {% endfor %}
+    </div>
   </div>
 
   <div class="empty-state" data-filter-empty {% if projects %}hidden{% endif %}>

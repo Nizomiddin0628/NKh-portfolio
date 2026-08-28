@@ -1,18 +1,17 @@
 /**
- * Silliq skroll (Lenis) + sahifalar orasidagi o'tish (View Transitions API).
+ * Silliq skroll (Lenis) + sahifalar orasidagi o'tish.
  *
- * View Transitions — brauzerning o'z imkoniyati. Chrome, Edge va Safari'da
- * ishlaydi; Firefox'da oddiy fade fallback'i qoladi. Hech qanday SPA
- * router kerak emas: sayt server tomonda render qilinganicha qolaveradi.
+ * O'tish: pastdan gradient panel ko'tarilib ekranni yopadi, keyingi sahifa
+ * yuklanganda yuqoriga chiqib ketadi. View Transitions API'dan farqli
+ * o'laroq bu barcha brauzerlarda bir xil ishlaydi.
  */
 
 const reduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ── Skroll qulfi (lightbox va ⌘K uchun) ───────────────────────────────── */
-
 let lenis = null;
 
+/** Lightbox va ⌘K skrollni qulflaydi. */
 window.scrollLock = (locked) => {
   document.body.style.overflow = locked ? "hidden" : "";
   if (lenis) locked ? lenis.stop() : lenis.start();
@@ -25,20 +24,19 @@ export async function initSmoothScroll() {
 
   try {
     const { default: Lenis } = await import("lenis");
-    lenis = new Lenis({
-      lerp: 0.09,
-      wheelMultiplier: 1,
-      smoothWheel: true,
-      autoRaf: false,
-    });
+    lenis = new Lenis({ lerp: 0.085, smoothWheel: true, autoRaf: false });
 
-    const raf = (time) => {
-      lenis.raf(time);
+    // Lenis va ScrollTrigger bitta rAF siklida ishlashi kerak,
+    // aks holda scrub animatsiyalari kechikadi.
+    if (window.ScrollTrigger) {
+      lenis.on("scroll", window.ScrollTrigger.update);
+      window.gsap?.ticker.add((time) => lenis.raf(time * 1000));
+      window.gsap?.ticker.lagSmoothing(0);
+    } else {
+      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
       requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
+    }
 
-    // Ichki havolalar Lenis orqali skroll qilsin
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
       link.addEventListener("click", (e) => {
         const target = document.querySelector(link.getAttribute("href"));
@@ -52,55 +50,46 @@ export async function initSmoothScroll() {
   }
 }
 
-/* ── Sahifalar orasidagi o'tish ────────────────────────────────────────── */
+/* ── Sahifa o'tishi ────────────────────────────────────────────────────── */
 
 export function initPageTransitions() {
-  if (reduced()) return;
+  const panel = document.querySelector("[data-transition]");
+  if (!panel || reduced() || !window.gsap) return;
 
-  const supported = "startViewTransition" in document;
+  const { gsap } = window;
 
-  if (supported) {
-    /*
-     * Loyiha kartochkasidagi rasm detail sahifasidagi katta rasmga
-     * "uchib" o'tadi. Buning uchun ikkala tomonda bir xil
-     * `view-transition-name` bo'lishi kerak — uni bosishdan oldin
-     * faqat bosilgan kartochkaga beramiz (nom sahifada yagona bo'lishi shart).
-     */
-    window.addEventListener("pageswap", (e) => {
-      if (!e.viewTransition) return;
-      const url = new URL(e.activation.entry.url);
-      const card = document.querySelector(`a.card[href="${url.pathname}"]`);
-      card?.querySelector("img")?.style.setProperty("view-transition-name", "project-media");
-    });
+  // Kirish: panel yuqoriga chiqib ketadi
+  gsap.set(panel, { yPercent: 0 });
+  gsap.to(panel, {
+    yPercent: -100,
+    duration: 0.85,
+    ease: "power4.inOut",
+    onComplete: () => gsap.set(panel, { visibility: "hidden" }),
+  });
 
-    window.addEventListener("pagereveal", (e) => {
-      if (!e.viewTransition) return;
-      const hero = document.querySelector("[data-hero-media]");
-      if (!hero) return;
-      hero.style.setProperty("view-transition-name", "project-media");
-      e.viewTransition.finished.finally(() =>
-        hero.style.removeProperty("view-transition-name"));
-    });
-    return;
-  }
-
-  // Fallback: navigatsiyadan oldin qisqa fade
   document.addEventListener("click", (e) => {
     const link = e.target.closest("a");
-    if (!link) return;
-    if (link.target === "_blank" || link.hasAttribute("download")) return;
+    if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
 
     const url = new URL(link.href, location.href);
     if (url.origin !== location.origin) return;
-    if (url.pathname === location.pathname && url.hash) return;
+    if (url.pathname === location.pathname) return;   // filtr va anchor'lar
+    if (url.protocol !== "http:" && url.protocol !== "https:") return;
 
     e.preventDefault();
-    document.documentElement.classList.add("is-leaving");
-    setTimeout(() => (location.href = url.href), 220);
+
+    gsap.set(panel, { visibility: "visible", yPercent: 100 });
+    gsap.to(panel, {
+      yPercent: 0,
+      duration: 0.65,
+      ease: "power4.inOut",
+      onComplete: () => (location.href = url.href),
+    });
   });
 
-  // Orqaga qaytilganda oq ekran qolib ketmasin
-  window.addEventListener("pageshow", () =>
-    document.documentElement.classList.remove("is-leaving"));
+  // Orqaga qaytilganda panel qotib qolmasin
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) gsap.set(panel, { visibility: "hidden", yPercent: -100 });
+  });
 }

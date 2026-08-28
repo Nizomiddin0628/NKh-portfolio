@@ -4,56 +4,68 @@
 {% block content %}
 <section class="hero wrap">
   <div class="hero__inner">
-    <span class="hero__name">{{ site.full_name }}{% if site.location %} · {{ site.location }}{% endif %}</span>
+    <span class="hero__name" data-reveal>{{ site.full_name }}{% if site.location %} · {{ site.location }}{% endif %}</span>
 
     {% if site.availability_is_open %}
-      <span class="status status--open">
+      <span class="status status--open" data-reveal data-reveal-delay="80">
         <span class="status__dot" aria-hidden="true"></span>
         {{ site|tr:"availability_note"|default:site.get_availability_display }}
       </span>
     {% endif %}
 
-    <h1 data-split>{% with headline=site|tr:"headline" %}{% if headline %}{{ headline }}{% else %}{{ site.job_title }}{% endif %}{% endwith %}</h1>
+    <h1 data-split="load">{% with headline=site|tr:"headline" %}{% if headline %}{{ headline }}{% else %}{{ site.job_title }}{% endif %}{% endwith %}</h1>
 
-    <p class="lead hero__intro" data-reveal data-reveal-delay="500">{{ site|tr:"intro" }}</p>
+    <p class="lead hero__intro" data-split>{{ site|tr:"intro" }}</p>
 
-    <div class="hero__actions" data-reveal data-reveal-delay="620">
-      <a class="btn btn--primary" href="{% url 'projects:list' %}" data-magnetic="0.3">
-        {% trans "See the work" %}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <div class="hero__actions" data-reveal data-reveal-delay="600">
+      <a class="btn btn--primary" href="{% url 'projects:list' %}" data-magnetic="0.35">
+        <span data-magnetic-label>{% trans "See the work" %}</span>
       </a>
-      <a class="btn btn--ghost" href="{% url 'core:cv' %}" data-magnetic="0.22">{% trans "Résumé" %}</a>
+      <a class="btn btn--ghost" href="{% url 'core:cv' %}" data-magnetic="0.25">
+        <span data-magnetic-label>{% trans "Résumé" %}</span>
+      </a>
     </div>
+  </div>
+</section>
 
-    <div class="hero__facts" data-reveal data-reveal-delay="720">
-      {% if current_role %}
-        <div>
-          <div class="fact__value">{{ current_role.company }}</div>
-          <div class="fact__label">{{ current_role|tr:"role"|truncatechars:38 }}</div>
-        </div>
-      {% endif %}
-      <div>
-        <div class="fact__value">{{ project_total }}</div>
-        <div class="fact__label">{% trans "Shipped projects" %}</div>
+{# Texnologiyalar lentasi — bo'limlar orasidagi nafas #}
+{% if technologies %}
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {% for i in "12" %}
+      <div class="marquee__group">
+        {% for tech in technologies %}
+          <span class="marquee__item">{{ tech.name }}</span>
+          <span class="marquee__dot">●</span>
+        {% endfor %}
       </div>
-      {% if site.email %}
-        <div>
-          <div class="fact__value" style="font-size:var(--step-0)">
-            <a class="link-underline" href="mailto:{{ site.email }}">{{ site.email }}</a>
-          </div>
-          <div class="fact__label">{% trans "Direct" %}</div>
-        </div>
-      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<section class="section wrap stats" data-reveal-group>
+  {% if current_role %}
+    <div class="stat">
+      <div class="stat__value">{{ current_role.company|truncatechars:22 }}</div>
+      <div class="stat__label">{{ current_role|tr:"role"|truncatechars:40 }}</div>
     </div>
+  {% endif %}
+  <div class="stat">
+    <div class="stat__value"><span data-count="{{ project_total }}">0</span></div>
+    <div class="stat__label">{% trans "Shipped projects" %}</div>
+  </div>
+  <div class="stat">
+    <div class="stat__value"><span data-count="3400" data-count-suffix="+">0</span></div>
+    <div class="stat__label">{% trans "Vehicles under one platform" %}</div>
   </div>
 </section>
 
 {% if featured_projects %}
 <section class="section wrap" aria-labelledby="work-heading">
-  <div class="section__head" data-reveal>
-    <p class="eyebrow">{% trans "Selected work" %}</p>
-    <h2 id="work-heading">{% trans "Three systems, in detail" %}</h2>
-    <p class="lead">{% trans "Not screenshots — the problem, the constraints, and what I would change today." %}</p>
+  <div class="section__head">
+    <p class="eyebrow" data-reveal>{% trans "Selected work" %}</p>
+    <h2 id="work-heading" data-split>{% trans "Three systems, in detail" %}</h2>
   </div>
 
   <div class="projects projects--two" data-reveal-group>
@@ -61,8 +73,8 @@
   </div>
 
   <p class="section__more" data-reveal>
-    <a class="btn btn--ghost" href="{% url 'projects:list' %}" data-magnetic="0.22">
-      {% trans "All projects" %} ({{ project_total }})
+    <a class="btn btn--ghost" href="{% url 'projects:list' %}" data-magnetic="0.25">
+      <span data-magnetic-label>{% trans "All projects" %} ({{ project_total }})</span>
     </a>
   </p>
 </section>
@@ -70,14 +82,14 @@
 
 {% if principles %}
 <section class="section section--tight wrap" aria-labelledby="how-heading">
-  <div class="section__head" data-reveal>
-    <p class="eyebrow">{% trans "How I work" %}</p>
-    <h2 id="how-heading">{% trans "Engineering habits" %}</h2>
+  <div class="section__head">
+    <p class="eyebrow" data-reveal>{% trans "How I work" %}</p>
+    <h2 id="how-heading" data-split>{% trans "Engineering habits" %}</h2>
   </div>
 
-  <div class="principles" data-reveal-group>
+  <div data-stack>
     {% for p in principles %}
-      <article class="principle">
+      <article class="principle" data-stack-item data-reveal>
         <span class="principle__index" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
         <h3>{{ p|tr:"title" }}</h3>
         <p>{{ p|tr:"body" }}</p>
@@ -90,9 +102,11 @@
 <section class="section wrap">
   <div class="cta" data-reveal>
     <p class="eyebrow" style="width:100%">{% trans "Next step" %}</p>
-    <h2>{% trans "Have a system that needs building?" %}</h2>
+    <h2 data-split>{% trans "Have a system that needs building?" %}</h2>
     <p class="lead">{% trans "Tell me what the problem is. I will tell you honestly whether I am the right person for it." %}</p>
-    <a class="btn btn--primary" href="{% url 'core:contact' %}" data-magnetic="0.3">{% trans "Get in touch" %}</a>
+    <a class="btn btn--primary" href="{% url 'core:contact' %}" data-magnetic="0.35">
+      <span data-magnetic-label>{% trans "Get in touch" %}</span>
+    </a>
   </div>
 </section>
 {% endblock %}

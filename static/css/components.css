@@ -147,7 +147,7 @@
 /* ══ Hero ════════════════════════════════════════════════════════════════ */
 .hero { padding-block: clamp(3.5rem, 11vw, 8rem) clamp(3rem, 8vw, 6rem); }
 .hero__inner { max-width: 940px; }
-.hero h1 { margin-block: 1.4rem 1.5rem; }
+.hero h1 { margin-block: 1.6rem 1.8rem; max-width: 17ch; }
 .hero__name {
   display: block; font-family: var(--font-mono); font-weight: 400;
   font-size: var(--step--1); letter-spacing: 0.18em; text-transform: uppercase;
@@ -157,7 +157,7 @@
   background: linear-gradient(100deg, var(--turquoise) 5%, var(--indigo) 65%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.hero__intro { max-width: 60ch; margin-bottom: 2rem; }
+.hero__intro { max-width: 58ch; margin-bottom: 2.25rem; font-size: var(--step-1); }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
 
 .hero__facts {
@@ -614,3 +614,143 @@
 /* CTA ichidagi tipografika */
 .cta h2 { font-size: var(--step-2); max-width: 16ch; }
 .cta .lead { max-width: 52ch; font-size: var(--step-0); }
+/* ══ Sahifa sarlavhalari ═════════════════════════════════════════════════ */
+.page-title { margin: 1.4rem 0 1.2rem; max-width: 15ch; }
+.page-lead { max-width: 54ch; }
+
+.section__head {
+  max-width: 46ch;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  display: grid; gap: 0.9rem;
+}
+.section__head h2 { font-size: var(--step-2); }
+.section__more { margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* ══ Statistika ══════════════════════════════════════════════════════════ */
+.stats {
+  display: grid; gap: 1px;
+  background: var(--border);
+  border-block: 1px solid var(--border);
+  padding-block: 0 !important;
+}
+@media (min-width: 720px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+
+.stat { background: var(--bg); padding: clamp(1.75rem, 4vw, 2.75rem) var(--sp-5); }
+.stat__value {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: var(--step-2); letter-spacing: -0.045em; line-height: 1.05;
+  background: linear-gradient(100deg, var(--turquoise), var(--indigo));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.stat__label {
+  font-family: var(--font-mono); font-size: var(--step--2);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-faint); margin-top: 0.6rem;
+}
+
+/* ══ Prinsip kartochkasi ═════════════════════════════════════════════════ */
+.principle {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  display: grid; gap: 0.85rem;
+  box-shadow: var(--shadow-md);
+}
+.principle__index {
+  font-family: var(--font-mono); font-size: var(--step--2);
+  letter-spacing: 0.12em; color: var(--brass);
+}
+.principle h3 { font-size: var(--step-1); }
+.principle p { color: var(--text-soft); max-width: 58ch; }
+
+/* ══ Loyihalar ro'yxati (hover preview) ══════════════════════════════════ */
+.preview { position: relative; }
+
+.row {
+  position: relative; z-index: 2;
+  display: grid; align-items: center; gap: 0.35rem 1.5rem;
+  grid-template-columns: auto 1fr auto;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem) 0;
+  border-top: 1px solid var(--border);
+  text-decoration: none;
+  transition: padding-inline var(--dur) var(--ease);
+}
+.row:last-of-type { border-bottom: 1px solid var(--border); }
+
+.row__index {
+  font-family: var(--font-mono); font-size: var(--step--2);
+  color: var(--text-faint); align-self: start; padding-top: 0.4rem;
+}
+.row__main { display: grid; gap: 0.35rem; min-width: 0; }
+.row__title {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: var(--step-2); letter-spacing: -0.04em; line-height: 1.1;
+  transition: color var(--dur) var(--ease);
+}
+.row__tagline {
+  color: var(--text-soft); font-size: var(--step--1);
+  max-width: 58ch;
+}
+.row__tech { display: none; }
+.row__year {
+  font-family: var(--font-mono); font-size: var(--step--2);
+  color: var(--text-faint); white-space: nowrap;
+}
+.row__arrow {
+  display: none; width: 38px; height: 38px; border-radius: 50%;
+  place-items: center; border: 1px solid var(--border);
+  color: var(--text-soft);
+  transform: translateX(-8px); opacity: 0;
+  transition: all 420ms var(--ease-out);
+}
+.row__arrow svg { width: 15px; height: 15px; }
+
+@media (min-width: 900px) {
+  .row { grid-template-columns: auto 1fr auto auto auto; }
+  .row__tech { display: flex; gap: 0.35rem; }
+  .row__arrow { display: grid; }
+  .row:hover { padding-inline: 1.25rem; }
+  .row:hover .row__title { color: var(--accent); }
+  .row:hover .row__arrow {
+    transform: none; opacity: 1;
+    background: var(--text); color: var(--bg); border-color: var(--text);
+  }
+}
+
+/* Sensorli ekranda rasm qatorning ichida ko'rinadi */
+.row__thumb {
+  grid-column: 1 / -1;
+  margin-top: 0.9rem;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.row__thumb img { width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 900px) { .row__thumb { display: none; } }
+
+/* Sichqoncha ortidan yuradigan qatlam */
+.preview__layer {
+  position: absolute; top: 0; left: 0;
+  width: 340px; height: 230px;
+  margin: -115px 0 0 -170px;
+  pointer-events: none; z-index: 1;
+  display: none;
+}
+[data-preview-active="true"] .preview__layer { display: block; }
+
+.preview__image {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  visibility: hidden;
+}
+.preview__image img { width: 100%; height: 100%; object-fit: cover; }
+.preview__placeholder {
+  display: grid; place-items: center; height: 100%;
+  background: linear-gradient(135deg, var(--turquoise), var(--indigo));
+  color: #fff; font-family: var(--font-display); font-weight: 600;
+  padding: 1rem; text-align: center; font-size: var(--step--1);
+}

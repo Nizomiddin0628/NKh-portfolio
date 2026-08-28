@@ -153,6 +153,5 @@ button { cursor: pointer; background: none; border: none; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  [data-reveal] { opacity: 1; transform: none; }
   .field__blob { animation: none; }
 }

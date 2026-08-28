@@ -43,17 +43,18 @@
 {% block extra_css %}{% endblock %}
 
 {#
-  Animatsiya kutubxonalari CDN'dan ESM sifatida keladi — build bosqichi yo'q.
-  Ikkalasi ham dinamik import bilan yuklanadi: yetib kelmasa sayt
-  animatsiyasiz, lekin to'liq ishlaydigan holatda qoladi.
+  GSAP — 2025-yildan beri barcha plaginlari bilan bepul (Webflow).
+  ScrollTrigger: skroll bilan bog'liq animatsiyalar.
+  SplitText: matnni qatorlarga bo'lib niqob ostidan chiqarish.
+  `defer` — sahifa chizilishini to'sib qo'ymaydi, lekin modul JS'dan oldin bajariladi.
 #}
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+
+{# Lenis dinamik import bilan yuklanadi — yetib kelmasa sayt baribir ishlaydi #}
 <script type="importmap">
-{
-  "imports": {
-    "motion": "https://cdn.jsdelivr.net/npm/motion@11.15.0/+esm",
-    "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"
-  }
-}
+{"imports": {"lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"}}
 </script>
 
 <script type="application/ld+json">
@@ -67,7 +68,11 @@
 <body>
 <a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
 
-{# Fon: sichqoncha ortidan suriladigan gradient #}
+{# Sahifalar orasidagi o'tish paneli #}
+<div class="transition" data-transition aria-hidden="true">
+  <span class="transition__mark">{{ site.full_name|initials }}</span>
+</div>
+
 <div class="field" aria-hidden="true">
   <div class="field__blob field__blob--a"></div>
   <div class="field__blob field__blob--b"></div>

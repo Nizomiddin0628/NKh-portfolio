@@ -1,0 +1,27 @@
+{% load i18n site_extras %}
+<a class="row" href="{{ project.get_absolute_url }}" data-preview-row
+   data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
+  <span class="row__index" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+
+  <span class="row__main">
+    <span class="row__title">{{ project.title }}</span>
+    <span class="row__tagline">{{ project|tr:"tagline" }}</span>
+  </span>
+
+  <span class="row__tech">
+    {% for tech in project.technologies.all|slice:":3" %}<span class="chip">{{ tech.name }}</span>{% endfor %}
+  </span>
+
+  <span class="row__year">{{ project.period }}</span>
+
+  <span class="row__arrow" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+  </span>
+
+  {# Sensorli ekranlarda rasm shu yerda statik ko'rinadi #}
+  {% with cover=project.cover %}
+    {% if cover %}
+      <span class="row__thumb"><img src="{{ cover.image.url }}" alt="" loading="lazy" decoding="async"></span>
+    {% endif %}
+  {% endwith %}
+</a>
