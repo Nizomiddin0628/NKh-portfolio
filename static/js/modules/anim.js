@@ -34,6 +34,8 @@ export function initAnimations() {
   stickyStack(gsap);
   scrollProgress(gsap);
   magnetic(gsap);
+  footerReveal(gsap);
+  velocitySkew(gsap);
 
   // Rasmlar yuklangach ScrollTrigger o'lchovlarini qayta hisoblaydi
   window.addEventListener("load", () => window.ScrollTrigger.refresh());
@@ -244,4 +246,55 @@ function magnetic(gsap) {
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerleave", reset);
   });
+}
+/* ── Footer pastdan ochiladi ───────────────────────────────────────────── */
+
+function footerReveal(gsap) {
+  const inner = document.querySelector("[data-footer-inner]");
+  if (!inner) return;
+
+  // Footer kontenti o'z konteyneri ichida yuqoriga suriladi — natijada
+  // sahifa oxiri "parda ko'tarilgandek" ochiladi.
+  gsap.fromTo(inner,
+    { yPercent: -55 },
+    {
+      yPercent: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: inner.parentElement,
+        start: "top bottom",
+        end: "bottom bottom",
+        scrub: true,
+      },
+    },
+  );
+}
+
+/* ── Skroll tezligiga qarab yengil egilish ─────────────────────────────── */
+
+function velocitySkew(gsap) {
+  const targets = gsap.utils.toArray("[data-skew]");
+  if (!targets.length) return;
+
+  const setters = targets.map((el) =>
+    gsap.quickSetter(el, "skewY", "deg"));
+  const clamp = gsap.utils.clamp(-4, 4);
+
+  window.ScrollTrigger.create({
+    onUpdate: (self) => {
+      // Tez skrollda elementlar ozgina egiladi, to'xtaganda tekislanadi.
+      // 4 daraja — sezilib turadigan, lekin o'qishga xalaqit bermaydigan chegara.
+      const skew = clamp(self.getVelocity() / -420);
+      setters.forEach((set) => set(skew));
+    },
+  });
+
+  // Skroll to'xtagach asta tekislanadi
+  let idle;
+  window.addEventListener("scroll", () => {
+    clearTimeout(idle);
+    idle = setTimeout(() => {
+      gsap.to(targets, { skewY: 0, duration: 0.7, ease: "power3.out" });
+    }, 120);
+  }, { passive: true });
 }

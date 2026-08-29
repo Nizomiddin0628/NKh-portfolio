@@ -3,7 +3,7 @@
    data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
   <span class="row__index" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
 
-  <span class="row__main">
+  <span class="row__main" data-skew>
     <span class="row__title">{{ project.title }}</span>
     <span class="row__tagline">{{ project|tr:"tagline" }}</span>
   </span>

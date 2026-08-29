@@ -122,3 +122,83 @@ html.lenis, html.lenis body { height: auto; }
   [data-stack-item] { position: static; }
   [data-parallax] img { transform: none !important; }
 }
+/* ══ Tema almashishi: doira kengayadi ════════════════════════════════════
+   Brauzerning standart cross-fade'ini o'chiramiz — o'rniga theme.js
+   `::view-transition-new(root)` ni clip-path bilan animatsiya qiladi. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+/* O'tish paytida fon blob'lari qayta chizilmasin — aks holda titraydi */
+:root[data-theme-switching] .field__blob { animation-play-state: paused; }
+
+/* ══ Header: skroll yo'nalishiga qarab ═══════════════════════════════════ */
+.header {
+  transition: transform 480ms var(--ease-out),
+              border-color var(--dur) var(--ease),
+              background var(--dur) var(--ease);
+}
+.header.is-hidden { transform: translateY(-100%); }
+
+/* ══ Nav havolalar: matn aylanib almashadi ═══════════════════════════════
+   Bitta span ichida matn, uning ::after'ida aynan o'sha matn.
+   Hover'da span 100% yuqoriga suriladi — pastdagi nusxa o'rniga chiqadi. */
+.nav-link { overflow: hidden; display: inline-block; }
+.nav-link > span {
+  display: block;
+  transition: transform 480ms var(--ease-out);
+}
+.nav-link > span::after {
+  content: attr(data-text);
+  display: block;
+  color: var(--text);
+}
+.nav-link:hover > span { transform: translateY(-100%); }
+
+@media (max-width: 780px) {
+  /* Mobil menyuda aylanish kerak emas — barmoq hover qilmaydi */
+  .nav-link > span::after { display: none; }
+  .nav-link:hover > span { transform: none; }
+}
+
+/* ══ Tugmalar: pastdan to'ldiriladi ══════════════════════════════════════ */
+.btn { position: relative; overflow: hidden; isolation: isolate; }
+.btn::before {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 520ms var(--ease-out);
+}
+.btn:hover::before { transform: scaleY(1); }
+
+.btn--ghost::before { background: var(--text); }
+.btn--ghost:hover { color: var(--bg); border-color: var(--text); }
+
+.btn--primary::before {
+  background: linear-gradient(120deg, var(--indigo), var(--turquoise-deep));
+}
+
+/* ══ Tema tugmasi ikonkasi ═══════════════════════════════════════════════ */
+.icon-btn--theme svg {
+  grid-area: 1 / 1;
+  transition: transform 520ms var(--ease-back), opacity 320ms var(--ease);
+}
+.icon-btn--theme { display: grid; place-items: center; }
+:root[data-theme="light"] .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+:root[data-theme="dark"] .icon-sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
+
+/* ══ Footer parda ════════════════════════════════════════════════════════ */
+.footer__reveal { overflow: hidden; }
+.footer__inner { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .header.is-hidden { transform: none; }
+  .footer__inner { transform: none !important; }
+  .btn::before { display: none; }
+}

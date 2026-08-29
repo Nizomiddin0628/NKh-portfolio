@@ -1,6 +1,5 @@
 {% load i18n site_extras %}
-<a class="card" href="{{ project.get_absolute_url }}"
-   data-tilt data-cursor="view" data-cursor-label="{% trans 'View case' %}"
+<a class="card" href="{{ project.get_absolute_url }}" data-skew
    data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
   {% with cover=project.cover %}
     {% if cover %}
