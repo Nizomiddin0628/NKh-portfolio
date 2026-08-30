@@ -124,14 +124,17 @@ html.lenis, html.lenis body { height: auto; }
 /* O'tish paytida fon blob'lari qayta chizilmasin — aks holda titraydi */
 :root[data-theme-switching] .field__blob { animation-play-state: paused; }
 
-/* ══ Header: skroll yo'nalishiga qarab ═══════════════════════════════════ */
+/* ══ Header ══════════════════════════════════════════════════════════════
+   Doim joyida turadi. Skrollda faqat fon va chegara zichlashadi. */
 .header {
-  transition: transform 480ms var(--ease-out),
-              border-color var(--dur) var(--ease),
-              background var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease),
+              background var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
 }
-.header.is-hidden { transform: translateY(-100%); }
-
+.header.is-scrolled {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  box-shadow: 0 1px 0 var(--border);
+}
 /* ══ Nav havolalar: matn aylanib almashadi ═══════════════════════════════
    Bitta span ichida matn, uning ::after'ida aynan o'sha matn.
    Hover'da span 100% yuqoriga suriladi — pastdagi nusxa o'rniga chiqadi. */
@@ -195,7 +198,6 @@ html.lenis, html.lenis body { height: auto; }
 .footer__inner { will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
-  .header.is-hidden { transform: none; }
   .footer__inner { transform: none !important; }
   .btn::before { display: none; }
 }

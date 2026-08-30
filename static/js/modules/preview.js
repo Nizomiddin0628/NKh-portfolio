@@ -1,12 +1,11 @@
 /**
- * Loyihalar ro'yxati: qator ustiga kelganda rasm sichqoncha ortidan chiqadi.
+ * Loyihalar ro'yxati: qator ustiga kelganda o'ngda rasm ko'rinadi.
  *
- * Nega kartochkalar o'rniga qator: 10 ta loyihani bir ekranda ko'rish va
- * sarlavhalarni tez o'qib chiqish mumkin. Rasm faqat qiziqqan odam uchun
- * chiqadi — ya'ni sahifa yengil bo'ladi, lekin vizual qism yo'qolmaydi.
- *
- * Sensorli ekranda umuman ishga tushmaydi: u yerda hover degan tushuncha yo'q,
- * shuning uchun rasmlar qatorlarning ichida statik ko'rinadi (CSS orqali).
+ * Rasm ataylab sichqoncha ostida emas, o'ngdagi bo'sh ustunda turadi.
+ * Kursor ostidagi variant chiroyliroq ko'rinadi, lekin u sarlavhani
+ * berkitadi — foydalanuvchi aynan o'qimoqchi bo'lgan matnni. Shu sababli
+ * rasm faqat vertikal siljiydi: qaysi qator faol ekani ko'rinib turadi,
+ * matn esa hech qachon yopilmaydi.
  */
 export function initPreview() {
   const list = document.querySelector("[data-preview-list]");
@@ -14,63 +13,66 @@ export function initPreview() {
   if (!list || !layer) return;
 
   const fine = window.matchMedia("(pointer: fine)").matches;
+  const wide = window.matchMedia("(min-width: 1100px)").matches;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!fine || reduced || !window.gsap) return;
+  if (!fine || !wide || reduced || !window.gsap) return;
 
   const { gsap } = window;
   list.dataset.previewActive = "true";
 
   const images = [...layer.querySelectorAll("[data-preview-image]")];
   const rows = [...list.querySelectorAll("[data-preview-row]")];
+  if (!images.length || !rows.length) return;
+
   let active = -1;
 
-  gsap.set(images, { autoAlpha: 0, scale: 0.9, yPercent: 6 });
+  gsap.set(images, { autoAlpha: 0, scale: 0.94 });
+  gsap.set(layer, { autoAlpha: 0 });
 
-  // Sichqoncha pozitsiyasini kechikish bilan kuzatamiz — "og'irlik" hissi
-  const setX = gsap.quickTo(layer, "x", { duration: 0.55, ease: "power3.out" });
-  const setY = gsap.quickTo(layer, "y", { duration: 0.55, ease: "power3.out" });
-  const setRot = gsap.quickTo(layer, "rotation", { duration: 0.8, ease: "power3.out" });
+  // Rasm faol qator balandligiga sinxron siljiydi
+  const setY = gsap.quickTo(layer, "y", { duration: 0.5, ease: "power3.out" });
 
-  let lastX = 0;
+  function show(index) {
+    if (active === index) return;
 
-  list.addEventListener("pointermove", (e) => {
-    const bounds = list.getBoundingClientRect();
-    setX(e.clientX - bounds.left);
-    setY(e.clientY - bounds.top);
-
-    // Tez harakatda rasm biroz egiladi
-    const velocity = gsap.utils.clamp(-12, 12, (e.clientX - lastX) * 0.6);
-    setRot(velocity);
-    lastX = e.clientX;
-  });
-
-  rows.forEach((row, i) => {
-    row.addEventListener("pointerenter", () => {
-      if (active === i) return;
-
-      if (active >= 0) {
-        gsap.to(images[active], {
-          autoAlpha: 0, scale: 0.92, duration: 0.35, ease: "power2.out",
-        });
-      }
-
-      active = i;
-      gsap.to(images[i], {
-        autoAlpha: 1, scale: 1, yPercent: 0,
-        duration: 0.55, ease: "power3.out",
-      });
-      row.dataset.hover = "true";
-    });
-
-    row.addEventListener("pointerleave", () => (row.dataset.hover = "false"));
-  });
-
-  list.addEventListener("pointerleave", () => {
     if (active >= 0) {
       gsap.to(images[active], {
-        autoAlpha: 0, scale: 0.9, duration: 0.4, ease: "power2.out",
+        autoAlpha: 0, scale: 0.96, duration: 0.3, ease: "power2.out",
       });
     }
+
+    active = index;
+
+    const row = rows[index];
+    const listBox = list.getBoundingClientRect();
+    const rowBox = row.getBoundingClientRect();
+    // Rasm markazi qator markaziga to'g'ri keladi
+    setY(rowBox.top - listBox.top + rowBox.height / 2 - layer.offsetHeight / 2);
+
+    gsap.to(layer, { autoAlpha: 1, duration: 0.25, ease: "power2.out" });
+    gsap.to(images[index], {
+      autoAlpha: 1, scale: 1, duration: 0.45, ease: "power3.out",
+    });
+  }
+
+  function hide() {
+    if (active >= 0) {
+      gsap.to(images[active], {
+        autoAlpha: 0, scale: 0.96, duration: 0.3, ease: "power2.out",
+      });
+    }
+    gsap.to(layer, { autoAlpha: 0, duration: 0.25, ease: "power2.out" });
     active = -1;
+  }
+
+  rows.forEach((row, i) => {
+    row.addEventListener("pointerenter", () => show(i));
+    // Klaviatura bilan yurganda ham ishlasin
+    row.addEventListener("focus", () => show(i));
+  });
+
+  list.addEventListener("pointerleave", hide);
+  list.addEventListener("focusout", (e) => {
+    if (!list.contains(e.relatedTarget)) hide();
   });
 }

@@ -6,28 +6,13 @@ export function initHeader() {
 
   if (header) {
     /*
-     * Header pastga skroll qilinganda yashirinadi, tepaga qaytganda chiqadi.
-     * Sabab: uzun case study sahifalarida header 64px ekranni yeb turadi,
-     * lekin butunlay olib tashlash ham noqulay — foydalanuvchi navigatsiyani
-     * yo'qotmasligi kerak.
-     *
-     * Chegara (12px) mayda titrashlarda header sakramasligi uchun.
+     * Header doim ko'rinib turadi. Skrollda faqat chegara chizig'i va
+     * fon zichligi o'zgaradi — navigatsiya hech qachon yo'qolmaydi.
      */
-    let last = window.scrollY;
     let ticking = false;
 
     const update = () => {
-      const y = window.scrollY;
-      const delta = y - last;
-
-      header.classList.toggle("is-scrolled", y > 8);
-
-      if (Math.abs(delta) > 12) {
-        const menuOpen = nav?.dataset.open === "true";
-        header.classList.toggle("is-hidden", delta > 0 && y > 220 && !menuOpen);
-        last = y;
-      }
-
+      header.classList.toggle("is-scrolled", window.scrollY > 8);
       ticking = false;
     };
 

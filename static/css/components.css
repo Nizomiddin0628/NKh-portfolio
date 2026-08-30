@@ -754,10 +754,19 @@
 .row__arrow svg { width: 15px; height: 15px; }
 
 @media (min-width: 900px) {
-  .row { grid-template-columns: auto 1fr auto auto auto; }
+  .row {
+    grid-template-columns: auto 1fr auto auto auto;
+    transition: background var(--dur) var(--ease),
+                padding-left var(--dur) var(--ease);
+  }
   .row__tech { display: flex; gap: 0.35rem; }
   .row__arrow { display: grid; }
-  .row:hover { padding-inline: 1.25rem; }
+
+  /* Fon o'zgarishi qaysi qator faol ekanini rasmdan ko'ra aniqroq bildiradi */
+  .row:hover {
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    padding-left: 1rem;
+  }
   .row:hover .row__title { color: var(--accent); }
   .row:hover .row__arrow {
     transform: none; opacity: 1;
@@ -777,27 +786,46 @@
 .row__thumb img { width: 100%; height: 100%; object-fit: cover; }
 @media (min-width: 900px) { .row__thumb { display: none; } }
 
-/* Sichqoncha ortidan yuradigan qatlam */
+/* ── Rasm paneli ──
+   O'ng chekkada, matn maydonidan tashqarida. Sarlavhalarni hech qachon
+   berkitmaydi — faqat vertikal siljiydi. */
 .preview__layer {
-  position: absolute; top: 0; left: 0;
-  width: 340px; height: 230px;
-  margin: -115px 0 0 -170px;
-  pointer-events: none; z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 1;
   display: none;
 }
 [data-preview-active="true"] .preview__layer { display: block; }
+
+/* Rasm paneli chiqqanda matnga joy qoldiramiz */
+@media (min-width: 1100px) {
+  [data-preview-active="true"] .row { padding-right: 330px; }
+}
 
 .preview__image {
   position: absolute; inset: 0;
   border-radius: var(--radius);
   overflow: hidden;
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-lg);
   visibility: hidden;
+  background: var(--surface-2);
 }
 .preview__image img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Rasm hali yuklanmagan loyihalar uchun */
 .preview__placeholder {
   display: grid; place-items: center; height: 100%;
-  background: linear-gradient(135deg, var(--turquoise), var(--indigo));
-  color: #fff; font-family: var(--font-display); font-weight: 600;
-  padding: 1rem; text-align: center; font-size: var(--step--1);
+  padding: 1.25rem; text-align: center;
+  background: linear-gradient(140deg,
+    color-mix(in srgb, var(--turquoise) 16%, var(--surface)),
+    color-mix(in srgb, var(--indigo) 16%, var(--surface)));
+  color: var(--text-soft);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  line-height: 1.5;
 }

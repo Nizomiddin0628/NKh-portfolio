@@ -31,7 +31,7 @@
             {% if cover %}
               <img src="{{ cover.image.url }}" alt="" loading="lazy" decoding="async">
             {% else %}
-              <span class="preview__placeholder">{{ project.title }}</span>
+              <span class="preview__placeholder">{% trans "No image yet" %}</span>
             {% endif %}
           </div>
         {% endwith %}
