@@ -31,7 +31,6 @@ export function initAnimations() {
   revealBlocks(gsap);
   parallaxMedia(gsap);
   countUp(gsap);
-  stickyStack(gsap);
   scrollProgress(gsap);
   magnetic(gsap);
   footerReveal(gsap);
@@ -173,32 +172,6 @@ function countUp(gsap) {
   });
 }
 
-/* ── Prinsiplar ustma-ust yig'iladi ────────────────────────────────────── */
-
-function stickyStack(gsap) {
-  const stack = document.querySelector("[data-stack]");
-  if (!stack || window.innerWidth < 900) return;
-
-  const cards = gsap.utils.toArray("[data-stack-item]", stack);
-  if (cards.length < 2) return;
-
-  cards.forEach((card, i) => {
-    if (i === cards.length - 1) return;
-
-    // Har kartochka keyingisi ustiga chiqqanda ozgina kichrayadi va xiralashadi
-    gsap.to(card, {
-      scale: 1 - (cards.length - i) * 0.035,
-      opacity: 0.45,
-      ease: "none",
-      scrollTrigger: {
-        trigger: cards[i + 1],
-        start: "top 80%",
-        end: "top 30%",
-        scrub: true,
-      },
-    });
-  });
-}
 
 /* ── O'qish progressi ──────────────────────────────────────────────────── */
 

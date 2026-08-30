@@ -39,17 +39,6 @@ html.lenis, html.lenis body { height: auto; }
 [data-parallax] { overflow: hidden; }
 [data-parallax] img { will-change: transform; }
 
-/* ── Sticky stack ── */
-@media (min-width: 900px) {
-  [data-stack] { display: block; }
-  [data-stack-item] {
-    position: sticky;
-    top: calc(var(--header-h) + 3rem);
-    will-change: transform;
-  }
-  [data-stack-item] + [data-stack-item] { margin-top: 1.25rem; }
-}
-
 /* ── O'qish progressi ── */
 .progress {
   position: fixed; top: 0; left: 0; right: 0;
@@ -119,7 +108,6 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .transition, .progress { display: none !important; }
   .marquee__track { animation: none; }
-  [data-stack-item] { position: static; }
   [data-parallax] img { transform: none !important; }
 }
 /* ══ Tema almashishi: doira kengayadi ════════════════════════════════════
@@ -147,14 +135,23 @@ html.lenis, html.lenis body { height: auto; }
 /* ══ Nav havolalar: matn aylanib almashadi ═══════════════════════════════
    Bitta span ichida matn, uning ::after'ida aynan o'sha matn.
    Hover'da span 100% yuqoriga suriladi — pastdagi nusxa o'rniga chiqadi. */
-.nav-link { overflow: hidden; display: inline-block; }
+/* Balandlik aniq belgilanishi shart — aks holda `overflow: hidden`
+   ikkala nusxani ham ko'rsatib qo'yadi. */
+.nav-link {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.5em;
+  line-height: 1.5em;
+}
 .nav-link > span {
   display: block;
-  transition: transform 480ms var(--ease-out);
+  line-height: 1.5em;
+  transition: transform 460ms var(--ease-out);
 }
 .nav-link > span::after {
   content: attr(data-text);
   display: block;
+  line-height: 1.5em;
   color: var(--text);
 }
 .nav-link:hover > span { transform: translateY(-100%); }

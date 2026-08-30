@@ -87,9 +87,9 @@
     <h2 id="how-heading" data-split>{% trans "Engineering habits" %}</h2>
   </div>
 
-  <div data-stack>
+  <div class="principles" data-reveal-group>
     {% for p in principles %}
-      <article class="principle" data-stack-item data-reveal>
+      <article class="principle">
         <span class="principle__index" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
         <h3>{{ p|tr:"title" }}</h3>
         <p>{{ p|tr:"body" }}</p>

@@ -145,7 +145,7 @@
 }
 
 /* ══ Hero ════════════════════════════════════════════════════════════════ */
-.hero { padding-block: clamp(3.5rem, 11vw, 8rem) clamp(3rem, 8vw, 6rem); }
+.hero { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(3rem, 8vw, 6rem); }
 .hero__inner { max-width: 940px; }
 .hero h1 { margin-block: 1.6rem 1.8rem; max-width: 17ch; }
 .hero__name {
@@ -675,13 +675,33 @@
   color: var(--text-faint); margin-top: 0.6rem;
 }
 
-/* ══ Prinsip kartochkasi ═════════════════════════════════════════════════ */
+/* ══ Prinsiplar ══════════════════════════════════════════════════════════
+   Uchta kartochka yonma-yon. Ilgari bu yerda "sticky stack" bor edi —
+   kartochkalar ustma-ust yig'ilardi. U ko'rinishi qiziq, lekin matnlar
+   bir-birining ustiga tushib o'qishni buzardi, shuning uchun olib tashlandi. */
+.principles {
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 860px) {
+  .principles { grid-template-columns: repeat(3, 1fr); }
+}
+
 .principle {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: clamp(1.75rem, 4vw, 2.75rem);
-  display: grid; gap: 0.85rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+  transition: transform var(--dur) var(--ease-out),
+              border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+.principle:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
 }
 .principle__index {
@@ -689,7 +709,7 @@
   letter-spacing: 0.12em; color: var(--brass);
 }
 .principle h3 { font-size: var(--step-1); }
-.principle p { color: var(--text-soft); max-width: 58ch; }
+.principle p { color: var(--text-soft); font-size: var(--step--1); }
 
 /* ══ Loyihalar ro'yxati (hover preview) ══════════════════════════════════ */
 .preview { position: relative; }

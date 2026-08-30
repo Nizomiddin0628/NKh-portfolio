@@ -42,12 +42,12 @@
 <link rel="stylesheet" href="{% static 'css/motion.css' %}">
 {% block extra_css %}{% endblock %}
 
-{#
+{% comment %}
   GSAP — 2025-yildan beri barcha plaginlari bilan bepul (Webflow).
   ScrollTrigger: skroll bilan bog'liq animatsiyalar.
   SplitText: matnni qatorlarga bo'lib niqob ostidan chiqarish.
   `defer` — sahifa chizilishini to'sib qo'ymaydi, lekin modul JS'dan oldin bajariladi.
-#}
+{% endcomment %}
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
