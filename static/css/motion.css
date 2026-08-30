@@ -138,22 +138,30 @@ html.lenis, html.lenis body { height: auto; }
 /* ══ Nav havolalar: matn aylanib almashadi ═══════════════════════════════
    Bitta span ichida matn, uning ::after'ida aynan o'sha matn.
    Hover'da span 100% yuqoriga suriladi — pastdagi nusxa o'rniga chiqadi. */
-/* Balandlik aniq belgilanishi shart — aks holda `overflow: hidden`
-   ikkala nusxani ham ko'rsatib qo'yadi. */
+/* Matn aylanib almashadi: ko'rinadigan nusxa yuqoriga chiqadi,
+   ostidagi nusxa uning o'rniga ko'tariladi.
+   Nusxa `position: absolute` bilan span'dan tashqarida turadi —
+   aks holda span balandligi ikki qator bo'lib qoladi va
+   `translateY(-100%)` matnni ikki barobar uzoqqa surib yuboradi. */
 .nav-link {
   display: inline-block;
   overflow: hidden;
   height: 1.5em;
   line-height: 1.5em;
+  vertical-align: middle;
 }
 .nav-link > span {
   display: block;
+  position: relative;
   line-height: 1.5em;
   transition: transform 460ms var(--ease-out);
 }
 .nav-link > span::after {
   content: attr(data-text);
-  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
   line-height: 1.5em;
   color: var(--text);
 }
