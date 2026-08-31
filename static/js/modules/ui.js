@@ -25,14 +25,22 @@ export function initHeader() {
     }, { passive: true });
   }
 
+  const scrim = document.querySelector("[data-nav-scrim]");
+
   const setMenu = (open) => {
     nav.dataset.open = String(open);
+    if (scrim) scrim.dataset.open = String(open);
     toggle.setAttribute("aria-expanded", String(open));
-    // Menyu butun ekranni qoplaydi — ortidagi sahifa surilmasligi kerak
     window.scrollLock?.(open);
   };
 
   toggle?.addEventListener("click", () => setMenu(nav.dataset.open !== "true"));
+
+  // Menyu tashqarisiga bosilganda yopiladi
+  scrim?.addEventListener("click", () => {
+    setMenu(false);
+    toggle.focus();
+  });
 
   // Havola bosilganda menyu yopiladi
   nav?.querySelectorAll("a").forEach((link) =>

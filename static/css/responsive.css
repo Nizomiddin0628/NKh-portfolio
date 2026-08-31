@@ -174,15 +174,29 @@
     pointer-events: auto;
   }
 
-  /* Ortidagi sahifani xiralashtiruvchi qatlam */
-  .nav::before {
-    content: "";
+  /* Ortidagi sahifani xiralashtiruvchi qatlam.
+     Alohida <button> — bosilganda menyu yopiladi. */
+  .nav-scrim {
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 69;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    cursor: default;
     background: color-mix(in srgb, var(--bg) 55%, transparent);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 240ms var(--ease-out), visibility 240ms;
+  }
+  .nav-scrim[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .nav a {
@@ -379,4 +393,8 @@
 @media (max-width: 400px) {
   /* Juda tor ekranda faqat belgi qoladi */
   .brand span:last-child { display: none; }
+}
+/* Keng ekranda scrim umuman kerak emas */
+@media (min-width: 781px) {
+  .nav-scrim { display: none; }
 }
