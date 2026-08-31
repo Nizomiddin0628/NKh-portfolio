@@ -136,50 +136,48 @@ html.lenis, html.lenis body { height: auto; }
   box-shadow: 0 1px 0 var(--border);
 }
 /* ══ Nav havolalar: matn aylanib almashadi ═══════════════════════════════
-   Bitta span ichida matn, uning ::after'ida aynan o'sha matn.
-   Hover'da span 100% yuqoriga suriladi — pastdagi nusxa o'rniga chiqadi. */
-/* Matn aylanib almashadi: ko'rinadigan nusxa yuqoriga chiqadi,
-   ostidagi nusxa uning o'rniga ko'tariladi.
-   Nusxa `position: absolute` bilan span'dan tashqarida turadi —
-   aks holda span balandligi ikki qator bo'lib qoladi va
-   `translateY(-100%)` matnni ikki barobar uzoqqa surib yuboradi. */
-.nav-link {
-  display: inline-block;
-  overflow: hidden;
-  height: 1.5em;
-  line-height: 1.5em;
-  vertical-align: middle;
-}
-.nav-link > span {
-  display: block;
-  position: relative;
-  line-height: 1.5em;
-  transition: transform 460ms var(--ease-out);
-}
-.nav-link > span::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  line-height: 1.5em;
-  color: var(--text);
-}
-.nav-link:hover > span { transform: translateY(-100%); }
+   HTML tuzilishi:
+     <a class="nav-link">
+       <span class="nav-link__mask">      ← kesuvchi qatlam
+         <span data-text="Work">Work</span>  ← siljiydigan matn
+       </span>
+     </a>
 
-@media (max-width: 780px) {
-  /* Mobil menyuda aylanish kerak emas — barmoq hover qilmaydi.
-     `line-height` ni ham qaytaramiz: 1.5em qat'iy balandlik katta
-     shriftdagi harflarning pastki qismini kesib tashlaydi. */
-  .nav-link,
-  .nav-link__mask {
-    height: auto;
-    overflow: visible;
-    line-height: 1.25;
+   Ichki span'ning ::after'ida aynan o'sha matn — u mask ostida yashirin
+   turadi. Hover'da span bir qator yuqoriga suriladi: birinchi nusxa
+   chiqib ketadi, ikkinchisi o'rniga ko'tariladi.
+
+   Butun blok `min-width` ichida. Mobil ekran bu qoidalarni umuman
+   ko'rmaydi — shuning uchun u yerda hech narsani bekor qilish kerak emas.
+   Ilgari teskarisi edi va bitta bekor qilish qoidasi yetmagani uchun
+   matn ikki marta chiqib qolgandi. */
+@media (min-width: 781px) {
+  .nav-link {
+    display: inline-block;
+    vertical-align: middle;
   }
-  .nav-link__mask > span { line-height: 1.25; }
-  .nav-link__mask > span::after { display: none; }
-  .nav-link:hover .nav-link__mask > span { transform: none; }
+  .nav-link__mask {
+    display: block;
+    overflow: hidden;
+    height: 1.5em;
+    line-height: 1.5em;
+  }
+  .nav-link__mask > span {
+    display: block;
+    position: relative;
+    line-height: 1.5em;
+    transition: transform 460ms var(--ease-out);
+  }
+  .nav-link__mask > span::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    line-height: 1.5em;
+    color: var(--text);
+  }
+  .nav-link:hover .nav-link__mask > span { transform: translateY(-100%); }
 }
 
 /* ══ Tugmalar: pastdan to'ldiriladi ══════════════════════════════════════ */

@@ -128,79 +128,107 @@
 }
 
 /* ══ Mobil menyu ═════════════════════════════════════════════════════════
-   Menyu `.header` ichida joylashgan, lekin `position: fixed` bo'lgani uchun
-   uni butun ekranga yoyamiz. Fon to'liq shaffofmas bo'lishi shart —
-   header'ning `backdrop-filter` i menyuga o'tmasligi uchun o'z foni beriladi. */
+   To'liq ekran o'rniga o'ng yuqori burchakdagi ixcham panel.
+
+   Nega shunday: to'liq ekran menyuda to'rtta havola markazda suzib turadi
+   va atrofi bo'm-bo'sh qoladi. Panel esa burger tugmasidan "o'sib chiqadi" —
+   foydalanuvchi qayerni bosgani va nima ochilgani o'rtasidagi bog'liqlik
+   ko'rinib turadi. Ortidagi sahifa ham yo'qolmaydi, faqat xiralashadi. */
 @media (max-width: 780px) {
   .nav {
     position: fixed;
-    inset: 0;
-    /* Brend va tugmalar bilan bitta stacking context ichida:
-       ular 2, menyu 1 — shuning uchun ular menyu ustida qoladi. */
-    z-index: 1;
-    height: 100dvh;
-    min-height: 100dvh;
+    top: calc(var(--header-h) + 8px);
+    right: var(--gutter);
+    left: auto;
+    bottom: auto;
+    z-index: 70;
+    width: min(260px, calc(100vw - var(--gutter) * 2));
+    height: auto;
+
     flex-direction: column;
     align-items: stretch;
-    justify-content: center;
     gap: 0;
-    padding: calc(var(--header-h) + 2rem) var(--gutter)
-             calc(2rem + env(safe-area-inset-bottom));
-    background: var(--bg);
+    padding: 0.5rem;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    border-bottom: none;
-    box-shadow: none;
-    transform: none;
+
+    /* Burger tugmasi tomondan ochiladi */
+    transform-origin: 100% 0;
+    transform: scale(0.94) translateY(-6px);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 300ms var(--ease-out), visibility 300ms;
-    overflow-y: auto;
+    transition: opacity 240ms var(--ease-out),
+                transform 300ms var(--ease-out),
+                visibility 300ms;
   }
   .nav[data-open="true"] {
+    transform: none;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
   }
-  /* Header elementlari menyu ustida qoladi — X tugmasi doim bosiladi */
-  .brand,
-  .header__tools { position: relative; z-index: 2; }
 
-  /* Menyu ochiq bo'lganda header foni kerak emas — menyu allaqachon to'ldirgan */
-  .header:has(.nav[data-open="true"]) {
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
-    border-bottom-color: transparent;
+  /* Ortidagi sahifani xiralashtiruvchi qatlam */
+  .nav::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
   }
+
   .nav a {
-    display: block;
-    padding: 1rem 0;
-    font-size: var(--step-2);
-    font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.25;
-    border-bottom: 1px solid var(--border);
-    /* Ochilganda navbat bilan pastdan chiqadi */
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0.85rem 0.9rem;
+    border-radius: var(--radius);
+    border-bottom: none;
+    font-size: var(--step-0);
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--text-soft);
+    /* Navbat bilan chiqadi */
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-out);
+    transform: translateY(8px);
+    transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out),
+                background var(--dur-fast) var(--ease);
   }
   .nav[data-open="true"] a { opacity: 1; transform: none; }
-  .nav[data-open="true"] a:nth-child(1) { transition-delay: 60ms; }
-  .nav[data-open="true"] a:nth-child(2) { transition-delay: 110ms; }
-  .nav[data-open="true"] a:nth-child(3) { transition-delay: 160ms; }
-  .nav[data-open="true"] a:nth-child(4) { transition-delay: 210ms; }
+  .nav[data-open="true"] a:nth-child(1) { transition-delay: 40ms; }
+  .nav[data-open="true"] a:nth-child(2) { transition-delay: 80ms; }
+  .nav[data-open="true"] a:nth-child(3) { transition-delay: 120ms; }
+  .nav[data-open="true"] a:nth-child(4) { transition-delay: 160ms; }
 
-  /* Menyu ochiq bo'lganda burger belgisi X ga aylanadi */
-  .nav-toggle svg path { transition: opacity 220ms var(--ease); }
+  .nav a:active { background: var(--surface-2); }
+
+  /* Faol sahifa: fon va chapdan rangli chiziqcha */
+  .nav a[aria-current="page"] {
+    color: var(--text);
+    font-weight: 600;
+    background: var(--surface-2);
+  }
+  .nav a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 50%; right: auto; bottom: auto;
+    width: 3px; height: 1.3em;
+    border-radius: 0 3px 3px 0;
+    transform: translateY(-50%);
+  }
+
+  /* Burger belgisi X ga aylanadi */
   .nav-toggle[aria-expanded="true"] .burger-open { display: none; }
   .nav-toggle[aria-expanded="false"] .burger-close { display: none; }
 
-  /* Menyu ochiq — ⌘K va til tugmasi keraksiz joy egallaydi */
   .kbd-hint { display: none; }
 }
 
