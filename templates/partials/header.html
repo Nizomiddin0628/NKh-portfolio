@@ -11,8 +11,7 @@
       <span>{{ site.full_name }}</span>
     </a>
 
-    {# Menyu ortidagi qatlam — bosilganda yopiladi.
-       Psevdo-element (::before) bunga yaramaydi: unga hodisa biriktirib bo'lmaydi. #}
+    {# Backdrop for the mobile menu. A real button, not a pseudo-element, so it can receive clicks. #}
     <button class="nav-scrim" data-nav-scrim type="button" tabindex="-1" aria-hidden="true"></button>
 
     <nav class="nav" data-nav aria-label="{% trans 'Main' %}">
