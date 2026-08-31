@@ -25,10 +25,30 @@ export function initHeader() {
     }, { passive: true });
   }
 
-  toggle?.addEventListener("click", () => {
-    const open = nav.dataset.open === "true";
-    nav.dataset.open = String(!open);
-    toggle.setAttribute("aria-expanded", String(!open));
+  const setMenu = (open) => {
+    nav.dataset.open = String(open);
+    toggle.setAttribute("aria-expanded", String(open));
+    // Menyu butun ekranni qoplaydi — ortidagi sahifa surilmasligi kerak
+    window.scrollLock?.(open);
+  };
+
+  toggle?.addEventListener("click", () => setMenu(nav.dataset.open !== "true"));
+
+  // Havola bosilganda menyu yopiladi
+  nav?.querySelectorAll("a").forEach((link) =>
+    link.addEventListener("click", () => setMenu(false)));
+
+  // Esc bilan ham
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav?.dataset.open === "true") {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+
+  // Ekran kengaysa menyu holati qotib qolmasin
+  window.matchMedia("(min-width: 781px)").addEventListener("change", (e) => {
+    if (e.matches && nav?.dataset.open === "true") setMenu(false);
   });
 
   const langBtn = document.querySelector("[data-lang-toggle]");

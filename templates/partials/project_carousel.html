@@ -1,0 +1,33 @@
+{% load i18n %}
+{#
+  Bitta DOM, ikki ko'rinish:
+  · 900px dan keng  — kartochkalar to'ri
+  · undan tor       — surib ko'riladigan karusel
+  Ko'rinishni CSS hal qiladi, JS faqat tugma va nuqtalarni boshqaradi.
+#}
+<div class="carousel" data-carousel>
+  <div class="carousel__track projects" data-carousel-track
+       tabindex="0" role="group" aria-label="{% trans 'Projects' %}">
+    {% for project in carousel_projects %}
+      <div class="carousel__item" data-carousel-item>
+        {% include "partials/project_card.html" %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="carousel__nav">
+    <button class="carousel__btn" data-carousel-prev type="button"
+            aria-label="{% trans 'Previous project' %}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+
+    <div class="carousel__dots" data-carousel-dots></div>
+
+    <span class="carousel__counter" data-carousel-counter aria-hidden="true"></span>
+
+    <button class="carousel__btn" data-carousel-next type="button"
+            aria-label="{% trans 'Next project' %}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+</div>

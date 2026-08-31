@@ -4,6 +4,7 @@ import { initGallery } from "./modules/gallery.js";
 import { initCmdK } from "./modules/cmdk.js";
 import { initField } from "./modules/field.js";
 import { initPreview } from "./modules/preview.js";
+import { initCarousel } from "./modules/carousel.js";
 import { initAnimations } from "./modules/anim.js";
 import { initSmoothScroll, initPageTransitions } from "./modules/transitions.js";
 
@@ -14,7 +15,7 @@ const boot = () => {
   initGallery();
   initFilter();
   initCmdK();
-
+  initCarousel();
   // Harakat qatlami
   initAnimations();
   initPageTransitions();

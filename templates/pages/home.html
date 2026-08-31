@@ -68,9 +68,9 @@
     <h2 id="work-heading" data-split>{% trans "Three systems, in detail" %}</h2>
   </div>
 
-  <div class="projects projects--two" data-reveal-group>
-    {% for project in featured_projects|slice:":3" %}{% include "partials/project_card.html" %}{% endfor %}
-  </div>
+  {% with carousel_projects=featured_projects|slice:":3" %}
+    {% include "partials/project_carousel.html" %}
+  {% endwith %}
 
   <p class="section__more" data-reveal>
     <a class="btn btn--ghost" href="{% url 'projects:list' %}" data-magnetic="0.25">
