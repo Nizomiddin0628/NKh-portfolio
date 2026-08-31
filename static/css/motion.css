@@ -168,9 +168,18 @@ html.lenis, html.lenis body { height: auto; }
 .nav-link:hover > span { transform: translateY(-100%); }
 
 @media (max-width: 780px) {
-  /* Mobil menyuda aylanish kerak emas — barmoq hover qilmaydi */
-  .nav-link > span::after { display: none; }
-  .nav-link:hover > span { transform: none; }
+  /* Mobil menyuda aylanish kerak emas — barmoq hover qilmaydi.
+     `line-height` ni ham qaytaramiz: 1.5em qat'iy balandlik katta
+     shriftdagi harflarning pastki qismini kesib tashlaydi. */
+  .nav-link,
+  .nav-link__mask {
+    height: auto;
+    overflow: visible;
+    line-height: 1.25;
+  }
+  .nav-link__mask > span { line-height: 1.25; }
+  .nav-link__mask > span::after { display: none; }
+  .nav-link:hover .nav-link__mask > span { transform: none; }
 }
 
 /* ══ Tugmalar: pastdan to'ldiriladi ══════════════════════════════════════ */

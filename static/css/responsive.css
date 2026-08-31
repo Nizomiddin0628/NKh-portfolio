@@ -127,25 +127,35 @@
   .footer a { display: inline-block; padding-block: 4px; }
 }
 
-/* ══ Mobil menyu ═════════════════════════════════════════════════════════ */
+/* ══ Mobil menyu ═════════════════════════════════════════════════════════
+   Menyu `.header` ichida joylashgan, lekin `position: fixed` bo'lgani uchun
+   uni butun ekranga yoyamiz. Fon to'liq shaffofmas bo'lishi shart —
+   header'ning `backdrop-filter` i menyuga o'tmasligi uchun o'z foni beriladi. */
 @media (max-width: 780px) {
   .nav {
     position: fixed;
-    inset: var(--header-h) 0 0;
-    height: auto;
+    inset: 0;
+    /* Brend va tugmalar bilan bitta stacking context ichida:
+       ular 2, menyu 1 — shuning uchun ular menyu ustida qoladi. */
+    z-index: 1;
+    height: 100dvh;
+    min-height: 100dvh;
     flex-direction: column;
     align-items: stretch;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0;
-    padding: 1.5rem var(--gutter) calc(2rem + env(safe-area-inset-bottom));
+    padding: calc(var(--header-h) + 2rem) var(--gutter)
+             calc(2rem + env(safe-area-inset-bottom));
     background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-bottom: none;
     box-shadow: none;
     transform: none;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 320ms var(--ease-out), visibility 320ms;
+    transition: opacity 300ms var(--ease-out), visibility 300ms;
     overflow-y: auto;
   }
   .nav[data-open="true"] {
@@ -153,13 +163,26 @@
     visibility: visible;
     pointer-events: auto;
   }
+  /* Header elementlari menyu ustida qoladi — X tugmasi doim bosiladi */
+  .brand,
+  .header__tools { position: relative; z-index: 2; }
 
+  /* Menyu ochiq bo'lganda header foni kerak emas — menyu allaqachon to'ldirgan */
+  .header:has(.nav[data-open="true"]) {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    border-bottom-color: transparent;
+  }
   .nav a {
-    padding: 1.1rem 0;
+    display: block;
+    padding: 1rem 0;
     font-size: var(--step-2);
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.035em;
+    line-height: 1.25;
     border-bottom: 1px solid var(--border);
     /* Ochilganda navbat bilan pastdan chiqadi */
     opacity: 0;
@@ -302,4 +325,30 @@
   .field { opacity: calc(var(--field-opacity) * 0.7); }
   .field__blob { filter: blur(60px); }
   .grain { display: none; }
+}
+/* ══ Header mobil ekranda ════════════════════════════════════════════════ */
+@media (max-width: 780px) {
+  /* Menyu ochiq bo'lganda header uning ustida turishi kerak —
+     aks holda yopish tugmasi menyu ostida qolib bosilmaydi. */
+  .header { z-index: 80; }
+
+  .header__inner { gap: 0.5rem; }
+
+  .brand {
+    min-width: 0;
+    font-size: var(--step--1);
+    gap: 0.45rem;
+  }
+  .brand span:last-child {
+    /* Ism ikki qatorga bo'linmasin — header balandligi o'zgarib ketadi */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .brand__mark { width: 24px; height: 24px; font-size: 10px; }
+}
+
+@media (max-width: 400px) {
+  /* Juda tor ekranda faqat belgi qoladi */
+  .brand span:last-child { display: none; }
 }
