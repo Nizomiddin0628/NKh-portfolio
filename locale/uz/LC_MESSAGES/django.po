@@ -67,13 +67,13 @@ msgid "Shipped projects"
 msgstr "Ishga tushirilgan loyihalar"
 
 msgid "Vehicles under one platform"
-msgstr "Bitta platformadagi transport"
+msgstr "Bitta platformadagi mashinalar"
 
 msgid "Selected work"
 msgstr "Tanlangan loyihalar"
 
 msgid "Three systems, in detail"
-msgstr "Uchta tizim, batafsil"
+msgstr "Uchta tizim batafsil"
 
 msgid "All projects"
 msgstr "Barcha loyihalar"
@@ -154,7 +154,7 @@ msgid "Stack"
 msgstr "Texnologiyalar"
 
 msgid "Context"
-msgstr "Kontekst"
+msgstr "Loyiha haqida"
 
 msgid "All work"
 msgstr "Barcha loyihalar"
@@ -196,7 +196,7 @@ msgid "Selected projects"
 msgstr "Tanlangan loyihalar"
 
 msgid "Want the short version?"
-msgstr "Qisqacha kerakmi?"
+msgstr "Qisqasini o'qimoqchimisiz?"
 
 msgid "The résumé fits on one page and prints cleanly."
 msgstr "Rezyume bir sahifaga sig'adi va chop etishga tayyor."
@@ -307,10 +307,10 @@ msgid "The error is logged. Try again in a moment."
 msgstr "Xatolik qayd etildi. Birozdan so'ng qayta urinib ko'ring."
 
 msgid "Open to opportunities"
-msgstr "Ish takliflariga ochiq"
+msgstr "Ish takliflariga ochiqman"
 
 msgid "Open to selected projects"
-msgstr "Tanlangan loyihalarga ochiq"
+msgstr "Qiziqarli loyihalarga ochiqman"
 
 msgid "Not available right now"
 msgstr "Hozircha band"
@@ -334,7 +334,7 @@ msgid "Constraints"
 msgstr "Cheklovlar"
 
 msgid "Decisions & trade-offs"
-msgstr "Qarorlar va murosalar"
+msgstr "Qabul qilingan qarorlar"
 
 msgid "Architecture"
 msgstr "Arxitektura"
@@ -343,7 +343,7 @@ msgid "Outcome"
 msgstr "Natija"
 
 msgid "What I'd do differently"
-msgstr "Nimani boshqacha qilgan bo'lardim"
+msgstr "Qaytadan qilsam, nimani o'zgartirardim"
 
 msgid "Custom section"
 msgstr "Qo'shimcha bo'lim"
