@@ -27,17 +27,33 @@ export function initAnimations() {
   const { gsap } = window;
   gsap.registerPlugin(window.ScrollTrigger, window.SplitText);
 
-  splitHeadings(gsap);
+  // Split only after web fonts load. Lines measured with the fallback
+  // font break in the wrong places once the real font arrives.
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+    splitHeadings(gsap);
+    window.ScrollTrigger.refresh();
+  });
   revealBlocks(gsap);
   parallaxMedia(gsap);
   countUp(gsap);
   scrollProgress(gsap);
   magnetic(gsap);
   footerReveal(gsap);
-  velocitySkew(gsap);
+  projectCards(gsap);
+  heroPortrait(gsap);
+  timelineDraw(gsap);
 
   // Rasmlar yuklangach ScrollTrigger o'lchovlarini qayta hisoblaydi
   window.addEventListener("load", () => window.ScrollTrigger.refresh());
+
+  // Carousels, images and fonts change the page height after load. Without
+  // a re-measure, triggers near the bottom keep stale positions and their
+  // content can stay hidden.
+  let refreshTimer = 0;
+  new ResizeObserver(() => {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => window.ScrollTrigger.refresh(), 150);
+  }).observe(document.body);
 }
 
 /* ── Sarlavha: qatorlar niqob ostidan ko'tariladi ───────────────────────── */
@@ -52,6 +68,7 @@ function splitHeadings(gsap) {
       mask: "lines",
       linesClass: "line",
     });
+    el.classList.add("is-split");
 
     const fromLoad = el.dataset.split === "load";
 
@@ -67,7 +84,10 @@ function splitHeadings(gsap) {
         start: "top 88%",
         once: true,
       },
-      onComplete: () => el.classList.add("is-revealed"),
+      onComplete: () => {
+        el.classList.add("is-revealed");
+        split.revert();
+      },
     });
   });
 }
@@ -243,31 +263,151 @@ function footerReveal(gsap) {
   );
 }
 
-/* ── Skroll tezligiga qarab yengil egilish ─────────────────────────────── */
+/* -- Project cards -------------------------------------------------------
+   Three layers, each with one job:
+     1. Entrance     - the image opens from the bottom edge, then the text
+                       follows line by line.
+     2. Scroll depth - the image drifts slower than the card (parallax).
+     3. Pointer      - a soft light and a glowing edge follow the cursor,
+                       the image leans a few pixels toward it.
+   Nothing rotates or skews, so text always stays level.
 
-function velocitySkew(gsap) {
-  const targets = gsap.utils.toArray("[data-skew]");
-  if (!targets.length) return;
+   Overscan math: the image rests at scale 1.12 (6% spare on each side).
+   Parallax (2.5%) + pointer offset (~4px) + hover scale 1.08 (4% spare)
+   never exceed that, so no empty edge ever shows.
 
-  const setters = targets.map((el) =>
-    gsap.quickSetter(el, "skewY", "deg"));
-  const clamp = gsap.utils.clamp(-4, 4);
+   Layers 2 and 3 live in gsap.matchMedia: they only run on wide screens
+   with a mouse and are reverted automatically if the breakpoint changes. */
 
-  window.ScrollTrigger.create({
-    onUpdate: (self) => {
-      // Tez skrollda elementlar ozgina egiladi, to'xtaganda tekislanadi.
-      // 4 daraja — sezilib turadigan, lekin o'qishga xalaqit bermaydigan chegara.
-      const skew = clamp(self.getVelocity() / -420);
-      setters.forEach((set) => set(skew));
-    },
+function projectCards(gsap) {
+  const cards = gsap.utils.toArray(".card");
+  if (!cards.length) return;
+
+  const REST = 1.12;
+  const HOVER = 1.08;
+
+  // 1. Entrance
+  cards.forEach((card) => {
+    const box = card.querySelector(".card__img");
+    const img = box && box.querySelector("img");
+    const text = card.querySelectorAll(".card__meta, .card__title, .card__tagline, .card__foot");
+
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: card, start: "top 85%", once: true },
+    });
+
+    if (box) {
+      tl.fromTo(box,
+        { clipPath: "inset(100% 0% 0% 0%)" },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1.2,
+          ease: "power4.out",
+          onComplete: () => gsap.set(box, { clearProps: "clipPath" }),
+        }, 0);
+    }
+    if (img) {
+      tl.fromTo(img, { scale: 1.4 }, { scale: REST, duration: 1.6, ease: "power3.out" }, 0);
+    }
+    if (text.length) {
+      tl.from(text, { y: 18, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.07 }, 0.35);
+    }
   });
 
-  // Skroll to'xtagach asta tekislanadi
-  let idle;
-  window.addEventListener("scroll", () => {
-    clearTimeout(idle);
-    idle = setTimeout(() => {
-      gsap.to(targets, { skewY: 0, duration: 0.7, ease: "power3.out" });
-    }, 120);
-  }, { passive: true });
+  // 2 + 3. Depth and pointer, desktop only
+  const mm = gsap.matchMedia();
+  mm.add("(min-width: 900px) and (pointer: fine)", () => {
+    const cleanups = [];
+
+    cards.forEach((card) => {
+      const img = card.querySelector(".card__img img");
+
+      if (img) {
+        gsap.fromTo(img, { yPercent: -2.5 }, {
+          yPercent: 2.5,
+          ease: "none",
+          scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
+        });
+      }
+
+      const moveX = img ? gsap.quickTo(img, "x", { duration: 0.8, ease: "power3.out" }) : null;
+      const moveY = img ? gsap.quickTo(img, "y", { duration: 0.8, ease: "power3.out" }) : null;
+      const zoom = img ? gsap.quickTo(img, "scale", { duration: 0.9, ease: "power3.out" }) : null;
+
+      const onMove = (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        card.style.setProperty("--mx", `${(px * 100).toFixed(1)}%`);
+        card.style.setProperty("--my", `${(py * 100).toFixed(1)}%`);
+        if (img) {
+          moveX((px - 0.5) * 12);
+          moveY((py - 0.5) * 8);
+        }
+      };
+      const onEnter = () => { if (zoom) zoom(HOVER); };
+      const onLeave = () => {
+        if (!img) return;
+        moveX(0);
+        moveY(0);
+        zoom(REST);
+      };
+
+      card.addEventListener("pointermove", onMove);
+      card.addEventListener("pointerenter", onEnter);
+      card.addEventListener("pointerleave", onLeave);
+
+      cleanups.push(() => {
+        card.removeEventListener("pointermove", onMove);
+        card.removeEventListener("pointerenter", onEnter);
+        card.removeEventListener("pointerleave", onLeave);
+        card.style.removeProperty("--mx");
+        card.style.removeProperty("--my");
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  });
+}
+
+/* -- Hero portrait: opens upward, image settles from a slight zoom ------ */
+
+function heroPortrait(gsap) {
+  const frame = document.querySelector("[data-hero-portrait]");
+  if (!frame) return;
+  const img = frame.querySelector("img");
+
+  gsap.fromTo(frame,
+    { clipPath: "inset(100% 0% 0% 0%)" },
+    {
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: 1.4,
+      ease: "power4.inOut",
+      delay: 0.25,
+      onComplete: () => gsap.set(frame, { clearProps: "clipPath" }),
+    },
+  );
+  if (img) gsap.fromTo(img, { scale: 1.3 }, { scale: 1, duration: 1.8, ease: "power3.out", delay: 0.25 });
+}
+
+/* -- Timeline draws itself while scrolling ------------------------------ */
+
+function timelineDraw(gsap) {
+  gsap.utils.toArray("[data-timeline]").forEach((timeline) => {
+    const progress = timeline.querySelector(".timeline__progress");
+    if (progress) {
+      gsap.fromTo(progress, { scaleY: 0 }, {
+        scaleY: 1,
+        ease: "none",
+        scrollTrigger: { trigger: timeline, start: "top 70%", end: "bottom 55%", scrub: 0.4 },
+      });
+    }
+    timeline.querySelectorAll(".timeline__item").forEach((item) => {
+      window.ScrollTrigger.create({
+        trigger: item,
+        start: "top 65%",
+        toggleClass: { targets: item, className: "is-reached" },
+      });
+    });
+  });
 }

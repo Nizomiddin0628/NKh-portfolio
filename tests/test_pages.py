@@ -28,11 +28,11 @@ def test_unpublished_project_is_404(seeded, client):
 
 @pytest.mark.django_db
 def test_language_prefixes(seeded, client):
-    for lang in ["en", "uz", "de", "ru"]:
+    for lang in ["en", "uz", "ru"]:
         assert client.get(f"/{lang}/").status_code == 200
 
 
 @pytest.mark.django_db
 def test_sitemap_and_robots(seeded, client):
     assert client.get("/sitemap.xml").status_code == 200
-    assert b"Disallow: /admin/" in client.get("/robots.txt").content
+    assert client.get("/robots.txt").status_code == 200

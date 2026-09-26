@@ -1,7 +1,7 @@
 """Admin panelni ko'p tilli maydonlar bilan o'qishli qilish uchun yordamchilar."""
 from django.utils.html import format_html
 
-LANGS = (("en", "English"), ("uz", "O'zbekcha"), ("de", "Deutsch"), ("ru", "Русский"))
+LANGS = (("en", "English"), ("uz", "O'zbekcha"), ("ru", "Русский"))
 
 
 def lang_fieldsets(fields, extra_classes=("collapse",)):

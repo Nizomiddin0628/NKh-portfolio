@@ -35,3 +35,26 @@
   .cv__section { break-inside: auto; }
   h2, h3 { break-after: avoid; }
 }
+
+/* -- On screen the resume looks like a sheet of paper; print stays plain -- */
+@media screen {
+  .cv {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+    box-shadow: var(--shadow-lg);
+  }
+  .cv__actions {
+    justify-content: flex-end;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px dashed var(--border);
+  }
+  .cv__name { letter-spacing: -0.04em; }
+  .cv__section > h2 { color: var(--turquoise-deep); }
+  :root[data-theme="dark"] .cv__section > h2 { color: var(--turquoise); }
+  .cv__entry-title { color: var(--text); }
+}
+@media screen and (max-width: 720px) {
+  .cv { padding: 1.25rem; border-radius: var(--radius); }
+}

@@ -68,7 +68,12 @@ class SiteSettings(SingletonModel, TranslatedModel):
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=40, blank=True)
 
-    avatar = models.ImageField(upload_to="site/", blank=True, help_text=_("Square photo, at least 600×600."))
+    avatar = models.ImageField(upload_to="site/", blank=True, help_text=_("Portrait photo, ideally 1200 px tall or more. Crop it below."))
+    avatar_crop = models.CharField(
+        max_length=80, blank=True,
+        help_text=_("Set by the cropper: x,y,width,height in pixels of the original."),
+    )
+    avatar_display = models.ImageField(upload_to="site/", blank=True, editable=False)
     og_image = models.ImageField(upload_to="site/", blank=True, help_text=_("1200×630 social preview."))
     cv_file = models.FileField(
         upload_to="site/", blank=True,
@@ -89,6 +94,16 @@ class SiteSettings(SingletonModel, TranslatedModel):
 
     def __str__(self):
         return self.full_name
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # The original upload is kept untouched so it can be re-cropped later;
+        # the site shows a cropped, compressed copy generated here.
+        from .imaging import render_portrait
+        name = render_portrait(self)
+        if name != (self.avatar_display.name or ""):
+            type(self).objects.filter(pk=self.pk).update(avatar_display=name)
+            self.avatar_display.name = name
 
     @property
     def availability_is_open(self):
@@ -140,6 +155,7 @@ class Principle(TranslatedModel):
 class ContactMessage(models.Model):
     name = models.CharField(max_length=120)
     email = models.EmailField()
+    phone = models.CharField(max_length=40, blank=True)
     subject = models.CharField(max_length=200, blank=True)
     message = models.TextField()
     ip_address = models.GenericIPAddressField(null=True, blank=True)
@@ -169,3 +185,19 @@ class PageView(models.Model):
 
     def __str__(self):
         return f"{self.path} · {self.date} · {self.count}"
+
+
+class DailyVisitor(models.Model):
+    """One row per anonymous visitor per day. See apps/core/analytics.py."""
+    date = models.DateField(db_index=True)
+    visitor = models.CharField(max_length=32)
+    device = models.CharField(max_length=10, blank=True)
+    referrer = models.CharField(max_length=120, blank=True)
+    first_path = models.CharField(max_length=300, blank=True)
+
+    class Meta:
+        unique_together = ("date", "visitor")
+        verbose_name = _("Visitor")
+
+    def __str__(self):
+        return f"{self.date} {self.visitor[:8]}"

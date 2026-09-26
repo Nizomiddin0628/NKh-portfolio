@@ -73,6 +73,6 @@ export function initTheme() {
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
     let stored = null;
     try { stored = localStorage.getItem(KEY); } catch { /* noop */ }
-    if (!stored) set(e.matches ? "dark" : "light");
+    if (stored !== "light" && stored !== "dark") set(e.matches ? "dark" : "light");
   });
 }

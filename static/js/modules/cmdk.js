@@ -76,7 +76,12 @@ export function initCmdK() {
 
   list?.addEventListener("mousemove", (e) => {
     const el = e.target.closest("[data-i]");
-    if (el && Number(el.dataset.i) !== cursor) { cursor = Number(el.dataset.i); render(); }
+    if (!el || Number(el.dataset.i) === cursor) return;
+    cursor = Number(el.dataset.i);
+    // Only move the highlight: re-rendering under the pointer rebuilds
+    // the list and scrolls it, which makes the menu jump.
+    list.querySelectorAll("[data-i]").forEach((node) =>
+      node.setAttribute("aria-selected", String(Number(node.dataset.i) === cursor)));
   });
 
   palette.addEventListener("click", (e) => { if (e.target === palette) close(); });

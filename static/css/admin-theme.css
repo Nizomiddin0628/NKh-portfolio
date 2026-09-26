@@ -1,0 +1,222 @@
+/* Admin theme: the site's palette, type and shapes on top of Django admin.
+   Only Django's own CSS variables are overridden, so every admin screen
+   (lists, forms, inlines, the login page) follows without extra rules.
+   The theme choice is shared with the site: both use localStorage "theme". */
+
+html[data-theme="light"],
+:root {
+  --primary: #3a4fd8;
+  --secondary: #2a3bb0;
+  --accent: #18b7be;
+  --primary-fg: #ffffff;
+
+  --body-fg: #0f1729;
+  --body-bg: #ffffff;
+  --body-quiet-color: #59647a;
+  --body-medium-color: #334155;
+  --body-loud-color: #0f1729;
+
+  --header-color: #cfd6e0;
+  --header-branding-color: #ffffff;
+  --header-bg: #0c1220;
+  --header-link-color: #ffffff;
+
+  --breadcrumbs-fg: #97a2b8;
+  --breadcrumbs-link-fg: #e6eaf2;
+  --breadcrumbs-bg: #131b2c;
+
+  --link-fg: #3a4fd8;
+  --link-hover-color: #0e8f95;
+  --link-selected-fg: #2a3bb0;
+
+  --hairline-color: #e2e7ee;
+  --border-color: #cfd6e0;
+  --darkened-bg: #f5f7fa;
+  --selected-bg: #eef1f5;
+  --selected-row: #eef1ff;
+
+  --button-bg: #3a4fd8;
+  --button-hover-bg: #2a3bb0;
+  --default-button-bg: #0e8f95;
+  --default-button-hover-bg: #18b7be;
+  --object-tools-bg: #3a4fd8;
+  --object-tools-hover-bg: #2a3bb0;
+
+  --font-family-primary: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-monospace: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #1c2640;
+    --secondary: #6f83ff;
+    --accent: #35d6dd;
+    --primary-fg: #e6eaf2;
+    --body-fg: #e6eaf2;
+    --body-bg: #0c1220;
+    --body-quiet-color: #97a2b8;
+    --body-medium-color: #cfd6e0;
+    --body-loud-color: #ffffff;
+    --header-bg: #070b14;
+    --breadcrumbs-bg: #131b2c;
+    --link-fg: #8fa0ff;
+    --link-hover-color: #35d6dd;
+    --link-selected-fg: #b7c3ff;
+    --hairline-color: #212c42;
+    --border-color: #2e3c57;
+    --darkened-bg: #131b2c;
+    --selected-bg: #182135;
+    --selected-row: #1c2640;
+    --button-bg: #4f63e6;
+    --button-hover-bg: #3a4fd8;
+    --close-button-bg: #2e3c57;
+    --close-button-hover-bg: #3a4a6a;
+  }
+}
+
+html[data-theme="dark"] {
+  --primary: #1c2640;
+  --secondary: #6f83ff;
+  --accent: #35d6dd;
+  --primary-fg: #e6eaf2;
+  --body-fg: #e6eaf2;
+  --body-bg: #0c1220;
+  --body-quiet-color: #97a2b8;
+  --body-medium-color: #cfd6e0;
+  --body-loud-color: #ffffff;
+  --header-bg: #070b14;
+  --breadcrumbs-bg: #131b2c;
+  --link-fg: #8fa0ff;
+  --link-hover-color: #35d6dd;
+  --link-selected-fg: #b7c3ff;
+  --hairline-color: #212c42;
+  --border-color: #2e3c57;
+  --darkened-bg: #131b2c;
+  --selected-bg: #182135;
+  --selected-row: #1c2640;
+  --button-bg: #4f63e6;
+  --button-hover-bg: #3a4fd8;
+  --close-button-bg: #2e3c57;
+  --close-button-hover-bg: #3a4a6a;
+}
+
+/* -- Header ------------------------------------------------------------ */
+#header {
+  background: linear-gradient(100deg, #0c1220 0%, #172048 60%, #0f3a4a 100%);
+  padding-block: 12px;
+}
+#site-name a.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #18b7be, #3a4fd8);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* -- Surfaces ------------------------------------------------------------ */
+.module,
+.inline-group {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--hairline-color);
+}
+.module h2,
+.module caption,
+.inline-group h2 {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 10px 14px;
+}
+fieldset.module { margin-bottom: 18px; }
+
+/* -- Controls ------------------------------------------------------------ */
+input[type="text"], input[type="email"], input[type="url"], input[type="number"],
+input[type="password"], input[type="tel"], input[type="search"], textarea, select,
+.vTextField {
+  border-radius: 8px;
+  padding: 7px 10px;
+  border-color: var(--border-color);
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid color-mix(in srgb, var(--link-fg) 35%, transparent);
+  outline-offset: 0;
+  border-color: var(--link-fg);
+}
+.button, input[type="submit"], input[type="button"], .submit-row input,
+a.button, .submit-row a.deletelink, .object-tools a {
+  border-radius: 8px;
+}
+.submit-row { border-radius: 12px; }
+
+/* -- Sidebar ------------------------------------------------------------ */
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited { color: var(--link-fg); }
+#nav-sidebar .current-model { background: var(--selected-row); }
+
+/* -- Language tabs (admin-tabs.js) -------------------------------------- */
+.lang-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px;
+  background: var(--darkened-bg);
+  border: 1px solid var(--hairline-color);
+  border-bottom: none;
+  border-radius: 14px 14px 0 0;
+}
+.lang-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--body-quiet-color);
+  font: 600 13px var(--font-family-primary);
+  cursor: pointer;
+}
+.lang-tabs__tab:hover { background: var(--body-bg); color: var(--body-fg); }
+.lang-tabs__tab.is-active {
+  background: var(--body-bg);
+  color: var(--body-fg);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+}
+.lang-tabs__state {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #18b7be;
+}
+.lang-tabs__tab.is-empty .lang-tabs__state {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--border-color);
+}
+.lang-tabs__hint {
+  margin-left: auto;
+  padding-right: 8px;
+  font-size: 12px;
+  color: var(--body-quiet-color);
+}
+.lang-pane {
+  margin-top: 0 !important;
+  border-radius: 0 0 14px 14px !important;
+}
+.lang-pane[hidden] { display: none !important; }
+.lang-pane > h2.fieldset-heading,
+.lang-pane summary { display: none; }

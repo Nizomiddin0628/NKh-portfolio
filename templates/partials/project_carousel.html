@@ -1,10 +1,10 @@
 {% load i18n %}
-{#
+{% comment %}
   Bitta DOM, ikki ko'rinish:
   · 900px dan keng  — kartochkalar to'ri
   · undan tor       — surib ko'riladigan karusel
   Ko'rinishni CSS hal qiladi, JS faqat tugma va nuqtalarni boshqaradi.
-#}
+{% endcomment %}
 <div class="carousel" data-carousel>
   <div class="carousel__track projects" data-carousel-track
        tabindex="0" role="group" aria-label="{% trans 'Projects' %}">

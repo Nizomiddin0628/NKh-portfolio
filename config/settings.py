@@ -66,10 +66,12 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "apps.core.language.DefaultLanguageMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.core.analytics.AnalyticsMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -132,7 +134,6 @@ LANGUAGE_CODE = "en"
 LANGUAGES = [
     ("en", "English"),
     ("uz", "O'zbekcha"),
-    ("de", "Deutsch"),
     ("ru", "Русский"),
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
@@ -165,7 +166,7 @@ else:
     CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
 
 # ── Email ─────────────────────────────────────────────────────────────────────
-if env("EMAIL_HOST"):
+if env("EMAIL_HOST") and env("EMAIL_HOST_PASSWORD"):
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = env("EMAIL_HOST")
     EMAIL_PORT = int(env("EMAIL_PORT", "587"))
@@ -182,6 +183,8 @@ CONTACT_NOTIFY_EMAIL = env("CONTACT_NOTIFY_EMAIL", "")
 # ── DRF ───────────────────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    # Public read-only API: no auth, so the docs show no locks or "Authorize"
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 20,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -191,9 +194,21 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Portfolio API",
-    "DESCRIPTION": "Read-only API behind nizomiddin.dev — projects, posts and stats.",
+    "DESCRIPTION": "Public read-only API of this portfolio: projects, technologies and summary stats.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+
+# Telegram notifications for new contact messages (optional, see .env)
+TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID", "")
+
+# Admin lives at a configurable path. Keep "admin/" locally; in production
+# set ADMIN_URL in .env to something only you know, e.g. "studio-x7k2/".
+ADMIN_URL = env("ADMIN_URL", "admin/").strip("/") + "/"
+
+# Stay logged in for 30 days, so the admin shortcuts on the site are
+# there without logging in every visit.
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30

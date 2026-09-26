@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
@@ -11,6 +12,7 @@ from apps.projects.models import Project,Technology
 from apps.resume.models import Award, Education, Experience, LanguageSkill, SkillGroup
 
 from .forms import ContactForm
+from .notify import notify_new_message
 from .models import PageView, Principle, SiteSettings
 
 RATE_LIMIT_PER_HOUR = 5
@@ -29,7 +31,6 @@ def _track(request):
 
 
 def _base_context(request):
-    _track(request)
     return {"conf": SiteSettings.load()}
 
 
@@ -77,6 +78,7 @@ def cv(request):
 @require_http_methods(["GET", "POST"])
 def contact(request):
     ctx = _base_context(request)
+    ctx["languages"] = LanguageSkill.objects.all()
     form = ContactForm(request.POST or None)
 
     if request.method == "POST":
@@ -92,7 +94,8 @@ def contact(request):
             msg.language = translation.get_language() or ""
             msg.save()
             cache.set(key, sent + 1, 3600)
-            _notify(msg)
+            notify_new_message(msg, request.build_absolute_uri(
+                reverse("admin:core_contactmessage_change", args=[msg.pk])))
             messages.success(request, _("Thanks — your message arrived. I usually reply within a day."))
             return redirect("core:contact")
 
@@ -129,7 +132,6 @@ def robots(request):
     body = "\n".join([
         "User-agent: *",
         "Allow: /",
-        "Disallow: /admin/",
         f"Sitemap: {request.scheme}://{host}/sitemap.xml",
         "",
     ])

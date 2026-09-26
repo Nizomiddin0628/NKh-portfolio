@@ -1,0 +1,188 @@
+{% extends "admin/index.html" %}
+{% load static admin_stats %}
+
+{% block extrahead %}{{ block.super }}
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script defer src="{% static 'js/admin-dashboard.js' %}"></script>
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+  /* Full width; the dashboard replaces Django's "Recent actions" column */
+  .dashboard #content { width: auto; max-width: none; }
+  .dashboard .colMS { margin-right: 0; }
+  .dashboard #content-main {
+    float: none; width: auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px; align-items: start;
+  }
+  .dashboard #content-main .module { margin: 0; }
+
+  .pf { margin: 0 0 28px; }
+  .pf h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; margin: 0; padding: 0;
+           color: var(--body-quiet-color); background: none; }
+
+  .pf-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .pf-action { display: grid; gap: 2px; padding: 14px 16px; border-radius: 12px; text-decoration: none;
+               border: 1px solid var(--hairline-color); background: var(--body-bg);
+               transition: border-color .2s, transform .2s; }
+  .pf-action:hover { border-color: var(--link-fg); transform: translateY(-2px); text-decoration: none; }
+  .pf-action b { color: var(--body-fg); font-size: 14px; }
+  .pf-action span { color: var(--body-quiet-color); font-size: 12px; }
+
+  .pf-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .pf-card, .pf-panel { background: var(--body-bg); border: 1px solid var(--hairline-color); border-radius: 14px; padding: 18px 20px; }
+  .pf-card--link { text-decoration: none; transition: border-color .2s; }
+  .pf-card--link:hover { border-color: var(--link-fg); text-decoration: none; }
+  .pf-card__label { font-size: 12px; color: var(--body-quiet-color); text-transform: uppercase; letter-spacing: .06em; }
+  .pf-card__row { display: flex; align-items: center; gap: 10px; margin: 8px 0 6px; }
+  .pf-card__value { font-size: 32px; font-weight: 600; line-height: 1; color: var(--body-fg); }
+  .pf-card--alert .pf-card__value { color: #d9a15b; }
+  .pf-card__sub { font-size: 12px; color: var(--body-quiet-color); }
+  .pf-card__sub b { color: var(--body-fg); }
+
+  .pf-trend { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px;
+              background: var(--darkened-bg); color: var(--body-quiet-color); }
+  .pf-trend.is-up { color: #10b981; background: color-mix(in srgb, #10b981 14%, transparent); }
+  .pf-trend.is-down { color: #ef4444; background: color-mix(in srgb, #ef4444 14%, transparent); }
+
+  .pf-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 1100px) { .pf-row { grid-template-columns: 1fr; } }
+  .pf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 16px; }
+
+  .pf-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .pf-panel > h2 { margin-bottom: 14px; }
+  .pf-range { display: inline-flex; padding: 3px; border-radius: 9px; background: var(--darkened-bg); border: 1px solid var(--hairline-color); }
+  .pf-range button { border: 0; background: transparent; color: var(--body-quiet-color); font: 600 12px var(--font-family-primary);
+                     padding: 5px 11px; border-radius: 7px; cursor: pointer; }
+  .pf-range button.is-active { background: var(--body-bg); color: var(--body-fg); box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
+
+  .pf-chart-box { position: relative; height: 290px; }
+  .pf-donut { position: relative; height: 250px; }
+  .pf-donut.is-empty canvas { display: none; }
+  .pf-donut.is-empty::after { content: "No data yet"; position: absolute; inset: 0; display: grid; place-items: center;
+                              color: var(--body-quiet-color); font-size: 13px; }
+
+  .pf-list { list-style: none; margin: 0; padding: 0; }
+  .pf-list li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0;
+                border-bottom: 1px solid var(--hairline-color); font-size: 13px; }
+  .pf-list li:last-child { border-bottom: none; }
+  .pf-list .path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pf-unread { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #d9a15b; margin-right: 6px; }
+
+  .pf-bar-row { position: relative; display: flex; justify-content: space-between; gap: 12px;
+                padding: 8px 10px; margin-bottom: 6px; border-radius: 8px; font-size: 13px; overflow: hidden; }
+  .pf-bar-row__fill { position: absolute; inset: 0 auto 0 0; border-radius: 8px;
+                      background: color-mix(in srgb, #18b7be 16%, transparent); }
+  .pf-bar-row > span:not(.pf-bar-row__fill) { position: relative; }
+  .pf-bar-row .path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--body-fg); }
+  .pf-bar-row .n { font-weight: 600; color: var(--body-fg); }
+
+  .pf-empty { color: var(--body-quiet-color); font-size: 13px; margin: 0; }
+  .pf-chart-box .pf-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 0 20px; }
+</style>
+{% endblock %}
+
+{% block content %}
+{% portfolio_stats as s %}
+<div class="pf">
+  <div class="pf-actions">
+    <a class="pf-action" href="{% url "admin:projects_project_add" %}"><b>+ Project</b><span>New case study</span></a>
+    <a class="pf-action" href="{% url "admin:resume_experience_add" %}"><b>+ Job</b><span>New position</span></a>
+    <a class="pf-action" href="{% url "admin:core_sitesettings_change" 1 %}"><b>Homepage</b><span>Headline, portrait, status</span></a>
+    <a class="pf-action" href="{% url "admin:core_contactmessage_changelist" %}"><b>Messages</b><span>{{ s.unread }} unread</span></a>
+    <a class="pf-action" href="/" target="_blank" rel="noopener"><b>Open site</b><span>See changes live</span></a>
+  </div>
+
+  <div class="pf-cards">
+    {% for c in s.cards %}
+      <div class="pf-card">
+        <div class="pf-card__label">{{ c.label }} &middot; 7 days</div>
+        <div class="pf-card__row">
+          <span class="pf-card__value">{{ c.value }}</span>
+          {% if c.trend is None %}
+            <span class="pf-trend" title="No data for the previous 7 days">new</span>
+          {% elif c.trend >= 0 %}
+            <span class="pf-trend is-up" title="Compared with the previous 7 days">&#9650; +{{ c.trend }}%</span>
+          {% else %}
+            <span class="pf-trend is-down" title="Compared with the previous 7 days">&#9660; {{ c.trend }}%</span>
+          {% endif %}
+        </div>
+        <div class="pf-card__sub">Today <b>{{ c.today }}</b> &middot; 30 days <b>{{ c.d30 }}</b></div>
+      </div>
+    {% endfor %}
+    <a class="pf-card pf-card--link{% if s.unread %} pf-card--alert{% endif %}"
+       href="{% url "admin:core_contactmessage_changelist" %}?is_read__exact=0">
+      <div class="pf-card__label">Unread messages</div>
+      <div class="pf-card__row"><span class="pf-card__value">{{ s.unread }}</span></div>
+      <div class="pf-card__sub">Total <b>{{ s.total_messages }}</b> &middot; click to open</div>
+    </a>
+  </div>
+
+  <div class="pf-row">
+    <div class="pf-panel">
+      <div class="pf-panel__head">
+        <h2>Traffic</h2>
+        <div class="pf-range" role="group" aria-label="Range">
+          <button type="button" data-range="7">7 d</button>
+          <button type="button" data-range="14" class="is-active">14 d</button>
+          <button type="button" data-range="30">30 d</button>
+        </div>
+      </div>
+      <div class="pf-chart-box">
+        {% if s.has_traffic %}
+          <canvas id="pf-traffic" aria-label="Visitors and page views per day"></canvas>
+        {% else %}
+          <p class="pf-empty">No visits yet. Numbers appear once people who are not logged in open the site.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="pf-panel">
+      <h2>Latest messages</h2>
+      {% if s.latest %}
+        <ul class="pf-list">
+          {% for m in s.latest %}
+            <li>
+              <a class="path" href="{% url "admin:core_contactmessage_change" m.pk %}">
+                {% if not m.is_read %}<span class="pf-unread"></span>{% endif %}{{ m.name }} &mdash; {{ m.subject|default:m.message|truncatechars:38 }}
+              </a>
+              <span>{{ m.created_at|date:"M j" }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="pf-empty">No messages yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="pf-grid">
+    <div class="pf-panel">
+      <h2>Top pages &middot; 30 days</h2>
+      {% for p in s.top_pages %}
+        <div class="pf-bar-row">
+          <span class="pf-bar-row__fill" style="width:{{ p.pct }}%"></span>
+          <span class="path">{{ p.path }}</span>
+          <span class="n">{{ p.n }}</span>
+        </div>
+      {% empty %}
+        <p class="pf-empty">No visits yet.</p>
+      {% endfor %}
+    </div>
+    <div class="pf-panel">
+      <h2>Where visitors come from</h2>
+      <div class="pf-donut"><canvas id="pf-sources"></canvas></div>
+    </div>
+    <div class="pf-panel">
+      <h2>Devices</h2>
+      <div class="pf-donut"><canvas id="pf-devices"></canvas></div>
+    </div>
+  </div>
+
+  {{ s.series|json_script:"pf-data" }}
+</div>
+{{ block.super }}
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

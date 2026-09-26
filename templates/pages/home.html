@@ -2,9 +2,9 @@
 {% load i18n site_extras %}
 
 {% block content %}
-<section class="hero wrap">
+<section class="hero wrap{% if site.avatar_display %} hero--with-media{% endif %}">
   <div class="hero__inner">
-    <span class="hero__name" data-reveal>{{ site.full_name }}{% if site.location %} · {{ site.location }}{% endif %}</span>
+    <span class="hero__name" data-reveal><span>{{ site.full_name }}</span>{% if site.location %}<span class="hero__loc">{{ site.location }}</span>{% endif %}</span>
 
     {% if site.availability_is_open %}
       <span class="status status--open" data-reveal data-reveal-delay="80">
@@ -26,11 +26,18 @@
       </a>
     </div>
   </div>
+  {% if site.avatar_display %}
+    <figure class="hero__media" data-hero-portrait>
+      <img src="{{ site.avatar_display.url }}?v={{ site.updated_at|date:'U' }}"
+           alt="{{ site.full_name }}" width="900" height="1125"
+           fetchpriority="high" decoding="async">
+    </figure>
+  {% endif %}
 </section>
 
 {# Texnologiyalar lentasi — bo'limlar orasidagi nafas #}
 {% if technologies %}
-<div class="marquee" aria-hidden="true">
+<div class="marquee wrap" aria-hidden="true">
   <div class="marquee__track">
     {% for i in "12" %}
       <div class="marquee__group">
@@ -63,20 +70,20 @@
 
 {% if featured_projects %}
 <section class="section wrap" aria-labelledby="work-heading">
-  <div class="section__head">
+  <div class="section__head section__head--row">
+    <div class="section__head-text">
     <p class="eyebrow" data-reveal>{% trans "Selected work" %}</p>
     <h2 id="work-heading" data-split>{% trans "Three systems, in detail" %}</h2>
+    </div>
+    <a class="link-arrow" href="{% url 'projects:list' %}" data-reveal>
+      {% trans "All projects" %} ({{ project_total }})
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 
   {% with carousel_projects=featured_projects|slice:":3" %}
     {% include "partials/project_carousel.html" %}
   {% endwith %}
-
-  <p class="section__more" data-reveal>
-    <a class="btn btn--ghost" href="{% url 'projects:list' %}" data-magnetic="0.25">
-      <span data-magnetic-label>{% trans "All projects" %} ({{ project_total }})</span>
-    </a>
-  </p>
 </section>
 {% endif %}
 
@@ -100,13 +107,70 @@
 {% endif %}
 
 <section class="section wrap">
-  <div class="cta" data-reveal>
+  <div class="cta cta--art" data-reveal>
+    <div class="cta__text">
     <p class="eyebrow" style="width:100%">{% trans "Next step" %}</p>
     <h2 data-split>{% trans "Have a system that needs building?" %}</h2>
     <p class="lead">{% trans "Tell me what the problem is. I will tell you honestly whether I am the right person for it." %}</p>
     <a class="btn btn--primary" href="{% url 'core:contact' %}" data-magnetic="0.35">
       <span data-magnetic-label>{% trans "Get in touch" %}</span>
     </a>
+    </div>
+
+    {# Live architecture sketch of the Smart Yard pipeline #}
+    <svg class="cta-art" viewBox="0 0 600 300" role="img"
+         aria-label="Camera streams flow through detection into an API and a database, which open the gate and send a Telegram alert">
+      <defs>
+        <linearGradient id="cta-g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="600" y2="0">
+          <stop offset="0" style="stop-color: var(--turquoise)"/>
+          <stop offset="1" style="stop-color: var(--indigo)"/>
+        </linearGradient>
+      </defs>
+
+      <path class="wire" d="M102 63 C132 63 130 150 160 150"/>
+      <path class="wire" d="M102 148 C130 148 130 150 160 150"/>
+      <path class="wire" d="M102 233 C132 233 130 150 160 150"/>
+      <path class="wire" d="M270 150 C295 150 295 72 320 72"/>
+      <path class="wire" d="M270 150 C295 150 295 228 320 228"/>
+      <path class="wire" d="M450 72 L500 72"/>
+      <path class="wire" d="M450 72 C475 72 475 228 500 228"/>
+
+      <path class="flow" d="M102 63 C132 63 130 150 160 150"/>
+      <path class="flow flow--slow" d="M102 148 C130 148 130 150 160 150"/>
+      <path class="flow" d="M102 233 C132 233 130 150 160 150"/>
+      <path class="flow flow--slow" d="M270 150 C295 150 295 72 320 72"/>
+      <path class="flow" d="M270 150 C295 150 295 228 320 228"/>
+      <path class="flow" d="M450 72 L500 72"/>
+      <path class="flow flow--slow" d="M450 72 C475 72 475 228 500 228"/>
+
+      <g class="node"><rect x="10" y="40" width="92" height="46" rx="10"/><circle class="live" cx="88" cy="52" r="3"/><text x="22" y="68">RTSP 01</text></g>
+      <g class="node"><rect x="10" y="125" width="92" height="46" rx="10"/><circle class="live" cx="88" cy="137" r="3"/><text x="22" y="153">RTSP 02</text></g>
+      <g class="node"><rect x="10" y="210" width="92" height="46" rx="10"/><circle class="live" cx="88" cy="222" r="3"/><text x="22" y="238">RTSP 07</text></g>
+
+      <g class="node node--accent">
+        <rect x="160" y="105" width="110" height="90" rx="14"/>
+        <path class="scan" d="M174 127 V119 H182 M248 119 H256 V127 M256 173 V181 H248 M182 181 H174 V173"/>
+        <text x="215" y="148" text-anchor="middle">YOLOv11</text>
+        <text class="s" x="215" y="166" text-anchor="middle">detect + OCR</text>
+      </g>
+
+      <g class="node node--accent">
+        <rect x="320" y="40" width="130" height="64" rx="12"/>
+        <text x="385" y="68" text-anchor="middle">Django API</text>
+        <text class="s" x="385" y="86" text-anchor="middle">rules + FMCSA</text>
+      </g>
+      <circle class="ping" cx="450" cy="72" r="5"/>
+      <circle class="dot" cx="450" cy="72" r="3.5"/>
+
+      <g class="node">
+        <rect x="320" y="196" width="130" height="64" rx="12"/>
+        <text x="385" y="224" text-anchor="middle">PostgreSQL</text>
+        <text class="s" x="385" y="242" text-anchor="middle">event log</text>
+      </g>
+
+      <g class="node"><rect x="500" y="40" width="90" height="64" rx="12"/><text x="545" y="68" text-anchor="middle">Gate</text><text class="s" x="545" y="86" text-anchor="middle">opens</text></g>
+      <g class="node"><rect x="500" y="196" width="90" height="64" rx="12"/><text x="545" y="224" text-anchor="middle">Telegram</text><text class="s" x="545" y="242" text-anchor="middle">alert</text></g>
+    </svg>
   </div>
 </section>
 {% endblock %}

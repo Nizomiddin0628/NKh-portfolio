@@ -1,29 +1,65 @@
 {% extends "base.html" %}
 {% load i18n site_extras %}
-{% block title %}{% trans "Contact" %} — {{ site.full_name }}{% endblock %}
+{% block title %}{% trans "Contact" %} &mdash; {{ site.full_name }}{% endblock %}
 
 {% block content %}
 <section class="section wrap">
-  <p class="eyebrow">{% trans "Contact" %}</p>
-  <h1 style="margin:1.2rem 0 1.2rem;max-width:15ch">{% trans "Let's talk about the problem" %}</h1>
-  <p class="lead" style="max-width:52ch">
-    {% trans "Describe what you are building and where it hurts. I reply to every message, usually within a day." %}
+  <div class="page-hero page-hero--art">
+    <div class="page-hero__text">
+    <p class="eyebrow" data-reveal>{% trans "Contact" %}</p>
+  <h1 class="page-title" data-split="load">{% trans "Let's talk about your project" %}</h1>
+  <p class="lead page-lead" data-reveal data-reveal-delay="300">
+    {% trans "Tell me what you are building or which technical problem needs solving. I reply to every message within one working day." %}
   </p>
 
   {% if site.availability_is_open %}
-    <p style="margin-top:1.5rem">
-      <span class="status status--open"><span class="status__dot" aria-hidden="true"></span>
-        {{ site|tr:"availability_note"|default:site.get_availability_display }}</span>
+    <p class="contact__status" data-reveal data-reveal-delay="380">
+      <span class="status status--open">
+        <span class="status__dot" aria-hidden="true"></span>
+        {{ site|tr:"availability_note"|default:site.get_availability_display }}
+      </span>
     </p>
   {% endif %}
+    </div>
+    <svg class="cta-art" viewBox="0 0 560 280" role="img"
+         aria-label="Your message goes from the form to Django, then to Telegram and email, and gets a reply within one day">
+      <defs>
+        <linearGradient id="cta-g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="560" y2="0">
+          <stop offset="0" style="stop-color: var(--turquoise)"/>
+          <stop offset="1" style="stop-color: var(--indigo)"/>
+        </linearGradient>
+      </defs>
+      <path class="wire" d="M120 140 L170 140"/>
+      <path class="wire" d="M280 140 C305 140 305 68 330 68"/>
+      <path class="wire" d="M280 140 C305 140 305 212 330 212"/>
+      <path class="wire" d="M430 68 C450 68 450 140 470 140"/>
+      <path class="wire" d="M430 212 C450 212 450 140 470 140"/>
+      <path class="flow" d="M120 140 L170 140"/>
+      <path class="flow flow--slow" d="M280 140 C305 140 305 68 330 68"/>
+      <path class="flow" d="M280 140 C305 140 305 212 330 212"/>
+      <path class="flow" d="M430 68 C450 68 450 140 470 140"/>
+      <path class="flow flow--slow" d="M430 212 C450 212 450 140 470 140"/>
 
-  <div class="skill-groups" style="margin-top:3rem;align-items:start">
-    <div>
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert--{{ message.tags }}" style="margin-bottom:1.25rem" role="status">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
+      <g class="node"><rect x="10" y="108" width="110" height="64" rx="12"/><circle class="live" cx="106" cy="120" r="3"/>
+        <text x="65" y="138" text-anchor="middle">Your message</text><text class="s" x="65" y="156" text-anchor="middle">form</text></g>
+      <g class="node node--accent"><rect x="170" y="108" width="110" height="64" rx="12"/>
+        <text x="225" y="138" text-anchor="middle">Django</text><text class="s" x="225" y="156" text-anchor="middle">saved + checked</text></g>
+      <g class="node"><rect x="330" y="40" width="100" height="56" rx="12"/>
+        <text x="380" y="64" text-anchor="middle">Telegram</text><text class="s" x="380" y="81" text-anchor="middle">instant</text></g>
+      <g class="node"><rect x="330" y="184" width="100" height="56" rx="12"/>
+        <text x="380" y="208" text-anchor="middle">Email</text><text class="s" x="380" y="225" text-anchor="middle">copy</text></g>
+      <g class="node node--accent"><rect x="470" y="108" width="84" height="64" rx="12"/>
+        <text x="512" y="138" text-anchor="middle">Reply</text><text class="s" x="512" y="156" text-anchor="middle">&lt; 1 day</text></g>
+      <circle class="ping" cx="470" cy="140" r="5"/>
+      <circle class="dot" cx="470" cy="140" r="3.5"/>
+    </svg>
+  </div>
+
+  <div class="contact">
+    <div class="contact__form" data-reveal data-reveal-delay="440">
+      {% for message in messages %}
+        <div class="alert alert--{{ message.tags }}" role="status">{{ message }}</div>
+      {% endfor %}
 
       <form class="form" method="post" novalidate>
         {% csrf_token %}
@@ -32,29 +68,83 @@
 
         {% for field in form.visible_fields %}
           <div class="field-row">
-            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span aria-hidden="true" style="color:var(--brass)">*</span>{% endif %}</label>
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}{% if field.field.required %} <span aria-hidden="true" class="req">*</span>{% endif %}
+            </label>
             {{ field }}
             {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
           </div>
         {% endfor %}
 
-        <div><button class="btn btn--primary" type="submit">{% trans "Send message" %}</button></div>
+        <div>
+          <button class="btn btn--primary" type="submit" data-magnetic="0.25">
+            <span data-magnetic-label>{% trans "Send message" %}</span>
+          </button>
+        </div>
       </form>
     </div>
 
-    <div data-reveal>
-      <p class="eyebrow">{% trans "Direct" %}</p>
-      <dl class="facts" style="margin-top:1.5rem">
-        {% if site.email %}<div><dt>{% trans "Email" %}</dt><dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd></div>{% endif %}
-        {% if site.phone %}<div><dt>{% trans "Phone" %}</dt><dd><a href="tel:{{ site.phone }}">{{ site.phone }}</a></dd></div>{% endif %}
-        {% if site.location %}<div><dt>{% trans "Based in" %}</dt><dd>{{ site.location }}</dd></div>{% endif %}
-        {% if social_links %}
-          <div><dt>{% trans "Elsewhere" %}</dt>
-            <dd>{% for link in social_links %}<a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a>{% if not forloop.last %} · {% endif %}{% endfor %}</dd>
+    <aside class="contact__aside" data-reveal data-reveal-delay="520">
+      <div class="channels">
+        {% for link in social_links %}{% if link.icon == "telegram" %}
+          <a class="channel" href="{{ link.url }}" target="_blank" rel="noopener">
+            <span class="channel__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 4 3 11l6.5 2.2L12 20l3.2-4.3L20 19l1-15Z"/><path d="m9.5 13.2 6-4.7"/></svg>
+            </span>
+            <span class="channel__text">
+              <span class="channel__label">Telegram &middot; {% trans "fastest" %}</span>
+              <span class="channel__value">@{{ link.url|cut:"https://t.me/"|cut:"http://t.me/" }}</span>
+            </span>
+            <span class="channel__arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </span>
+          </a>
+        {% endif %}{% endfor %}
+
+        {% if site.email %}
+          <a class="channel" href="mailto:{{ site.email }}">
+            <span class="channel__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+            </span>
+            <span class="channel__text">
+              <span class="channel__label">Email</span>
+              <span class="channel__value">{{ site.email }}</span>
+            </span>
+            <span class="channel__arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </span>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="aside-card">
+        <p class="aside-card__label">{% trans "What happens next" %}</p>
+        <ol class="steps">
+          <li><span>1</span> {% trans "I read every message myself" %}</li>
+          <li><span>2</span> {% trans "Reply within one working day" %}</li>
+          <li><span>3</span> {% trans "A short call if it looks like a fit" %}</li>
+        </ol>
+      </div>
+
+      <div class="aside-card">
+        <p class="aside-card__label">{% trans "Helps me answer faster" %}</p>
+        <ul class="hints">
+          <li>{% trans "What the system does today" %}</li>
+          <li>{% trans "Where it breaks or slows down" %}</li>
+          <li>{% trans "Timeline, if you have one" %}</li>
+        </ul>
+      </div>
+
+      <dl class="facts">
+        {% if site.location %}<div><dt>{% trans "Based in" %}</dt><dd>{{ site.location }} &middot; UTC+5</dd></div>{% endif %}
+        {% if languages %}
+          <div>
+            <dt>{% trans "Write in" %}</dt>
+            <dd>{% for lang in languages %}{{ lang|tr:"name" }}{% if not forloop.last %} &middot; {% endif %}{% endfor %}</dd>
           </div>
         {% endif %}
       </dl>
-    </div>
+    </aside>
   </div>
 </section>
 {% endblock %}

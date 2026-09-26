@@ -216,3 +216,46 @@ html.lenis, html.lenis body { height: auto; }
   .footer__inner { transform: none !important; }
   .btn::before { display: none; }
 }
+/* -- Project cards: pointer light and glowing edge ---------------------
+   --mx / --my are set by anim.js from the cursor position. */
+.card__img img { transition: none; will-change: transform; }
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(440px circle at var(--mx, 50%) var(--my, 0%),
+              color-mix(in srgb, var(--turquoise) 12%, transparent),
+              transparent 60%);
+  opacity: 0;
+  transition: opacity 450ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card {
+    transition: transform 600ms var(--ease-out),
+                border-color var(--dur) var(--ease),
+                box-shadow 600ms var(--ease-out);
+  }
+  .card:hover { transform: translateY(-6px); }
+
+  /* The gradient border only lights up around the cursor */
+  .card::before {
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%),
+                var(--turquoise), var(--indigo) 45%, transparent 75%);
+  }
+  .card:hover::before,
+  .card:hover::after { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover { transform: none; }
+}
+
+/* Hide split targets until fonts load and the split is ready,
+   otherwise the text flashes once before animating. */
+:root.is-ready [data-split]:not(.is-split):not(.is-revealed) { visibility: hidden; }
+:root.no-anim [data-split] { visibility: visible !important; }

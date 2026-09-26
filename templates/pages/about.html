@@ -1,30 +1,62 @@
 {% extends "base.html" %}
 {% load i18n site_extras %}
-{% block title %}{% trans "About" %} — {{ site.full_name }}{% endblock %}
+{% block title %}{% trans "About" %} &mdash; {{ site.full_name }}{% endblock %}
 
 {% block content %}
-<section class="section wrap">
-  <p class="eyebrow">{% trans "About" %}</p>
-  <h1 style="margin:1.2rem 0 1.5rem;max-width:14ch">{{ site.full_name }}</h1>
-  <div class="prose" style="font-size:var(--step-1)">{{ site|tr:"about"|markdown }}</div>
+<section class="section wrap about-hero{% if site.avatar_display %} about-hero--media{% endif %}">
+  <div class="about-hero__text">
+    <p class="eyebrow" data-reveal>{% trans "About" %}</p>
+    <h1 class="page-title" data-split="load">{{ site.full_name }}</h1>
+    <p class="about-hero__role" data-reveal data-reveal-delay="250">
+      {{ site.job_title }}{% if site.location %} &middot; {{ site.location }}{% endif %}
+    </p>
+    {% with intro=site|tr:"intro" %}
+      {% if intro %}<p class="lead" data-reveal data-reveal-delay="320">{{ intro }}</p>{% endif %}
+    {% endwith %}
+    <div class="hero__actions" data-reveal data-reveal-delay="420">
+      <a class="btn btn--primary" href="{% url 'core:cv' %}" data-magnetic="0.3"><span data-magnetic-label>{% trans "Open résumé" %}</span></a>
+      <a class="btn btn--ghost" href="{% url 'core:contact' %}" data-magnetic="0.22"><span data-magnetic-label>{% trans "Contact" %}</span></a>
+    </div>
+  </div>
+
+  {% if site.avatar_display %}
+    <figure class="about-hero__media" data-reveal data-reveal-delay="200">
+      <div class="about-hero__frame">
+        <img src="{{ site.avatar_display.url }}?v={{ site.updated_at|date:'U' }}" alt="{{ site.full_name }}"
+             width="900" height="1125" decoding="async">
+      </div>
+    </figure>
+  {% endif %}
 </section>
+
+{% with about=site|tr:"about" %}
+  {% if about %}
+    <section class="section section--tight wrap about-story">
+      <p class="eyebrow" data-reveal>{% trans "Story" %}</p>
+      <div class="prose about-story__body" data-reveal>{{ about|markdown }}</div>
+    </section>
+  {% endif %}
+{% endwith %}
 
 {% if experiences %}
 <section class="section section--tight wrap" aria-labelledby="exp-heading">
-  <p class="eyebrow" data-reveal>{% trans "Experience" %}</p>
-  <h2 id="exp-heading" class="sr-only">{% trans "Experience" %}</h2>
-  <div class="timeline" style="margin-top:2rem">
+  <div class="section__head">
+    <p class="eyebrow" data-reveal>{% trans "Experience" %}</p>
+    <h2 id="exp-heading" class="sr-only">{% trans "Experience" %}</h2>
+  </div>
+  <div class="timeline timeline--draw" data-timeline>
+    <span class="timeline__progress" aria-hidden="true"></span>
     {% for job in experiences %}
       <article class="timeline__item {% if job.is_current %}timeline__item--current{% endif %}" data-reveal>
         <p class="timeline__period">
-          {{ job.start_date|date:"M Y" }} — {% if job.end_date %}{{ job.end_date|date:"M Y" }}{% else %}{% trans "present" %}{% endif %}
-          {% with type=job|tr:"employment_type" %}{% if type %} · {{ type }}{% endif %}{% endwith %}
+          {{ job.start_date|date:"M Y" }} &mdash; {% if job.end_date %}{{ job.end_date|date:"M Y" }}{% else %}{% trans "present" %}{% endif %}
+          {% with type=job|tr:"employment_type" %}{% if type %} &middot; {{ type }}{% endif %}{% endwith %}
         </p>
         <div>
           <h3 class="timeline__role">{{ job|tr:"role" }}</h3>
           <p class="timeline__company">
             {% if job.company_url %}<a href="{{ job.company_url }}" target="_blank" rel="noopener">{{ job.company }}</a>{% else %}{{ job.company }}{% endif %}
-            {% if job.location %} · {{ job.location }}{% endif %}
+            {% if job.location %} &middot; {{ job.location }}{% endif %}
           </p>
         </div>
         {% with summary=job|tr:"summary" %}{% if summary %}<div class="prose">{{ summary|markdown }}</div>{% endif %}{% endwith %}
@@ -41,12 +73,12 @@
 
 {% if skill_groups %}
 <section class="section section--tight wrap">
-  <p class="eyebrow" data-reveal>{% trans "Stack" %}</p>
-  <div class="skill-groups" style="margin-top:1.75rem" data-reveal>
+  <div class="section__head"><p class="eyebrow" data-reveal>{% trans "Stack" %}</p></div>
+  <div class="skill-cards" data-reveal-group>
     {% for group in skill_groups %}
-      <div class="skill-group">
+      <div class="skill-card">
         <h3>{{ group|tr:"name" }}</h3>
-        {% with note=group|tr:"note" %}{% if note %}<p class="muted mono" style="margin-bottom:0.7rem">{{ note }}</p>{% endif %}{% endwith %}
+        {% with note=group|tr:"note" %}{% if note %}<p class="skill-card__note">{{ note }}</p>{% endif %}{% endwith %}
         <ul class="skill-list">
           {% for skill in group.skills.all %}<li class="skill {% if skill.depth == 'core' %}skill--core{% endif %}">{{ skill.name }}</li>{% endfor %}
         </ul>
@@ -57,57 +89,54 @@
 {% endif %}
 
 <section class="section section--tight wrap">
-  <div class="skill-groups">
+  <div class="info-cards" data-reveal-group>
     {% if education %}
-      <div data-reveal>
+      <div class="info-card">
         <p class="eyebrow">{% trans "Education" %}</p>
-        <div class="timeline" style="margin-top:1.5rem">
-          {% for ed in education %}
-            <article class="timeline__item">
-              <p class="timeline__period">{{ ed.start_year }} — {{ ed.end_year }}{% if ed.grade %} · {{ ed.grade }}{% endif %}</p>
-              <div>
-                <h3 class="timeline__role" style="font-size:var(--step-0)">{{ ed|tr:"degree" }}</h3>
-                <p class="timeline__company">{{ ed.institution }}{% with f=ed|tr:"field_of_study" %}{% if f %} · {{ f }}{% endif %}{% endwith %}</p>
-              </div>
-              {% with note=ed|tr:"note" %}{% if note %}<div class="prose">{{ note|markdown }}</div>{% endif %}{% endwith %}
-            </article>
-          {% endfor %}
-        </div>
+        {% for ed in education %}
+          <div class="info-card__item">
+            <h3>{{ ed|tr:"degree" }}</h3>
+            <p class="muted">{{ ed.institution }}</p>
+            <p class="mono muted">{{ ed.start_year }}&ndash;{{ ed.end_year }}{% if ed.grade %} &middot; {{ ed.grade }}{% endif %}</p>
+            {% with note=ed|tr:"note" %}{% if note %}<div class="prose">{{ note|markdown }}</div>{% endif %}{% endwith %}
+          </div>
+        {% endfor %}
       </div>
     {% endif %}
 
-    <div data-reveal>
-      {% if languages %}
+    {% if languages %}
+      <div class="info-card">
         <p class="eyebrow">{% trans "Languages" %}</p>
-        <dl class="facts" style="margin-top:1.5rem">
+        <dl class="lang-list">
           {% for lang in languages %}
             <div><dt>{{ lang|tr:"name" }}</dt><dd>{{ lang|tr:"level" }}</dd></div>
           {% endfor %}
         </dl>
-      {% endif %}
+      </div>
+    {% endif %}
 
-      {% if awards %}
-        <p class="eyebrow" style="margin-top:2.5rem">{% trans "Recognition" %}</p>
-        <dl class="facts" style="margin-top:1.5rem">
-          {% for a in awards %}
-            <div>
-              <dt>{{ a.year }}{% if a.issuer %} · {{ a.issuer }}{% endif %}</dt>
-              <dd>{% if a.url %}<a href="{{ a.url }}" target="_blank" rel="noopener">{{ a|tr:"title" }}</a>{% else %}{{ a|tr:"title" }}{% endif %}</dd>
-            </div>
-          {% endfor %}
-        </dl>
-      {% endif %}
-    </div>
+    {% if awards %}
+      <div class="info-card">
+        <p class="eyebrow">{% trans "Recognition" %}</p>
+        {% for a in awards %}
+          <div class="info-card__item">
+            <p class="mono muted">{{ a.year }}{% if a.issuer %} &middot; {{ a.issuer }}{% endif %}</p>
+            <h3>{% if a.url %}<a href="{{ a.url }}" target="_blank" rel="noopener">{{ a|tr:"title" }}</a>{% else %}{{ a|tr:"title" }}{% endif %}</h3>
+            {% with d=a|tr:"description" %}{% if d %}<p class="muted">{{ d }}</p>{% endif %}{% endwith %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 </section>
 
 <section class="section wrap">
   <div class="cta" data-reveal>
-    <h2 style="max-width:18ch">{% trans "Want the short version?" %}</h2>
+    <h2 data-split>{% trans "Want the short version?" %}</h2>
     <p class="lead">{% trans "The résumé fits on one page and prints cleanly." %}</p>
     <div class="hero__actions">
-      <a class="btn btn--primary" href="{% url 'core:cv' %}">{% trans "Open résumé" %}</a>
-      <a class="btn btn--ghost" href="{% url 'core:contact' %}">{% trans "Contact" %}</a>
+      <a class="btn btn--primary" href="{% url 'core:cv' %}" data-magnetic="0.3"><span data-magnetic-label>{% trans "Open résumé" %}</span></a>
+      <a class="btn btn--ghost" href="{% url 'core:contact' %}" data-magnetic="0.22"><span data-magnetic-label>{% trans "Contact" %}</span></a>
     </div>
   </div>
 </section>

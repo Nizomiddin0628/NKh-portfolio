@@ -23,20 +23,6 @@
   <div class="preview" data-preview-list data-project-grid>
     {% for project in projects %}{% include "partials/project_row.html" %}{% endfor %}
 
-    {# Sichqoncha ortidan yuradigan rasm qatlami #}
-    <div class="preview__layer" data-preview-layer aria-hidden="true">
-      {% for project in projects %}
-        {% with cover=project.cover %}
-          <div class="preview__image" data-preview-image>
-            {% if cover %}
-              <img src="{{ cover.image.url }}" alt="" loading="lazy" decoding="async">
-            {% else %}
-              <span class="preview__placeholder">{% trans "No image yet" %}</span>
-            {% endif %}
-          </div>
-        {% endwith %}
-      {% endfor %}
-    </div>
   </div>
 
   <div class="empty-state" data-filter-empty {% if projects %}hidden{% endif %}>

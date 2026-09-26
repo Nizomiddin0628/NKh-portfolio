@@ -1,5 +1,5 @@
 {% load i18n site_extras %}
-<a class="card" href="{{ project.get_absolute_url }}" data-skew
+<a class="card{% if not project.cover %} card--text{% endif %}" href="{{ project.get_absolute_url }}"
    data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
   {% with cover=project.cover %}
     {% if cover %}
@@ -11,15 +11,12 @@
           <span class="card__count">{{ project.image_count }} {% trans "images" %}</span>
         {% endif %}
       </div>
-    {% else %}
-      <div class="card__img card__img--empty" data-tilt-media><span>{{ project.title }}</span></div>
     {% endif %}
   {% endwith %}
 
   <div class="card__body">
     <div class="card__meta">
       {% if project.period %}<span>{{ project.period }}</span>{% endif %}
-      {% if project.organisation %}<span>· {{ project.organisation }}</span>{% endif %}
       <span class="badge {% if project.status == 'research' %}badge--research{% elif project.status == 'archived' %}badge--archived{% endif %}">{{ project.get_status_display }}</span>
     </div>
 
@@ -28,11 +25,9 @@
 
     <div class="card__foot">
       <div class="card__tech">
-        {% for tech in project.technologies.all|slice:":4" %}<span class="chip">{{ tech.name }}</span>{% endfor %}
+        {% for tech in project.technologies.all|slice:":3" %}<span class="chip">{{ tech.name }}</span>{% endfor %}{% with n=project.technologies.all|length %}{% if n > 3 %}<span class="chip chip--more">+{{ n|add:"-3" }}</span>{% endif %}{% endwith %}
       </div>
-      <span class="card__arrow" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </span>
+      <span class="card__cta">{% trans "Case study" %}<span class="card__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
     </div>
   </div>
 </a>

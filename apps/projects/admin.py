@@ -23,7 +23,7 @@ class CaseSectionInline(admin.StackedInline):
     model = CaseSection
     extra = 0
     fields = ["kind", "order", "heading_en", "body_en",
-              "heading_uz", "body_uz", "heading_de", "body_de", "heading_ru", "body_ru"]
+              "heading_uz", "body_uz", "heading_ru", "body_ru"]
     classes = ["collapse"]
 
 

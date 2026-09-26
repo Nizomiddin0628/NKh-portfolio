@@ -9,7 +9,7 @@ from .models import Award, Education, Experience, ExperienceBullet, LanguageSkil
 class ExperienceBulletInline(admin.TabularInline):
     model = ExperienceBullet
     extra = 2
-    fields = ["text_en", "text_uz", "text_de", "text_ru", "order"]
+    fields = ["text_en", "text_uz", "text_ru", "order"]
 
 
 @admin.register(Experience)

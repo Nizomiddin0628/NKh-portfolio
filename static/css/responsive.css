@@ -7,12 +7,72 @@
    Yuklanish tartibi: tokens → base → components → motion → responsive
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ══ Karusel ═════════════════════════════════════════════════════════════ */
-.carousel__nav { display: none; }
+/* -- Project carousel ---------------------------------------------------
+   One markup, two modes (carousel.js sets [data-carousel-mode]):
+     swipe (< 900px):  native scroll-snap strip, neighbours peek in
+     stage (>= 900px): coverflow, front card with its neighbours behind;
+                       positions rotate on a timer */
 
+.carousel { position: relative; }
+
+/* Controls, both modes */
+.carousel__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+.carousel__btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.carousel__btn svg { width: 18px; height: 18px; }
+.carousel__btn:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
+.carousel__btn:active { transform: scale(0.92); }
+
+.carousel__dots { display: flex; gap: 0.4rem; }
+.carousel__dot {
+  position: relative;
+  overflow: hidden;
+  width: 7px; height: 7px;
+  padding: 0;
+  border-radius: 4px;
+  background: var(--border-strong);
+  transition: width 320ms var(--ease-out);
+}
+.carousel__dot[aria-current="true"] { width: 26px; }
+.carousel__dot[aria-current="true"]::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--turquoise), var(--indigo));
+  transform-origin: 0 50%;
+}
+[data-playing="true"] .carousel__dot[aria-current="true"]::after {
+  animation: carousel-fill var(--autoplay, 4s) linear both;
+}
+@keyframes carousel-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.carousel__counter {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--text-faint);
+  min-width: 5.5ch;
+  text-align: center;
+}
+
+/* Swipe mode */
 @media (max-width: 899px) {
-  .carousel { position: relative; }
-
   .carousel__track {
     display: flex !important;
     grid-template-columns: none !important;
@@ -20,7 +80,6 @@
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    /* Chekkadagi kartochka ham markazga kela olishi uchun */
     padding-inline: 12vw;
     scroll-padding-inline: 12vw;
     padding-block: 0.75rem 1.25rem;
@@ -36,62 +95,77 @@
     flex: 0 0 76vw;
     max-width: 380px;
     scroll-snap-align: center;
-    /* Yon kartochkalar kichrayadi va xiralashadi — markazdagi
-       aniq ajralib turadi, lekin qo'shnilar ham ko'rinib qoladi. */
     transform: scale(0.93);
     opacity: 0.55;
     transition: transform 420ms var(--ease-out), opacity 420ms var(--ease-out);
   }
   .carousel__item.is-active { transform: scale(1); opacity: 1; }
   .carousel__item > .card { height: 100%; }
+}
 
-  .carousel__nav {
+/* Stage mode (coverflow)
+   Every card has the same height (--stage-h, measured by carousel.js), so
+   the row stays calm whichever card is in front. Side cards sit flat behind
+   the front one: smaller, dimmed and slightly blurred, so they read as
+   depth rather than as half-cut text. No 3D rotation. The ease-in-out
+   curve starts and ends softly; 1.2s keeps the change unhurried. */
+@media (min-width: 900px) {
+  .carousel { --ease-stage: cubic-bezier(0.45, 0, 0.25, 1); }
+
+  .carousel__track.projects {
+    display: block;
+    position: relative;
+    height: 640px;                  /* replaced with the exact value by JS */
+  }
+
+  .carousel__item {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    width: min(560px, 44%);
+    height: var(--stage-h, auto);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.85rem;
-    margin-top: 0.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) scale(0.78);
+    transition: transform 1000ms var(--ease-stage),
+                opacity 800ms var(--ease-stage),
+                filter 800ms var(--ease-stage);
+    will-change: transform, opacity;
   }
+  .carousel__item > .card { flex: 1; min-width: 0; height: 100%; }
 
-  .carousel__btn {
-    width: 44px; height: 44px;     /* barmoq uchun eng kichik qulay o'lcham */
-    border-radius: 50%;
-    display: grid; place-items: center;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    transition: opacity var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+  .carousel__item[data-pos="center"] {
+    z-index: 3;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) scale(1);
   }
-  .carousel__btn svg { width: 18px; height: 18px; }
-  .carousel__btn:active { transform: scale(0.92); }
-  .carousel__btn:disabled { opacity: 0.35; }
+  .carousel__item[data-pos="center"] > .card { box-shadow: var(--shadow-lg); }
 
-  .carousel__dots { display: flex; gap: 0.4rem; }
-  .carousel__dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--border-strong);
-    padding: 0;
-    transition: all 320ms var(--ease-out);
+  .carousel__item[data-pos="left"],
+  .carousel__item[data-pos="right"] {
+    z-index: 2;
+    opacity: 0.42;
+    filter: blur(2px) saturate(0.85);
+    pointer-events: auto;
+    cursor: pointer;
   }
-  /* Bosish maydonini kattalashtiramiz — ko'rinishi kichik qoladi */
-  .carousel__dot::before {
-    content: ""; position: absolute;
-    width: 28px; height: 28px;
-    transform: translate(-50%, -50%);
-  }
-  .carousel__dot { position: relative; }
-  .carousel__dot[aria-current="true"] {
-    width: 22px; border-radius: 4px;
-    background: linear-gradient(90deg, var(--turquoise), var(--indigo));
-  }
+  .carousel__item[data-pos="left"]  { transform: translateX(-118%) scale(0.86); }
+  .carousel__item[data-pos="right"] { transform: translateX(18%) scale(0.86); }
+  .carousel__item[data-pos="left"]:hover,
+  .carousel__item[data-pos="right"]:hover { opacity: 0.7; filter: none; }
 
-  .carousel__counter {
-    font-family: var(--font-mono);
-    font-size: var(--step--2);
-    color: var(--text-faint);
-    min-width: 5.5ch;
-    text-align: center;
-  }
+  .carousel__item[data-pos="far-left"]  { z-index: 1; transform: translateX(-170%) scale(0.75); }
+  .carousel__item[data-pos="far-right"] { z-index: 1; transform: translateX(70%) scale(0.75); }
+
+  /* Side cards are previews: no lift or glow of their own */
+  .carousel__item:not([data-pos="center"]) > .card:hover { transform: none; box-shadow: none; }
+  .carousel__item:not([data-pos="center"]) > .card::before,
+  .carousel__item:not([data-pos="center"]) > .card::after { opacity: 0 !important; }
+
+  /* Text-only cards: title on top, tech and link at the bottom */
+  .carousel__item .card--text .card__body { justify-content: space-between; }
 }
 
 /* ══ Tipografika ═════════════════════════════════════════════════════════ */
@@ -398,3 +472,59 @@
 @media (min-width: 781px) {
   .nav-scrim { display: none; }
 }
+
+
+/* Hero on phones: portrait on the left, name and status to its right,
+   headline and text full width below. .hero__inner switches to
+   display: contents so its children join the section grid directly. */
+@media (max-width: 899px) {
+  .hero--with-media {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    grid-template-areas:
+      "media   name"
+      "media   status"
+      "title   title"
+      "intro   intro"
+      "actions actions";
+    column-gap: 1.1rem;
+    row-gap: 0;
+  }
+  .hero--with-media .hero__inner { display: contents; }
+
+  .hero--with-media .hero__media {
+    grid-area: media;
+    order: 0;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 22px;
+    margin: 0 0 1.75rem;
+  }
+  .hero--with-media .hero__media img { object-position: 50% 20%; }
+
+  .hero--with-media .hero__name {
+    grid-area: name;
+    align-self: end;
+    margin: 0 0 0.75rem;
+    font-size: var(--step--2);
+    letter-spacing: 0.1em;
+    line-height: 1.7;
+  }
+  .hero--with-media .status {
+    grid-area: status;
+    align-self: start;
+    justify-self: start;
+    white-space: normal;
+    border-radius: 14px;
+    line-height: 1.45;
+  }
+  .hero--with-media h1 { grid-area: title; margin-top: 0; }
+  .hero--with-media .hero__intro { grid-area: intro; }
+  .hero--with-media .hero__actions { grid-area: actions; }
+}
+
+@media (max-width: 899px) {
+  .hero--with-media .hero__name > span { display: block; }
+  .hero--with-media .hero__loc::before { content: none; }
+}
+

@@ -11,7 +11,7 @@ sayt hech qachon bo'sh matn ko'rsatmaydi.
 from django.db import models
 from django.utils.translation import get_language
 
-TRANSLATION_LANGS = ("en", "uz", "de", "ru")
+TRANSLATION_LANGS = ("en", "uz", "ru")
 FALLBACK_LANG = "en"
 
 
