@@ -25,7 +25,7 @@ msgid "Menu"
 msgstr "Menyu"
 
 msgid "Toggle theme"
-msgstr "Mavzuni almashtirish"
+msgstr "Yorug' yoki qorong'i rejim"
 
 msgid "Open command palette"
 msgstr "Tezkor qidiruvni ochish"
@@ -70,7 +70,7 @@ msgid "Vehicles under one platform"
 msgstr "Bitta platformadagi mashinalar"
 
 msgid "Selected work"
-msgstr "Tanlangan loyihalar"
+msgstr "Saralangan loyihalar"
 
 msgid "Three systems, in detail"
 msgstr "Uchta tizim batafsil"
@@ -79,7 +79,7 @@ msgid "All projects"
 msgstr "Barcha loyihalar"
 
 msgid "How I work"
-msgstr "Qanday ishlayman"
+msgstr "Ish uslubim"
 
 msgid "Engineering habits"
 msgstr "Muhandislik tamoyillari"
@@ -88,10 +88,10 @@ msgid "Next step"
 msgstr "Keyingi qadam"
 
 msgid "Have a system that needs building?"
-msgstr "Yangi tizim kerakmi?"
+msgstr "Yangi tizim yaratmoqchimisiz?"
 
 msgid "Tell me what the problem is. I will tell you honestly whether I am the right person for it."
-msgstr "Vazifani qisqacha yozing. Bu ish menga mos keladimi, ochiq aytaman."
+msgstr "Vazifani qisqacha yozib yuboring. Uni bajara olamanmi, yo'qmi — ochiq aytaman."
 
 msgid "Get in touch"
 msgstr "Bog'lanish"
@@ -112,10 +112,10 @@ msgid "Systems I have shipped"
 msgstr "Ishga tushirgan tizimlarim"
 
 msgid "Each project has a full write-up: the problem, the constraints, what I chose and what I would change today."
-msgstr "Har bir loyiha bo'yicha to'liq tahlil: vazifa, cheklovlar, tanlangan yechim va bugun nimani boshqacha qilgan bo'lardim."
+msgstr "Har bir loyiha haqida batafsil: qanday muammo bor edi, qanday cheklovlar mavjud edi, qaysi yechim tanlandi va bugun nimani o'zgartirgan bo'lardim."
 
 msgid "%(n)s engineering projects: computer vision, backend systems and internal platforms."
-msgstr "%(n)s ta loyiha: computer vision, backend tizimlar va ichki platformalar."
+msgstr "%(n)s ta loyiha: kompyuter ko'rish, backend tizimlari va ichki platformalar."
 
 msgid "All"
 msgstr "Hammasi"
@@ -124,7 +124,7 @@ msgid "No projects match that filter yet."
 msgstr "Bu filtr bo'yicha loyiha topilmadi."
 
 msgid "Live"
-msgstr "Jonli versiya"
+msgstr "Saytni ochish"
 
 msgid "Source"
 msgstr "Manba kodi"
@@ -139,7 +139,7 @@ msgid "Expand"
 msgstr "Kattalashtirish"
 
 msgid "My role"
-msgstr "Mening vazifam"
+msgstr "Loyihadagi rolim"
 
 msgid "Team"
 msgstr "Jamoa"
@@ -193,10 +193,10 @@ msgid "Skills"
 msgstr "Ko'nikmalar"
 
 msgid "Selected projects"
-msgstr "Tanlangan loyihalar"
+msgstr "Saralangan loyihalar"
 
 msgid "Want the short version?"
-msgstr "Qisqasini o'qimoqchimisiz?"
+msgstr "Qisqacha ma'lumot kerakmi?"
 
 msgid "The résumé fits on one page and prints cleanly."
 msgstr "Rezyume bir sahifaga sig'adi va chop etishga tayyor."
@@ -232,7 +232,7 @@ msgid "Reply within one working day"
 msgstr "Bir ish kuni ichida javob beraman"
 
 msgid "A short call if it looks like a fit"
-msgstr "Mos kelsa, qisqa qo'ng'iroq qilamiz"
+msgstr "Loyiha mos kelsa, qisqa qo'ng'iroq orqali kelishib olamiz"
 
 msgid "Helps me answer faster"
 msgstr "Tezroq javob berishim uchun"
@@ -250,7 +250,7 @@ msgid "Based in"
 msgstr "Joylashuv"
 
 msgid "Write in"
-msgstr "Yozishingiz mumkin"
+msgstr "Muloqot tillari"
 
 msgid "Name"
 msgstr "Ism"
@@ -307,28 +307,28 @@ msgid "The error is logged. Try again in a moment."
 msgstr "Xatolik qayd etildi. Birozdan so'ng qayta urinib ko'ring."
 
 msgid "Open to opportunities"
-msgstr "Ish takliflariga ochiqman"
+msgstr "Yangi ish takliflarini ko'rib chiqaman"
 
 msgid "Open to selected projects"
-msgstr "Qiziqarli loyihalarga ochiqman"
+msgstr "Ayrim loyihalarni qabul qilaman"
 
 msgid "Not available right now"
-msgstr "Hozircha band"
+msgstr "Hozircha bandman"
 
 msgid "In production"
-msgstr "Ishlab turibdi"
+msgstr "Foydalanishda"
 
 msgid "Research"
 msgstr "Tadqiqot"
 
 msgid "In progress"
-msgstr "Jarayonda"
+msgstr "Ishlab chiqilmoqda"
 
 msgid "Archived"
 msgstr "Arxivda"
 
 msgid "Problem"
-msgstr "Vazifa"
+msgstr "Muammo"
 
 msgid "Constraints"
 msgstr "Cheklovlar"
@@ -343,7 +343,7 @@ msgid "Outcome"
 msgstr "Natija"
 
 msgid "What I'd do differently"
-msgstr "Qaytadan qilsam, nimani o'zgartirardim"
+msgstr "Qaytadan boshlasam, nimani o'zgartirardim"
 
 msgid "Custom section"
 msgstr "Qo'shimcha bo'lim"

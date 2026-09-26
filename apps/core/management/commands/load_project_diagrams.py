@@ -46,18 +46,19 @@ class Command(BaseCommand):
     help = "Attach illustrative diagrams to projects that have no images."
 
     def handle(self, *args, **options):
+        say = self.stdout.write if options.get("verbosity", 1) else (lambda *a, **k: None)
         for slug, (filename, alt, caption) in DIAGRAMS.items():
             project = Project.objects.filter(slug=slug).first()
             if project is None:
-                self.stdout.write(f"· {slug}: not found, skipped")
+                say(f"· {slug}: not found, skipped")
                 continue
             if project.images.exists():
-                self.stdout.write(f"· {slug}: already has images, skipped")
+                say(f"· {slug}: already has images, skipped")
                 continue
             img = ProjectImage(project=project, order=0, is_primary=True,
                                **lang_fields("alt_text", alt), **lang_fields("caption", caption))
             with open(ASSETS / filename, "rb") as fh:
                 img.image.save(filename, File(fh), save=False)
             img.save()
-            self.stdout.write(f"· {slug}: diagram added")
-        self.stdout.write(self.style.SUCCESS("Done."))
+            say(f"· {slug}: diagram added")
+        say(self.style.SUCCESS("Done."))

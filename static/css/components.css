@@ -1339,3 +1339,36 @@ main > .section:last-child { padding-bottom: clamp(1.75rem, 4vw, 3rem); }
   .cert-list__link { border: 0; padding: 0; }
   .cert-list__type { display: none; }
 }
+
+/* ---------- Mobile: visible menu button ---------- */
+@media (max-width: 780px) {
+  .nav-toggle {
+    width: auto; height: 38px; padding: 0 0.85rem 0 0.7rem;
+    grid-auto-flow: column; gap: 0.4rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-strong);
+    background: var(--surface); color: var(--text);
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-toggle:hover { background: var(--surface-2); }
+  .nav-toggle svg { width: 18px; height: 18px; }
+  .nav-toggle__label { font-size: 0.875rem; font-weight: 600; line-height: 1; }
+}
+.nav-toggle__label { display: none; }
+@media (max-width: 780px) { .nav-toggle__label { display: inline; } }
+/* Very narrow phones: icon only, but still a bordered button */
+@media (max-width: 340px) { .nav-toggle__label { display: none; } .nav-toggle { padding: 0 0.6rem; } }
+
+/* ---------- Footer page links: easy to spot ---------- */
+.footer__links--pages a { color: var(--text); font-weight: 500; }
+@media (max-width: 720px) {
+  .footer__links--pages { gap: 0.5rem; }
+  .footer__links--pages a {
+    display: inline-flex; align-items: center;
+    min-height: 40px; padding: 0 1rem;
+    border: 1px solid var(--border-strong); border-radius: var(--radius-full);
+    background: var(--surface); box-shadow: var(--shadow-sm);
+    font-size: var(--step--1); text-decoration: none;
+  }
+  .footer__links--pages a:active { background: var(--surface-2); }
+}
