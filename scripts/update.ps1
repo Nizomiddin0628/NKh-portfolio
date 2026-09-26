@@ -39,6 +39,9 @@ if (git status --porcelain) {
     git add -A
     git commit -q -m $Message
 }
+# Take in commits pushed from another computer first; on a clash our local version wins
+git pull -q --rebase -X theirs
+if ($LASTEXITCODE -ne 0) { throw "git pull failed - run 'git status' and send me the output" }
 git push -q
 if ($LASTEXITCODE -ne 0) { throw "git push failed" }
 
