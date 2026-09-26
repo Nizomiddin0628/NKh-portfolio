@@ -9,7 +9,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from apps.projects.models import Project,Technology
-from apps.resume.models import Award, Education, Experience, LanguageSkill, SkillGroup
+from apps.resume.models import Award, Certificate, Education, Experience, LanguageSkill, SkillGroup
 
 from .forms import ContactForm
 from .notify import notify_new_message
@@ -38,8 +38,9 @@ def home(request):
     ctx = _base_context(request)
     ctx.update({
         "featured_projects": (
-            Project.objects.filter(is_published=True, is_featured=True)
-            .prefetch_related("images", "technologies", "metrics")[:4]
+            # Every published project rotates in the home carousel, in admin order
+            Project.objects.filter(is_published=True)
+            .prefetch_related("images", "technologies", "metrics")
         ),
         "project_total": Project.objects.filter(is_published=True).count(),
         "principles": Principle.objects.filter(is_published=True)[:3],
@@ -57,6 +58,7 @@ def about(request):
         "skill_groups": SkillGroup.objects.prefetch_related("skills"),
         "languages": LanguageSkill.objects.all(),
         "awards": Award.objects.all(),
+        "certificates": Certificate.objects.filter(is_published=True),
         "principles": Principle.objects.filter(is_published=True),
     })
     return render(request, "pages/about.html", ctx)
@@ -70,6 +72,7 @@ def cv(request):
         "skill_groups": SkillGroup.objects.prefetch_related("skills"),
         "languages": LanguageSkill.objects.all(),
         "awards": Award.objects.all(),
+        "certificates": Certificate.objects.filter(is_published=True),
         "projects": Project.objects.filter(is_published=True).prefetch_related("technologies")[:5],
     })
     return render(request, "pages/cv.html", ctx)

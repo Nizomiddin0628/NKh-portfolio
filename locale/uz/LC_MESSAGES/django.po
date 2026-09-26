@@ -356,3 +356,9 @@ msgstr "Yakka o'zim"
 
 msgid "people"
 msgstr "kishi"
+
+msgid "Certificates"
+msgstr "Sertifikatlar"
+
+msgid "View"
+msgstr "Ko'rish"

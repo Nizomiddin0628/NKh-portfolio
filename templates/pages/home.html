@@ -73,7 +73,7 @@
   <div class="section__head section__head--row">
     <div class="section__head-text">
     <p class="eyebrow" data-reveal>{% trans "Selected work" %}</p>
-    <h2 id="work-heading" data-split>{% trans "Three systems, in detail" %}</h2>
+    <h2 id="work-heading" data-split>{% trans "Systems I have shipped" %}</h2>
     </div>
     <a class="link-arrow" href="{% url 'projects:list' %}" data-reveal>
       {% trans "All projects" %} ({{ project_total }})
@@ -81,7 +81,7 @@
     </a>
   </div>
 
-  {% with carousel_projects=featured_projects|slice:":3" %}
+  {% with carousel_projects=featured_projects %}
     {% include "partials/project_carousel.html" %}
   {% endwith %}
 </section>

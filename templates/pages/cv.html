@@ -120,6 +120,22 @@
           {% endfor %}
         </section>
         {% endif %}
+
+        {% if certificates %}
+        <section class="cv__section">
+          <h2>{% trans "Certificates" %}</h2>
+          <ul class="cert-list">
+            {% for c in certificates %}
+              <li class="cert-list__item">
+                <span class="cert-list__name">{{ c|tr:"title" }}</span>
+                <a class="cert-list__link" href="{{ c.file.url }}" target="_blank" rel="noopener">
+                  {% trans "View" %}<span class="cert-list__type">{% if c.is_pdf %}PDF{% else %}IMG{% endif %}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
       </div>
     </div>
   </div>

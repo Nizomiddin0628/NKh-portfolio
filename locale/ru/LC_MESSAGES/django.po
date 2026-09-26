@@ -356,3 +356,9 @@ msgstr "Один"
 
 msgid "people"
 msgstr "чел."
+
+msgid "Certificates"
+msgstr "Сертификаты"
+
+msgid "View"
+msgstr "Открыть"

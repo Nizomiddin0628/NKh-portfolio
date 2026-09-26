@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -176,3 +177,34 @@ class Award(TranslatedModel):
 
     def __str__(self):
         return self.title_en
+
+
+CERTIFICATE_EXTENSIONS = ["pdf", "jpg", "jpeg", "png", "webp"]
+
+
+@with_translations("title")
+class Certificate(TranslatedModel):
+    """A certificate or diploma: just a name and the uploaded file."""
+
+    title_en = models.CharField(max_length=180, help_text=_("e.g. IELTS Academic 7.0, Bachelor's diploma"))
+    title_uz = models.CharField(max_length=180, blank=True)
+    title_ru = models.CharField(max_length=180, blank=True)
+    file = models.FileField(
+        upload_to="certificates/",
+        validators=[FileExtensionValidator(CERTIFICATE_EXTENSIONS)],
+        help_text=_("PDF or image (JPG, PNG, WEBP)."),
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    is_published = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = _("Certificate")
+        verbose_name_plural = _("Certificates")
+
+    def __str__(self):
+        return self.title_en
+
+    @property
+    def is_pdf(self):
+        return self.file.name.lower().endswith(".pdf")

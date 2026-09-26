@@ -1,9 +1,10 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.admin_utils import lang_fieldsets
 
-from .models import Award, Education, Experience, ExperienceBullet, LanguageSkill, Skill, SkillGroup
+from .models import Award, Certificate, Education, Experience, ExperienceBullet, LanguageSkill, Skill, SkillGroup
 
 
 class ExperienceBulletInline(admin.TabularInline):
@@ -74,3 +75,20 @@ class AwardAdmin(admin.ModelAdmin):
         (_("Details"), {"fields": ["issuer", "year", "url", "order"]}),
         *lang_fieldsets(["title", "description"]),
     ]
+
+
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ["title_en", "file_link", "is_published", "order"]
+    list_editable = ["is_published", "order"]
+    list_display_links = ["title_en"]
+    fieldsets = [
+        (_("File"), {"fields": ["file", "is_published", "order"]}),
+        *lang_fieldsets(["title"]),
+    ]
+
+    @admin.display(description=_("File"))
+    def file_link(self, obj):
+        if not obj.file:
+            return "—"
+        return format_html('<a href="{}" target="_blank" rel="noopener">{}</a>', obj.file.url, _("Open"))
