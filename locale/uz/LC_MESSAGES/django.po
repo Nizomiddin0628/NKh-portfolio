@@ -115,7 +115,7 @@ msgid "Each project has a full write-up: the problem, the constraints, what I ch
 msgstr "Har bir loyiha haqida batafsil: qanday muammo bor edi, qanday cheklovlar mavjud edi, qaysi yechim tanlandi va bugun nimani o'zgartirgan bo'lardim."
 
 msgid "%(n)s engineering projects: computer vision, backend systems and internal platforms."
-msgstr "%(n)s ta loyiha: kompyuter ko'rish, backend tizimlari va ichki platformalar."
+msgstr "%(n)s ta loyiha: Computer Vision, backend tizimlar va ichki platformalar."
 
 msgid "All"
 msgstr "Hammasi"
@@ -307,7 +307,7 @@ msgid "The error is logged. Try again in a moment."
 msgstr "Xatolik qayd etildi. Birozdan so'ng qayta urinib ko'ring."
 
 msgid "Open to opportunities"
-msgstr "Yangi ish takliflarini ko'rib chiqaman"
+msgstr "Ishga tayyorman"
 
 msgid "Open to selected projects"
 msgstr "Ayrim loyihalarni qabul qilaman"
