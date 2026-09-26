@@ -350,3 +350,9 @@ msgstr "Qo'shimcha bo'lim"
 
 msgid "Story"
 msgstr "Mening yo'lim"
+
+msgid "Solo"
+msgstr "Yakka o'zim"
+
+msgid "people"
+msgstr "kishi"

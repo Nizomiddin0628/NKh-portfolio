@@ -350,3 +350,9 @@ msgstr "Дополнительный раздел"
 
 msgid "Story"
 msgstr "Мой путь"
+
+msgid "Solo"
+msgstr "Один"
+
+msgid "people"
+msgstr "чел."

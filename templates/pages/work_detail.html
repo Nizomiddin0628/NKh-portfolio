@@ -109,7 +109,7 @@
             {% if role %}<div><dt>{% trans "My role" %}</dt><dd>{{ role }}</dd></div>{% endif %}
           {% endwith %}
           {% if project.team_size %}
-            <div><dt>{% trans "Team" %}</dt><dd>{% blocktrans count n=project.team_size %}{{ n }} person{% plural %}{{ n }} people{% endblocktrans %}</dd></div>
+            <div><dt>{% trans "Team" %}</dt><dd>{% if project.team_size == 1 %}{% trans "Solo" %}{% else %}{{ project.team_size }} {% trans "people" %}{% endif %}</dd></div>
           {% endif %}
           {% if project.period %}<div><dt>{% trans "Period" %}</dt><dd>{{ project.period }}</dd></div>{% endif %}
           {% if project.organisation %}<div><dt>{% trans "For" %}</dt><dd>{{ project.organisation }}</dd></div>{% endif %}
