@@ -1257,3 +1257,61 @@
 .link-arrow svg { width: 15px; height: 15px; transition: transform var(--dur) var(--ease-out); }
 .link-arrow:hover { color: var(--text); border-color: var(--text); }
 .link-arrow:hover svg { transform: translateX(4px); }
+
+/* -- Card images: shown whole -------------------------------------------
+   The screenshot is never cropped: it sits in the 16:10 frame with
+   object-fit: contain, and the empty space is filled by a blurred,
+   darkened copy of the same image, so the frame never looks empty. */
+.card__img { background: #0b1120; isolation: isolate; }
+.card__img .card__img-bg,
+.row__thumb .thumb-bg {
+  position: absolute; inset: -12%;
+  width: 124%; height: 124%;
+  object-fit: cover;
+  filter: blur(22px) saturate(1.15) brightness(0.7);
+  transform: none !important;
+  z-index: 0;
+}
+.card__img .card__img-main,
+.row__thumb .thumb-main {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  transform: none;
+}
+.card__count { z-index: 2; }
+.row__thumb { position: relative; background: #0b1120; isolation: isolate; }
+.gallery__thumb img { object-fit: contain; background: #0b1120; }
+
+/* -- Footer ----------------------------------------------------------- */
+.footer { margin-top: clamp(2rem, 5vw, 3.5rem); border-top: 1px solid var(--border); }
+.footer__inner {
+  display: grid; gap: 2rem;
+  padding-block: clamp(2.25rem, 5vw, 3.5rem) 1.75rem;
+}
+@media (min-width: 820px) {
+  .footer__inner { grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 3rem; }
+}
+.footer__title { font-size: var(--step-1); }
+.footer__cols { display: grid; gap: 1.5rem; grid-template-columns: repeat(2, minmax(0, auto)); column-gap: clamp(2rem, 6vw, 4.5rem); }
+.footer__links { display: grid; gap: 0.5rem; }
+.footer__bottom {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem;
+  padding-block: 1.1rem calc(1.25rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  font-size: var(--step--2); color: var(--text-faint);
+}
+@media (max-width: 720px) {
+  .footer__inner { gap: 1.5rem; padding-block: 2rem 1.25rem; }
+  .footer__title { font-size: var(--step-0); }
+  .footer__role { font-size: var(--step--1); }
+  .footer__mail { margin-top: 0.6rem; font-size: var(--step--1); }
+  .footer__cols { grid-template-columns: 1fr; gap: 1.1rem; }
+  /* Links sit in a row instead of a tall column */
+  .footer__links { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; }
+  .footer__label { margin-bottom: 0.4rem; }
+}
+
+/* The last section sits close to the footer instead of leaving a gap */
+main > .section:last-child { padding-bottom: clamp(1.75rem, 4vw, 3rem); }
+.footer { margin-top: 0; }

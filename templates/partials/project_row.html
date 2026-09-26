@@ -21,7 +21,7 @@
   {# Sensorli ekranlarda rasm shu yerda statik ko'rinadi #}
   {% with cover=project.cover %}
     {% if cover %}
-      <span class="row__thumb"><img src="{{ cover.image.url }}" alt="" loading="lazy" decoding="async"></span>
+      <span class="row__thumb"><img class="thumb-bg" src="{{ cover.image.url }}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="thumb-main" src="{{ cover.image.url }}" alt="" loading="lazy" decoding="async"></span>
     {% endif %}
   {% endwith %}
 </a>

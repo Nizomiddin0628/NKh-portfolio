@@ -38,7 +38,6 @@ export function initAnimations() {
   countUp(gsap);
   scrollProgress(gsap);
   magnetic(gsap);
-  footerReveal(gsap);
   projectCards(gsap);
   heroPortrait(gsap);
   timelineDraw(gsap);
@@ -283,13 +282,13 @@ function projectCards(gsap) {
   const cards = gsap.utils.toArray(".card");
   if (!cards.length) return;
 
-  const REST = 1.12;
-  const HOVER = 1.08;
+  const REST = 1;
+  const HOVER = 1.03;
 
   // 1. Entrance
   cards.forEach((card) => {
     const box = card.querySelector(".card__img");
-    const img = box && box.querySelector("img");
+    const img = box && box.querySelector(".card__img-main");
     const text = card.querySelectorAll(".card__meta, .card__title, .card__tagline, .card__foot");
 
     const tl = gsap.timeline({
@@ -320,15 +319,8 @@ function projectCards(gsap) {
     const cleanups = [];
 
     cards.forEach((card) => {
-      const img = card.querySelector(".card__img img");
+      const img = card.querySelector(".card__img-main");
 
-      if (img) {
-        gsap.fromTo(img, { yPercent: -2.5 }, {
-          yPercent: 2.5,
-          ease: "none",
-          scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
-        });
-      }
 
       const moveX = img ? gsap.quickTo(img, "x", { duration: 0.8, ease: "power3.out" }) : null;
       const moveY = img ? gsap.quickTo(img, "y", { duration: 0.8, ease: "power3.out" }) : null;
@@ -341,8 +333,8 @@ function projectCards(gsap) {
         card.style.setProperty("--mx", `${(px * 100).toFixed(1)}%`);
         card.style.setProperty("--my", `${(py * 100).toFixed(1)}%`);
         if (img) {
-          moveX((px - 0.5) * 12);
-          moveY((py - 0.5) * 8);
+          moveX((px - 0.5) * 6);
+          moveY((py - 0.5) * 4);
         }
       };
       const onEnter = () => { if (zoom) zoom(HOVER); };

@@ -4,7 +4,8 @@
   {% with cover=project.cover %}
     {% if cover %}
       <div class="card__img">
-        <img src="{{ cover.image.url }}" alt="{{ cover|tr:'alt_text' }}"
+        <img class="card__img-bg" src="{{ cover.image.url }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <img class="card__img-main" src="{{ cover.image.url }}" alt="{{ cover|tr:'alt_text' }}"
              {% if cover.width %}width="{{ cover.width }}" height="{{ cover.height }}"{% endif %}
              loading="lazy" decoding="async" data-tilt-media>
         {% if project.image_count > 1 %}

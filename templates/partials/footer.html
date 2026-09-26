@@ -1,39 +1,34 @@
 {% load i18n %}
 <footer class="footer">
-  <div class="footer__reveal">
-    <div class="footer__inner wrap" data-footer-inner>
-      <div class="footer__brand">
-        <p class="footer__title">{{ site.full_name }}</p>
-        <p class="footer__role">{{ site.job_title }}</p>
-        {% if site.email %}
-          <a class="footer__mail link-underline" href="mailto:{{ site.email }}">{{ site.email }}</a>
-        {% endif %}
-      </div>
+  <div class="footer__inner wrap">
+    <div class="footer__brand">
+      <p class="footer__title">{{ site.full_name }}</p>
+      <p class="footer__role">{{ site.job_title }}</p>
+      {% if site.email %}<a class="footer__mail link-underline" href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}
+    </div>
 
-      <div class="footer__cols">
-        <div class="footer__col">
-          <p class="footer__label">{% trans "Pages" %}</p>
+    <nav class="footer__cols" aria-label="{% trans 'Footer' %}">
+      <div class="footer__col">
+        <p class="footer__label">{% trans "Pages" %}</p>
+        <div class="footer__links">
           <a href="{% url 'projects:list' %}">{% trans "Work" %}</a>
           <a href="{% url 'core:about' %}">{% trans "About" %}</a>
           <a href="{% url 'core:cv' %}">{% trans "Résumé" %}</a>
           <a href="{% url 'core:contact' %}">{% trans "Contact" %}</a>
         </div>
-
-        {% if social_links %}
-          <div class="footer__col">
-            <p class="footer__label">{% trans "Elsewhere" %}</p>
-            {% for link in social_links %}
-              <a href="{{ link.url }}" rel="me noopener" target="_blank">{{ link.label }} ↗</a>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        <div class="footer__col">
-          <p class="footer__label">{% trans "Built with" %}</p>
-          <a href="/api/docs/">API docs ↗</a>
-          <span class="footer__note">Django · PostgreSQL · GSAP</span>
+      </div>
+      <div class="footer__col">
+        <p class="footer__label">{% trans "Elsewhere" %}</p>
+        <div class="footer__links">
+          {% for link in social_links %}<a href="{{ link.url }}" rel="me noopener" target="_blank">{{ link.label }} &#8599;</a>{% endfor %}
+          <a href="/api/docs/">API docs &#8599;</a>
         </div>
       </div>
-    </div>
+    </nav>
+  </div>
+
+  <div class="footer__bottom wrap">
+    <span>&copy; {% now "Y" %} {{ site.full_name }}</span>
+    <span class="footer__note">Django &middot; PostgreSQL &middot; GSAP</span>
   </div>
 </footer>
