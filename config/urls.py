@@ -18,6 +18,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
     path("robots.txt", core_views.robots, name="robots"),
+    path("ai/", include("apps.ai.urls")),
 ]
 
 urlpatterns += i18n_patterns(

@@ -1,4 +1,4 @@
-{% load static i18n site_extras %}<!doctype html>
+{% load static i18n site_extras ai_widget %}<!doctype html>
 <html lang="{{ LANGUAGE_CODE }}" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -88,6 +88,7 @@
 
 {% include "partials/footer.html" %}
 {% include "partials/cmdk.html" %}
+{% ai_widget %}
 
 <script type="module" src="{% static 'js/main.js' %}"></script>
 {% block extra_js %}{% endblock %}

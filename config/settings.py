@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.projects",
     "apps.resume",
+    "apps.ai",
 ]
 
 MIDDLEWARE = [
@@ -204,6 +205,19 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 # Telegram notifications for new contact messages (optional, see .env)
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID", "")
+
+# AI assistant (Google Gemini). The key lives only in .env; see docs/AI_ASSISTANT.md
+GEMINI_API_KEY = env("GEMINI_API_KEY", "")
+GEMINI_MODELS = env_list("GEMINI_MODELS") or None          # comma separated chain, optional
+GEMINI_LITE_MODELS = env_list("GEMINI_LITE_MODELS") or None
+AI_OWNER_TELEGRAM_ID = env("AI_OWNER_TELEGRAM_ID", "")     # defaults to TELEGRAM_CHAT_ID
+AI_OWNER_LANG = env("AI_OWNER_LANG", "uz")
+TELEGRAM_WEBHOOK_SECRET = env("TELEGRAM_WEBHOOK_SECRET", "")
+AI_GUEST_HOURLY = int(env("AI_GUEST_HOURLY", "20"))
+AI_GUEST_DAILY = int(env("AI_GUEST_DAILY", "60"))
+AI_DAILY_LIMIT = int(env("AI_DAILY_LIMIT", "400"))
+AI_LOG_RETENTION_DAYS = int(env("AI_LOG_RETENTION_DAYS", "90"))
+AI_RUN_ASYNC = True
 
 # Admin lives at a configurable path. Keep "admin/" locally; in production
 # set ADMIN_URL in .env to something only you know, e.g. "studio-x7k2/".

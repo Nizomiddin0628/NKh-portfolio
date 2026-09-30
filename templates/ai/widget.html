@@ -1,0 +1,145 @@
+{% load static %}
+<style>
+.ai-fab {
+  position: fixed;
+  right: calc(1.25rem + env(safe-area-inset-right));
+  bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  z-index: 95;
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  height: 50px; padding: 0 1.1rem 0 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font: 500 var(--step--1) var(--font-body);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.ai-fab:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--text-faint); }
+.ai-fab:active { transform: none; }
+.ai-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ai-fab__icon {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--turquoise), var(--indigo));
+  color: #fff;
+}
+.ai-fab__icon svg { width: 17px; height: 17px; }
+.ai-fab.is-loading .ai-fab__icon { animation: ai-pulse 0.9s ease-in-out infinite; }
+.ai-fab__badge {
+  position: absolute; top: -5px; right: -3px;
+  min-width: 19px; height: 19px; padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--brass); color: #fff;
+  font: 600 11px/19px var(--font-mono); text-align: center;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.ai[data-open="true"] .ai-fab { opacity: 0; pointer-events: none; transform: translateY(8px); }
+@keyframes ai-pulse { 50% { transform: scale(0.88); opacity: 0.7; } }
+
+@media (max-width: 640px) { .ai-fab { height: 48px; padding: 0 0.6rem; } .ai-fab__text { display: none; } }
+@media print { .ai { display: none; } }
+</style>
+{# AI assistant: the button is server-rendered; CSS and JS load on the first click (or when idle). #}
+<div class="ai" data-ai data-css="{% static 'ai/widget.css' %}" data-js="{% static 'ai/widget.js' %}"
+     data-config='{{ config_json }}'>
+  <button class="ai-fab" data-ai-open type="button" aria-haspopup="dialog" aria-expanded="false"
+          aria-controls="ai-panel" title="{{ ui.open }}">
+    <span class="ai-fab__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3.5 13.9 8.6 19 10.5l-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9Z"/>
+        <path d="M19 3v3M17.5 4.5h3M5 17v3M3.5 18.5h3"/>
+      </svg>
+    </span>
+    <span class="ai-fab__text">{{ ui.open }}</span>
+    <span class="ai-fab__badge" data-ai-badge hidden></span>
+  </button>
+
+  <section class="ai-panel" id="ai-panel" data-ai-panel role="dialog" aria-modal="true"
+           aria-label="{{ ui.title }}" data-lenis-prevent hidden>
+    <header class="ai-head">
+      <div class="ai-head__id">
+        <span class="ai-avatar" aria-hidden="true">{{ initials }}</span>
+        <div class="ai-head__text">
+          <strong>{{ ui.title }}</strong>
+          <small data-ai-status>{% if owner %}{{ ui.owner }}{% else %}{{ ui.subtitle }}{% endif %}</small>
+        </div>
+      </div>
+      <div class="ai-head__tools">
+        <div class="ai-mode" data-ai-mode hidden role="group">
+          <button type="button" data-mode="local" aria-pressed="true">{{ ui.mode_site }}</button>
+          <button type="button" data-mode="web" aria-pressed="false">{{ ui.mode_web }}</button>
+        </div>
+        <button type="button" class="ai-icon" data-ai-new title="{{ ui.new }}" aria-label="{{ ui.new }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button type="button" class="ai-icon" data-ai-close title="{{ ui.close }}" aria-label="{{ ui.close }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="ai-body" data-ai-log role="log" aria-live="polite"></div>
+
+    <div class="ai-chips" data-ai-chips></div>
+    <div class="ai-actions" data-ai-actions></div>
+
+    <form class="ai-composer" data-ai-form autocomplete="off">
+      <div class="ai-preview" data-ai-preview hidden></div>
+      <div class="ai-row">
+        <button type="button" class="ai-icon ai-icon--tool" data-ai-attach title="{{ ui.attach }}" aria-label="{{ ui.attach }}" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21 11.5-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7L10 17.7a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>
+        </button>
+        <input type="file" accept="image/*,.pdf,application/pdf" data-ai-file hidden>
+        <button type="button" class="ai-icon ai-icon--tool" data-ai-mic title="{{ ui.voice }}" aria-label="{{ ui.voice }}" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        </button>
+        <textarea class="ai-input" data-ai-input rows="1" placeholder="{{ ui.placeholder }}" aria-label="{{ ui.placeholder }}" maxlength="2000"></textarea>
+        <button type="submit" class="ai-send" data-ai-send aria-label="{{ ui.send }}" title="{{ ui.send }}">
+          <svg class="ai-send__go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          <svg class="ai-send__stop" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        </button>
+      </div>
+      <p class="ai-note">{{ ui.note }}</p>
+    </form>
+  </section>
+</div>
+<script>
+(function () {
+  var root = document.querySelector("[data-ai]");
+  if (!root) return;
+  var btn = root.querySelector("[data-ai-open]");
+  var loading = null;
+  function load() {
+    if (loading) return loading;
+    loading = new Promise(function (resolve, reject) {
+      var link = document.createElement("link");
+      link.rel = "stylesheet"; link.href = root.dataset.css;
+      link.onload = function () {
+        import(root.dataset.js).then(function (m) { m.init(root); resolve(m); }).catch(reject);
+      };
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+    return loading;
+  }
+  function open(question) {
+    btn.classList.add("is-loading");
+    load().then(function (m) { btn.classList.remove("is-loading"); m.open(question); })
+          .catch(function () { btn.classList.remove("is-loading"); });
+  }
+  btn.addEventListener("click", function () { if (!root.dataset.ready) open(); });
+  btn.addEventListener("pointerenter", function () { load(); }, { once: true });
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#ai"], [data-ai-ask]');
+    if (!a) return;
+    e.preventDefault();
+    open(a.getAttribute("data-ai-ask") || "");
+  });
+  if (location.hash === "#ai") setTimeout(function () { open(); }, 400);
+  window.addEventListener("load", function () {
+    setTimeout(function () { (window.requestIdleCallback || setTimeout)(function () { load(); }); }, 3000);
+  });
+})();
+</script>

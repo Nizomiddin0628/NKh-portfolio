@@ -33,6 +33,12 @@ $RUN "$VENV/bin/python" manage.py collectstatic --noinput -v0
 step "Compiling translations"
 $RUN "$VENV/bin/python" scripts/compile_po.py | tail -1
 
+step "AI assistant: Telegram webhook and the 15-minute timer"
+$RUN "$VENV/bin/python" manage.py tg_setup 2>/dev/null | tail -1 || true
+install -m 644 deploy/portfolio-ai-tick.service deploy/portfolio-ai-tick.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable -q --now portfolio-ai-tick.timer
+
 step "Restarting the app"
 systemctl restart portfolio
 sleep 3
