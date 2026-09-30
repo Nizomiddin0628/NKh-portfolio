@@ -2,7 +2,7 @@
 
 UI = {
     "en": {
-        "open": "Ask AI", "title": "Assistant", "subtitle": "Nizomiddin's AI assistant",
+        "open": "Ask AI", "fab": "Talk with AI", "tease_title": "Have a question?", "tease_text": "Ask the AI about my projects or describe yours.", "title": "Assistant", "subtitle": "Nizomiddin's AI assistant",
         "owner": "Owner mode", "placeholder": "Type a question…", "send": "Send", "stop": "Stop",
         "new": "New chat", "close": "Close", "attach": "Image or PDF", "voice": "Voice question",
         "mode_site": "Site", "mode_web": "Global", "confirm": "Confirm", "cancel": "Cancel",
@@ -15,7 +15,7 @@ UI = {
         "mic_denied": "Microphone access was denied.", "you": "You", "assistant": "Assistant",
     },
     "uz": {
-        "open": "AI assistent", "title": "Assistent", "subtitle": "Nizomiddinning AI assistenti",
+        "open": "AI assistent", "fab": "AI bilan suhbat", "tease_title": "Savolingiz bormi?", "tease_text": "Loyihalarim haqida AI'dan so'rang yoki o'z loyihangizni aytib bering.", "title": "Assistent", "subtitle": "Nizomiddinning AI assistenti",
         "owner": "Ega rejimi", "placeholder": "Savol yozing…", "send": "Yuborish", "stop": "To'xtatish",
         "new": "Yangi suhbat", "close": "Yopish", "attach": "Rasm yoki PDF", "voice": "Ovozli savol",
         "mode_site": "Sayt", "mode_web": "Global", "confirm": "Tasdiqlash", "cancel": "Bekor",
@@ -29,7 +29,7 @@ UI = {
         "you": "Siz", "assistant": "Assistent",
     },
     "ru": {
-        "open": "AI-ассистент", "title": "Ассистент", "subtitle": "AI-ассистент Низомиддина",
+        "open": "AI-ассистент", "fab": "Чат с AI", "tease_title": "Есть вопрос?", "tease_text": "Спросите AI о моих проектах или расскажите о своём.", "title": "Ассистент", "subtitle": "AI-ассистент Низомиддина",
         "owner": "Режим владельца", "placeholder": "Напишите вопрос…", "send": "Отправить", "stop": "Остановить",
         "new": "Новый диалог", "close": "Закрыть", "attach": "Фото или PDF", "voice": "Голосовой вопрос",
         "mode_site": "Сайт", "mode_web": "Глобальный", "confirm": "Подтвердить", "cancel": "Отмена",

@@ -1,44 +1,77 @@
 {% load static %}
 <style>
+/* Launcher: a large gradient orb with a label under it. Styled here so it is right before widget.css loads. */
 .ai-fab {
   position: fixed;
-  right: calc(1.25rem + env(safe-area-inset-right));
-  bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  right: calc(1.5rem + env(safe-area-inset-right));
+  bottom: calc(1.5rem + env(safe-area-inset-bottom));
   z-index: 95;
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  height: 50px; padding: 0 1.1rem 0 0.75rem;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  color: var(--text);
-  font: 500 var(--step--1) var(--font-body);
-  box-shadow: var(--shadow-md);
-  cursor: pointer;
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
-              border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
+  padding: 0; border: 0; background: none; color: var(--text);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
 }
-.ai-fab:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--text-faint); }
-.ai-fab:active { transform: none; }
-.ai-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.ai-fab__icon {
-  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+.ai-fab__orb {
+  position: relative; display: grid; place-items: center;
+  width: 68px; height: 68px; border-radius: 50%;
   background: linear-gradient(135deg, var(--turquoise), var(--indigo));
   color: #fff;
+  box-shadow: 0 14px 34px -10px color-mix(in srgb, var(--indigo) 70%, transparent),
+              0 0 0 1px color-mix(in srgb, #fff 18%, transparent) inset;
+  transition: transform var(--dur) var(--ease-back), box-shadow var(--dur) var(--ease);
 }
-.ai-fab__icon svg { width: 17px; height: 17px; }
-.ai-fab.is-loading .ai-fab__icon { animation: ai-pulse 0.9s ease-in-out infinite; }
+.ai-fab__orb::after {               /* soft ring that pulses a few times after load */
+  content: ""; position: absolute; inset: -6px; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--turquoise) 55%, transparent);
+  opacity: 0; animation: ai-ring 2.4s var(--ease-out) 1.2s 4;
+}
+.ai-fab__orb svg { width: 30px; height: 30px; }
+.ai-fab__label {
+  padding: 0.3rem 0.75rem; border-radius: var(--radius-full);
+  background: var(--surface); border: 1px solid var(--border-strong);
+  font: 600 13px/1.2 var(--font-body); letter-spacing: 0.01em; white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+.ai-fab:hover .ai-fab__orb { transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 20px 40px -12px color-mix(in srgb, var(--indigo) 80%, transparent); }
+.ai-fab:active .ai-fab__orb { transform: scale(0.96); }
+.ai-fab:focus-visible { outline: none; }
+.ai-fab:focus-visible .ai-fab__orb { outline: 3px solid var(--accent); outline-offset: 4px; }
+.ai-fab.is-loading .ai-fab__orb { animation: ai-pulse 0.9s ease-in-out infinite; }
 .ai-fab__badge {
-  position: absolute; top: -5px; right: -3px;
-  min-width: 19px; height: 19px; padding: 0 5px;
-  border-radius: var(--radius-full);
-  background: var(--brass); color: #fff;
-  font: 600 11px/19px var(--font-mono); text-align: center;
-  box-shadow: 0 0 0 2px var(--surface);
+  position: absolute; top: -2px; right: -2px;
+  min-width: 22px; height: 22px; padding: 0 6px;
+  border-radius: var(--radius-full); background: var(--brass); color: #fff;
+  font: 700 12px/22px var(--font-mono); text-align: center;
+  box-shadow: 0 0 0 3px var(--bg);
 }
-.ai[data-open="true"] .ai-fab { opacity: 0; pointer-events: none; transform: translateY(8px); }
-@keyframes ai-pulse { 50% { transform: scale(0.88); opacity: 0.7; } }
-
-@media (max-width: 640px) { .ai-fab { height: 48px; padding: 0 0.6rem; } .ai-fab__text { display: none; } }
+.ai-tease {
+  position: fixed; z-index: 95;
+  right: calc(1.5rem + env(safe-area-inset-right));
+  bottom: calc(1.5rem + 118px + env(safe-area-inset-bottom));
+  max-width: 270px; padding: 0.7rem 2rem 0.7rem 0.9rem;
+  border-radius: 14px 14px 4px 14px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg); font: 400 14px/1.4 var(--font-body);
+  cursor: pointer; animation: ai-tease-in 0.4s var(--ease-out) both;
+}
+.ai-tease b { display: block; font-weight: 600; margin-bottom: 2px; }
+.ai-tease__x { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border: 0;
+  background: none; color: var(--text-faint); font-size: 16px; cursor: pointer; border-radius: 50%; }
+.ai-tease__x:hover { color: var(--text); background: var(--surface-2); }
+.ai[data-open="true"] .ai-fab, .ai[data-open="true"] .ai-tease { opacity: 0; pointer-events: none; transform: translateY(10px); }
+@keyframes ai-pulse { 50% { transform: scale(0.9); opacity: 0.75; } }
+@keyframes ai-ring { 0% { opacity: 0.9; transform: scale(0.92); } 100% { opacity: 0; transform: scale(1.35); } }
+@keyframes ai-tease-in { from { opacity: 0; transform: translateY(8px) scale(0.97); } }
+@media (max-width: 640px) {
+  .ai-fab { right: calc(1rem + env(safe-area-inset-right)); bottom: calc(1.25rem + env(safe-area-inset-bottom)); }
+  .ai-fab__orb { width: 62px; height: 62px; }
+  .ai-fab__orb svg { width: 28px; height: 28px; }
+  .ai-fab__label { font-size: 12px; padding: 0.25rem 0.65rem; }
+  .ai-tease { right: calc(1rem + env(safe-area-inset-right)); bottom: calc(1.25rem + 108px + env(safe-area-inset-bottom));
+              border-radius: 14px 14px 4px 14px; max-width: min(260px, calc(100vw - 2rem)); }
+}
+@media (prefers-reduced-motion: reduce) { .ai-fab__orb::after, .ai-tease { animation: none; } }
 @media print { .ai { display: none; } }
 </style>
 {# AI assistant: the button is server-rendered; CSS and JS load on the first click (or when idle). #}
@@ -46,15 +79,19 @@
      data-config='{{ config_json }}'>
   <button class="ai-fab" data-ai-open type="button" aria-haspopup="dialog" aria-expanded="false"
           aria-controls="ai-panel" title="{{ ui.open }}">
-    <span class="ai-fab__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 3.5 13.9 8.6 19 10.5l-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9Z"/>
-        <path d="M19 3v3M17.5 4.5h3M5 17v3M3.5 18.5h3"/>
+    <span class="ai-fab__orb" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.2-4.6A8.5 8.5 0 1 1 21 12Z"/>
+        <path d="M12 7.6l1.05 2.85 2.85 1.05-2.85 1.05L12 15.4l-1.05-2.85L8.1 11.5l2.85-1.05Z" fill="currentColor" stroke="none"/>
       </svg>
+      <span class="ai-fab__badge" data-ai-badge hidden></span>
     </span>
-    <span class="ai-fab__text">{{ ui.open }}</span>
-    <span class="ai-fab__badge" data-ai-badge hidden></span>
+    <span class="ai-fab__label">{{ ui.fab }}</span>
   </button>
+  <div class="ai-tease" data-ai-tease role="button" tabindex="0" hidden>
+    <b>{{ ui.tease_title }}</b>{{ ui.tease_text }}
+    <button type="button" class="ai-tease__x" data-ai-tease-close aria-label="{{ ui.close }}">&times;</button>
+  </div>
 
   <section class="ai-panel" id="ai-panel" data-ai-panel role="dialog" aria-modal="true"
            aria-label="{{ ui.title }}" data-lenis-prevent hidden>
@@ -138,6 +175,21 @@
     open(a.getAttribute("data-ai-ask") || "");
   });
   if (location.hash === "#ai") setTimeout(function () { open(); }, 400);
+  var tease = root.querySelector("[data-ai-tease]");
+  var seen = false;
+  try { seen = sessionStorage.getItem("ai:teased") === "1"; } catch (e) {}
+  if (tease && !seen) {
+    setTimeout(function () {
+      if (root.dataset.open === "true") return;
+      tease.hidden = false;
+      try { sessionStorage.setItem("ai:teased", "1"); } catch (e) {}
+      setTimeout(function () { tease.hidden = true; }, 12000);
+    }, 7000);
+    tease.addEventListener("click", function (e) {
+      tease.hidden = true;
+      if (!e.target.closest("[data-ai-tease-close]")) open();
+    });
+  }
   window.addEventListener("load", function () {
     setTimeout(function () { (window.requestIdleCallback || setTimeout)(function () { load(); }); }, 3000);
   });

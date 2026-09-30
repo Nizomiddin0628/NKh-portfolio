@@ -313,7 +313,7 @@ export async function open(question) {
   root.dataset.open = "true";
   els.panel.hidden = false;
   els.fab.setAttribute("aria-expanded", "true");
-  if (matchMedia("(max-width: 640px)").matches) window.scrollLock?.(true);
+  if (matchMedia("(max-width: 768px)").matches) window.scrollLock?.(true);
   scrollDown();
   if (question) { els.input.value = question; autosize(); ask(question); }
   else setTimeout(() => els.input.focus({ preventScroll: true }), 50);

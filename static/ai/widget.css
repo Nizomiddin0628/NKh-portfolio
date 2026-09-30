@@ -4,7 +4,7 @@
    Layers: header 80 · cmdk 90 · lightbox 100 · this 95 (under the lightbox)
    ═══════════════════════════════════════════════════════════════════════ */
 
-.ai { --ai-w: 400px; --ai-h: min(660px, calc(100dvh - 5.5rem)); }
+.ai { --ai-w: 440px; --ai-h: min(740px, calc(100dvh - 3rem)); }
 .ai [hidden] { display: none !important; }
 
 /* The floating button is styled inline in templates/ai/widget.html so it looks right before this file loads. */
@@ -30,7 +30,7 @@
 }
 .ai-panel[hidden] { display: none; }
 @keyframes ai-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
-@media (prefers-reduced-motion: reduce) { .ai-panel { animation: none; } .ai-fab.is-loading .ai-fab__icon { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ai-panel { animation: none; } }
 
 .ai-head {
   display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
@@ -177,7 +177,7 @@
 .ai-rec b { color: #d64545; font-family: var(--font-mono); }
 
 /* ── Phone: full screen sheet ─────────────────────────────────────────── */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .ai-panel {
     inset: 0; width: auto; height: 100dvh; border-radius: 0; border: 0;
     background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none;
@@ -187,5 +187,5 @@
   .ai-head { padding-top: calc(0.8rem + env(safe-area-inset-top)); }
   .ai-msg { max-width: 92%; }
 }
-@media (max-width: 640px) and (display-mode: standalone) { .ai-panel { height: 100vh; } }
+@media (max-width: 768px) and (display-mode: standalone) { .ai-panel { height: 100vh; } }
 @media print { .ai { display: none; } }
