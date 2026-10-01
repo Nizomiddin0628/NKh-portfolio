@@ -19,7 +19,7 @@ from .models import AiLog
 from .render import clean, strip_marker, text_only
 
 logger = logging.getLogger(__name__)
-MAX_STEPS = 5
+MAX_STEPS = 8
 HISTORY_TURNS = 8
 
 
@@ -30,7 +30,9 @@ def _now_text():
 
 def _system(ctx, mode):
     if ctx.is_owner:
-        rules = prompts.OWNER_RULES + ("\n\n" + prompts.WEB_RULES if mode == "web" else "")
+        rules = prompts.OWNER_RULES + "\n" + (prompts.AUTO_RULES if ctx.auto else prompts.CONFIRM_RULES)
+        if mode == "web":
+            rules += "\n\n" + prompts.WEB_RULES
         who = "Nizomiddin Khalilov (the site owner)"
     else:
         rules = prompts.GUEST_RULES
@@ -58,12 +60,13 @@ def _history_contents(history):
 
 def ask(*, role="guest", channel="site", lang="en", question="", history=(), attachments=(),
         on_text=None, stop=None, mode="local", session="", page="", ip_hash="", chat_id=None,
-        kind="ask"):
+        kind="ask", auto=False):
     started = time.time()
     lang = lang if lang in ("en", "uz", "ru") else "en"
     mode = "web" if (mode == "web" and role == "owner") else "local"
     ctx = tools.Ctx(role=role, channel=channel, lang=lang, session=session, page=page,
-                    ip_hash=ip_hash, history=list(history or []), question=question)
+                    ip_hash=ip_hash, history=list(history or []), question=question,
+                    auto=bool(auto and role == "owner"))
     log = AiLog(channel=channel, role=role, kind=kind, lang=lang, mode=mode, question=question[:4000],
                 ip_hash=ip_hash, session=session, chat_id=chat_id)
 

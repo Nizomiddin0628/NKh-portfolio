@@ -355,6 +355,9 @@
 
 /* ══ Case study ══════════════════════════════════════════════════════════ */
 .case { display: grid; gap: clamp(2rem, 5vw, 3.5rem); }
+/* Grid items must be allowed to shrink below their content (a wide <pre> or a long
+   row of chips would otherwise stretch the whole column past the phone screen). */
+.case > * { min-width: 0; }
 @media (min-width: 980px) {
   .case { grid-template-columns: minmax(0, 1fr) 260px; align-items: start; }
   .case__aside { position: sticky; top: calc(var(--header-h) + 2rem); }
@@ -380,9 +383,10 @@
   background: var(--surface-2); border: 1px solid var(--border);
   padding: 0.12em 0.4em; border-radius: 5px; color: var(--text);
 }
+.prose p, .prose li { overflow-wrap: break-word; }
 .prose pre {
   background: var(--surface-2); border: 1px solid var(--border);
-  padding: 1rem; border-radius: var(--radius); overflow-x: auto;
+  padding: 1rem; border-radius: var(--radius); overflow-x: auto; max-width: 100%;
 }
 .prose pre code { background: none; border: none; padding: 0; }
 .prose h3 { margin-top: 1.6em; }
@@ -944,7 +948,8 @@
 .card--text .card__tagline { -webkit-line-clamp: 4; }
 
 .card__foot { flex-wrap: wrap; row-gap: 0.75rem; }
-.card__tech { flex-wrap: nowrap; overflow: hidden; }
+/* Only inside a project card: one clipped row. On the detail page (.facts) the chips wrap. */
+.card .card__tech { flex-wrap: nowrap; overflow: hidden; }
 .chip--more { color: var(--text-faint); background: transparent; }
 
 .card__cta {
@@ -1340,9 +1345,11 @@ main > .section:last-child { padding-bottom: clamp(1.75rem, 4vw, 3rem); }
   .cert-list__type { display: none; }
 }
 
-/* ---------- Mobile: visible menu button ---------- */
+/* ---------- Mobile: visible menu button ----------
+   `.icon-btn.nav-toggle` beats the plain `.icon-btn { width: 44px }` in responsive.css;
+   with a single class the label used to spill out of a 44 px circle past the screen edge. */
 @media (max-width: 780px) {
-  .nav-toggle {
+  .icon-btn.nav-toggle {
     width: auto; height: 38px; padding: 0 0.85rem 0 0.7rem;
     grid-auto-flow: column; gap: 0.4rem;
     border-radius: var(--radius-full);
@@ -1350,14 +1357,14 @@ main > .section:last-child { padding-bottom: clamp(1.75rem, 4vw, 3rem); }
     background: var(--surface); color: var(--text);
     box-shadow: var(--shadow-sm);
   }
-  .nav-toggle:hover { background: var(--surface-2); }
-  .nav-toggle svg { width: 18px; height: 18px; }
+  .icon-btn.nav-toggle:hover { background: var(--surface-2); }
+  .icon-btn.nav-toggle svg { width: 18px; height: 18px; }
   .nav-toggle__label { font-size: 0.875rem; font-weight: 600; line-height: 1; }
 }
 .nav-toggle__label { display: none; }
 @media (max-width: 780px) { .nav-toggle__label { display: inline; } }
 /* Very narrow phones: icon only, but still a bordered button */
-@media (max-width: 340px) { .nav-toggle__label { display: none; } .nav-toggle { padding: 0 0.6rem; } }
+@media (max-width: 340px) { .nav-toggle__label { display: none; } .icon-btn.nav-toggle { padding: 0 0.6rem; } }
 
 /* ---------- Footer page links: easy to spot ---------- */
 .footer__links--pages a { color: var(--text); font-weight: 500; }

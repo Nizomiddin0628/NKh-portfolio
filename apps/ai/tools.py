@@ -32,6 +32,7 @@ class Ctx:
     ip_hash: str = ""
     history: list = field(default_factory=list)   # [{"role","text"}] for lead transcripts
     question: str = ""
+    auto: bool = False           # owner on Telegram: changes apply at once, with an undo button
     actions: list = field(default_factory=list)   # AiAction objects created in this turn
     leads: list = field(default_factory=list)
     used: list = field(default_factory=list)
@@ -98,8 +99,11 @@ def _project_row(p, lang, full=False):
             row["summary"] = p.tr("summary")
             row["context"] = p.tr("context")
             row["team_size"] = p.team_size
-            row["sections"] = [{"heading": s.title, "text": s.tr("body")} for s in p.sections.all()]
-            row["metrics"] = [{"label": m.tr("label"), "before": m.value_before, "after": m.value_after,
+            row["year_started"], row["year_finished"] = p.year_started, p.year_finished
+            row["is_featured"], row["is_confidential"] = p.is_featured, p.is_confidential
+            row["sections"] = [{"id": s.pk, "kind": s.kind, "heading": s.title, "text": s.tr("body")}
+                               for s in p.sections.all()]
+            row["metrics"] = [{"id": m.pk, "label": m.tr("label"), "before": m.value_before, "after": m.value_after,
                                "note": m.tr("note")} for m in p.metrics.all()]
             row["images"] = [i.tr("alt_text") for i in p.images.all()[:6]]
         return row
@@ -136,7 +140,7 @@ def project_detail(ctx, slug=""):
 
 
 @tool("resume", "Nizomiddin's resume: experience with bullet points, education, skills, languages, "
-      "certificates and awards.",
+      "certificates and awards. Rows carry ids for update_item / add_item / remove_item.",
       {"section": {"type": "string",
                    "description": "all | experience | education | skills | languages | certificates | awards"}})
 def resume(ctx, section="all"):
@@ -145,26 +149,28 @@ def resume(ctx, section="all"):
     with translation.override(ctx.lang):
         if section in ("all", "experience"):
             out["experience"] = [{
-                "role": e.tr("role"), "company": e.company, "location": e.location,
+                "id": e.pk, "role": e.tr("role"), "company": e.company, "location": e.location,
                 "type": e.tr("employment_type"), "from": f"{e.start_date:%Y-%m}",
                 "to": f"{e.end_date:%Y-%m}" if e.end_date else "present",
-                "summary": e.tr("summary"), "bullets": [b.tr("text") for b in e.bullets.all()],
+                "summary": e.tr("summary"), "bullets": [{"id": b.pk, "text": b.tr("text")} for b in e.bullets.all()],
             } for e in Experience.objects.filter(is_published=True).prefetch_related("bullets")]
         if section in ("all", "education"):
             out["education"] = [{
-                "degree": e.tr("degree"), "field": e.tr("field_of_study"), "institution": e.institution,
+                "id": e.pk, "degree": e.tr("degree"), "field": e.tr("field_of_study"), "institution": e.institution,
                 "years": f"{e.start_year or ''}–{e.end_year or ''}", "grade": e.grade, "note": e.tr("note"),
             } for e in Education.objects.all()]
         if section in ("all", "skills"):
-            out["skills"] = [{"group": g.tr("name"), "note": g.tr("note"),
-                              "items": [f"{s.name} ({s.get_depth_display()})" for s in g.skills.all()]}
+            out["skills"] = [{"id": g.pk, "group": g.tr("name"), "note": g.tr("note"),
+                              "items": [{"id": s.pk, "name": s.name, "depth": s.depth} for s in g.skills.all()]}
                              for g in SkillGroup.objects.prefetch_related("skills")]
         if section in ("all", "languages"):
-            out["languages"] = [f"{x.tr('name')}: {x.tr('level')}" for x in LanguageSkill.objects.all()]
+            out["languages"] = [{"id": x.pk, "name": x.tr("name"), "level": x.tr("level")}
+                                for x in LanguageSkill.objects.all()]
         if section in ("all", "certificates"):
-            out["certificates"] = [c.tr("title") for c in Certificate.objects.filter(is_published=True)]
+            out["certificates"] = [{"id": c.pk, "title": c.tr("title")}
+                                   for c in Certificate.objects.filter(is_published=True)]
         if section in ("all", "awards"):
-            out["awards"] = [{"title": a.tr("title"), "issuer": a.issuer, "year": a.year,
+            out["awards"] = [{"id": a.pk, "title": a.tr("title"), "issuer": a.issuer, "year": a.year,
                               "description": a.tr("description")} for a in Award.objects.all()]
     return out
 
@@ -349,15 +355,19 @@ def technologies(ctx):
     return {"ok": True, "technologies": list(Technology.objects.values_list("name", flat=True))}
 
 
-# ── Owner: changes (all go through confirmation) ────────────────────────────
+# ── Owner: changes (confirmed with a tap, or applied at once in auto mode) ───
 
 def _propose(ctx, kind, params):
     return actions.propose(ctx, kind, params)
 
 
-@tool("update_settings", "PREPARE a change of a site text or setting (needs confirmation). "
-      "Translated fields need lang: headline, intro, about, availability_note, work_philosophy, "
-      "meta_description. Plain fields: job_title, location, availability (open|selective|busy).",
+CHANGE = ("Prepares the change; the result says whether it was applied (DONE) or waits for the owner's "
+          "confirmation (PENDING). ")
+
+
+@tool("update_settings", CHANGE + "One site text or setting. Translated fields need lang: headline, intro, "
+      "about, availability_note, work_philosophy, meta_description. Plain fields: job_title, location, "
+      "availability (open|selective|busy), full_name, email, phone, github_username.",
       {"field": {"type": "string"}, "value": {"type": "string"},
        "lang": {"type": "string", "description": "en | uz | ru for translated fields"}},
       ("field", "value"), owner=True)
@@ -365,9 +375,10 @@ def update_settings(ctx, field="", value="", lang=""):
     return _propose(ctx, "settings", {"field": _s(field, 40), "value": _s(value, 5000), "lang": _s(lang, 2)})
 
 
-@tool("update_project", "PREPARE a change of one project field (needs confirmation). Translated fields "
-      "need lang: tagline, role, summary, context. Plain: title, status (production|research|wip|archived), "
-      "organisation, order, is_featured (true|false), live_url.",
+@tool("update_project", CHANGE + "One project field. Translated fields need lang: tagline, role, summary, "
+      "context. Plain: title, status (production|research|wip|archived), organisation, order, is_featured, "
+      "live_url, repo_url, is_confidential, year_started, year_finished, team_size. Sections, metrics and "
+      "technologies have their own tools.",
       {"slug": {"type": "string"}, "field": {"type": "string"}, "value": {"type": "string"},
        "lang": {"type": "string"}}, ("slug", "field", "value"), owner=True)
 def update_project(ctx, slug="", field="", value="", lang=""):
@@ -375,52 +386,103 @@ def update_project(ctx, slug="", field="", value="", lang=""):
                                      "value": _s(value, 5000), "lang": _s(lang, 2)})
 
 
-@tool("set_project_visibility", "PREPARE publishing or hiding a project (needs confirmation).",
+@tool("set_project_visibility", CHANGE + "Publish or hide a project.",
       {"slug": {"type": "string"}, "published": {"type": "boolean"}}, ("slug", "published"), owner=True)
 def set_project_visibility(ctx, slug="", published=True):
     return _propose(ctx, "project_visibility", {"slug": _s(slug, 160), "published": bool(published)})
 
 
-@tool("update_lead", "PREPARE a lead status/note change (needs confirmation). status: new|contacted|closed.",
+@tool("project_technologies", CHANGE + "Add or remove technologies (chips) of a project by name; unknown "
+      "names are created.",
+      {"slug": {"type": "string"}, "add": {"type": "array", "items": {"type": "string"}},
+       "remove": {"type": "array", "items": {"type": "string"}}}, ("slug",), owner=True)
+def project_technologies(ctx, slug="", add=None, remove=None):
+    return _propose(ctx, "project_tech", {"slug": _s(slug, 160), "add": list(add or []), "remove": list(remove or [])})
+
+
+ITEM_HELP = ("item is one of: section (project case-study block: heading, body, kind, order), metric (label, "
+             "value_before, value_after, note, order), experience (role, employment_type, summary, company, "
+             "company_url, location, start_date, end_date, order, is_published), bullet (text, order), education "
+             "(degree, field_of_study, note, institution, institution_url, location, start_year, end_year, grade, "
+             "order), skill_group (name, note, order), skill (name, depth core|strong|working, order), language "
+             "(name, level, order), award (title, description, issuer, year, url, order), certificate (title, order, "
+             "is_published), principle (title, body, order, is_published). Get ids from project_detail or resume. "
+             "Text fields are per language: pass lang (en|uz|ru) for heading, body, label, note, role, "
+             "employment_type, summary, text, degree, field_of_study, name, level, title, description.")
+
+
+@tool("update_item", CHANGE + "One field of a resume or case-study row. " + ITEM_HELP,
+      {"item": {"type": "string"}, "id": {"type": "integer"}, "field": {"type": "string"},
+       "value": {"type": "string"}, "lang": {"type": "string"}}, ("item", "id", "field", "value"), owner=True)
+def update_item(ctx, item="", id=0, field="", value="", lang=""):
+    return _propose(ctx, "item", {"item": _s(item, 20), "id": int(id), "field": _s(field, 40),
+                                  "value": _s(value, 8000), "lang": _s(lang, 2)})
+
+
+@tool("add_item", CHANGE + "Create a new row: section or metric (parent = project slug), bullet (parent = "
+      "experience id), skill (parent = skill_group id), language, award, principle (no parent). fields is a "
+      "JSON object as a string, field -> value; text fields take a language suffix, e.g. "
+      "{\"text_en\": \"...\", \"text_uz\": \"...\"}; a field without suffix is English. " + ITEM_HELP,
+      {"item": {"type": "string"}, "parent": {"type": "string", "description": "project slug or parent id"},
+       "fields": {"type": "string", "description": "JSON object: field -> value"}}, ("item", "fields"), owner=True)
+def add_item(ctx, item="", parent="", fields=None):
+    if isinstance(fields, str):
+        import json
+        try:
+            fields = json.loads(fields or "{}")
+        except ValueError:
+            return {"ok": False, "error": "fields must be a JSON object"}
+    return _propose(ctx, "item_add", {"item": _s(item, 20), "parent": _s(parent, 160),
+                                      "fields": dict(fields or {})})
+
+
+@tool("remove_item", CHANGE + "Delete a row: section, metric, bullet, skill, language, award or principle "
+      "by id (it can be restored with undo).",
+      {"item": {"type": "string"}, "id": {"type": "integer"}}, ("item", "id"), owner=True)
+def remove_item(ctx, item="", id=0):
+    return _propose(ctx, "item_remove", {"item": _s(item, 20), "id": int(id)})
+
+
+@tool("update_lead", CHANGE + "Lead status/note. status: new|contacted|closed.",
       {"id": {"type": "integer"}, "status": {"type": "string"}, "note": {"type": "string"}}, ("id",), owner=True)
 def update_lead(ctx, id=0, status="", note=""):
     return _propose(ctx, "lead", {"id": int(id), "status": _s(status, 10), "note": _s(note, 1000)})
 
 
-@tool("reply_lead", "PREPARE an email reply to a lead whose contact is an email address (needs confirmation). "
-      "Write the reply in the lead's language.",
+@tool("reply_lead", "PREPARE an email reply to a lead whose contact is an email address. It ALWAYS waits for "
+      "the owner's confirmation. Write the reply in the lead's language.",
       {"id": {"type": "integer"}, "subject": {"type": "string"}, "body": {"type": "string"}},
       ("id", "subject", "body"), owner=True)
 def reply_lead(ctx, id=0, subject="", body=""):
     return _propose(ctx, "reply_lead", {"id": int(id), "subject": _s(subject, 150), "body": _s(body, 6000)})
 
 
-@tool("mark_messages_read", "PREPARE marking contact messages as read (needs confirmation).",
+@tool("mark_messages_read", CHANGE + "Mark contact messages as read.",
       {"ids": {"type": "array", "items": {"type": "integer"}, "description": "empty = all unread"}}, owner=True)
 def mark_messages_read(ctx, ids=None):
     return _propose(ctx, "messages_read", {"ids": [int(i) for i in (ids or [])][:100]})
 
 
-@tool("remember_fact", "PREPARE saving a fact the assistant should know from now on (needs confirmation).",
+@tool("remember_fact", CHANGE + "Save a fact the assistant should know from now on.",
       {"text": {"type": "string"}}, ("text",), owner=True)
 def remember_fact(ctx, text=""):
     return _propose(ctx, "remember", {"text": _s(text, 1000)})
 
 
-@tool("forget_fact", "PREPARE removing a remembered fact by id (needs confirmation).",
+@tool("forget_fact", CHANGE + "Remove a remembered fact by id.",
       {"id": {"type": "integer"}}, ("id",), owner=True)
 def forget_fact(ctx, id=0):
     return _propose(ctx, "forget", {"id": int(id)})
 
 
-@tool("add_reminder", "PREPARE a reminder sent to the owner on Telegram at a given local time (needs "
-      "confirmation). due must be ISO like 2026-10-01T10:00 in Asia/Tashkent time.",
+@tool("add_reminder", CHANGE + "A reminder sent to the owner on Telegram at a given local time. due must be "
+      "ISO like 2026-10-01T10:00 in Asia/Tashkent time.",
       {"due": {"type": "string"}, "text": {"type": "string"}}, ("due", "text"), owner=True)
 def add_reminder(ctx, due="", text=""):
     return _propose(ctx, "reminder", {"due": _s(due, 25), "text": _s(text, 300)})
 
 
-@tool("remove_reminder", "PREPARE deleting a reminder by id (needs confirmation).",
+@tool("remove_reminder", CHANGE + "Delete a reminder by id.",
       {"id": {"type": "integer"}}, ("id",), owner=True)
 def remove_reminder(ctx, id=0):
     return _propose(ctx, "reminder_remove", {"id": int(id)})

@@ -41,8 +41,9 @@ LANG_NAMES = {"uz": "O'zbekcha", "ru": "Русский", "en": "English"}
 T = {
     "uz": {
         "start": "Salom, Nizomiddin! Men sizning AI assistentingizman. Yozing yoki gapiring: so'rovlar, "
-                 "xabarlar, statistika, sayt matnlari, eslatmalar. Rasm yoki PDF yuborsangiz — o'qib beraman. "
-                 "Har qanday o'zgarish faqat siz tasdiqlagandan keyin bajariladi.",
+                 "xabarlar, statistika, sayt matnlari, loyihalar, rezyume, eslatmalar — yoki istalgan boshqa ish. "
+                 "Rasm yoki PDF yuborsangiz — o'qib beraman. O'zgarishlarni darhol bajaraman, har birini "
+                 "↩️ tugmasi bilan qaytarish mumkin (⚙️ Sozlamalar → ⚡ Avto-tasdiq).",
         "help": "Pastdagi menyu bo'limlari: 📊 Hisobot, 📥 So'rovlar, ✉️ Xabarlar, 📈 Statistika, ⏰ Eslatmalar, "
                 "🧠 Bilim, ⚙️ Sozlamalar.\nIstalgan narsani oddiy yozing yoki ovozli xabar yuboring — AI bajaradi.\n"
                 "Buyruqlar: /menu /report /leads /messages /stats /reminders /knowledge /settings /web /site /new",
@@ -54,14 +55,16 @@ T = {
         "lang_ask": "Tilni tanlang:", "confirm": "Tasdiqlaysizmi?", "yes": "✅ Tasdiqlash", "no": "✖️ Bekor",
         "done": "✅ Bajarildi: {result}", "cancelled": "✖️ Bekor qilindi.", "failed": "⚠️ Bajarilmadi: {result}",
         "expired": "⌛ Muddati o'tdi, qaytadan so'rang.", "no_leads": "Yangi so'rovlar yo'q.",
+        "applied": "✅ Bajarildi", "undo": "↩️ Qaytarish", "undone": "↩️ Qaytarildi.",
         "guest": "Bu bot faqat sayt egasi uchun. Sayt: https://khalilovn.uz", "file_bad": "Bu faylni o'qiy olmadim: {why}",
         "too_long": "Ovozli xabar juda uzun (3 daqiqadan ko'p).",
         "placeholder": "Savol yozing yoki \U0001f399 gapiring…",
     },
     "ru": {
         "start": "Здравствуйте, Низомиддин! Я ваш AI-ассистент. Пишите или говорите: заявки, сообщения, "
-                 "статистика, тексты сайта, напоминания. Пришлите фото или PDF — прочитаю. "
-                 "Любое изменение выполняется только после вашего подтверждения.",
+                 "статистика, тексты сайта, проекты, резюме, напоминания — или любая другая задача. "
+                 "Пришлите фото или PDF — прочитаю. Изменения выполняю сразу, каждое можно вернуть "
+                 "кнопкой ↩️ (⚙️ Настройки → ⚡ Авто-подтверждение).",
         "help": "Разделы меню внизу: 📊 Отчёт, 📥 Заявки, ✉️ Сообщения, 📈 Статистика, ⏰ Напоминания, "
                 "🧠 Знания, ⚙️ Настройки.\nЛюбую задачу просто напишите или скажите голосом — AI выполнит.\n"
                 "Команды: /menu /report /leads /messages /stats /reminders /knowledge /settings /web /site /new",
@@ -73,13 +76,15 @@ T = {
         "lang_ask": "Выберите язык:", "confirm": "Подтвердить?", "yes": "✅ Подтвердить", "no": "✖️ Отмена",
         "done": "✅ Выполнено: {result}", "cancelled": "✖️ Отменено.", "failed": "⚠️ Не выполнено: {result}",
         "expired": "⌛ Срок истёк, попросите снова.", "no_leads": "Новых заявок нет.",
+        "applied": "✅ Выполнено", "undo": "↩️ Вернуть", "undone": "↩️ Возвращено.",
         "guest": "Этот бот только для владельца сайта. Сайт: https://khalilovn.uz", "file_bad": "Не смог прочитать файл: {why}",
         "too_long": "Голосовое сообщение слишком длинное (более 3 минут).",
         "placeholder": "Напишите вопрос или \U0001f399 говорите…",
     },
     "en": {
         "start": "Hi Nizomiddin! I'm your AI assistant. Type or talk: leads, messages, stats, site texts, "
-                 "reminders. Send a photo or PDF and I'll read it. Every change runs only after you confirm it.",
+                 "projects, resume, reminders — or anything else. Send a photo or PDF and I'll read it. "
+                 "Changes are applied at once and each one has an ↩️ undo button (⚙️ Settings → ⚡ Auto-apply).",
         "help": "Menu sections below: 📊 Report, 📥 Leads, ✉️ Messages, 📈 Stats, ⏰ Reminders, 🧠 Knowledge, "
                 "⚙️ Settings.\nFor anything else just type or send a voice note — the AI does it.\n"
                 "Commands: /menu /report /leads /messages /stats /reminders /knowledge /settings /web /site /new",
@@ -91,6 +96,7 @@ T = {
         "lang_ask": "Choose a language:", "confirm": "Confirm?", "yes": "✅ Confirm", "no": "✖️ Cancel",
         "done": "✅ Done: {result}", "cancelled": "✖️ Cancelled.", "failed": "⚠️ Failed: {result}",
         "expired": "⌛ Expired, ask again.", "no_leads": "No new leads.",
+        "applied": "✅ Done", "undo": "↩️ Undo", "undone": "↩️ Undone.",
         "guest": "This bot is for the site owner only. Site: https://khalilovn.uz", "file_bad": "Could not read the file: {why}",
         "too_long": "The voice message is too long (over 3 minutes).",
         "placeholder": "Type a question or \U0001f399 talk…",
@@ -199,6 +205,10 @@ def confirm_markup(lang, action_id):
                                  {"text": t(lang)["no"], "callback_data": f"aiact:no:{action_id}"}]]}
 
 
+def undo_markup(lang, action_id):
+    return {"inline_keyboard": [[{"text": t(lang)["undo"], "callback_data": f"aiundo:{action_id}"}]]}
+
+
 # ── Update handling ─────────────────────────────────────────────────────────
 
 def process_update(update):
@@ -249,6 +259,14 @@ def handle_callback(cb):
             chat.lang = code
             chat.save(update_fields=["lang"])
             send(chat_id, t(code)["lang_set"].format(name=LANG_NAMES[code]), reply_markup=keyboard(code, chat.mode))
+        return
+    if data.startswith("aiundo:"):
+        mid = cb.get("message", {}).get("message_id")
+        try:
+            actions.undo(int(data.split(":", 1)[1]), channel="telegram")
+        except ActionError as exc:
+            if mid:
+                edit(chat_id, mid, f"{cb['message'].get('text', '')}\n\n⚠️ {html.escape(str(exc))}")
         return
     if data.startswith("aiact:"):
         _, verb, action_id = data.split(":", 2)
@@ -411,7 +429,7 @@ def _run(chat_pk, run, question, attachments, kind, mid):
     try:
         res = agent.ask(role="owner", channel="telegram", lang=chat.lang, question=question,
                         history=chat.history, attachments=attachments, mode=chat.mode,
-                        chat_id=chat_id, kind=kind, on_text=on_text, stop=stop)
+                        chat_id=chat_id, kind=kind, on_text=on_text, stop=stop, auto=chat.auto_confirm)
         if not res.get("ok"):
             if res.get("code") == "stopped":
                 text = f"{tt['stopped']}\n<code>{html.escape(question[:1000])}</code>" if question else tt["stopped"]
@@ -435,7 +453,10 @@ def _run(chat_pk, run, question, attachments, kind, mid):
         for extra in chunks[1:]:
             send(chat_id, extra)
         for a in res.get("actions", []):
-            ask_confirmation(chat_id, chat.lang, a["id"], a["summary"])
+            if a["status"] == "proposed":
+                ask_confirmation(chat_id, chat.lang, a["id"], a["summary"])
+            else:
+                report_action(chat_id, chat.lang, a)
         hist = (chat.history or []) + [{"role": "user", "text": question[:2000]},
                                        {"role": "model", "text": res["text"][:2000]}]
         AiChat.objects.filter(pk=chat_pk).update(history=hist[-16:])
@@ -456,21 +477,41 @@ def ask_confirmation(chat_id, lang, action_id, summary):
         AiAction.objects.filter(pk=action_id).update(tg_msgs=[[chat_id, msg.get("message_id")]])
 
 
+def report_action(chat_id, lang, a):
+    """Auto mode: the change is already applied (or failed); show it with an undo button."""
+    tt = t(lang)
+    if a["status"] == "done":
+        text = f"{tt['applied']}\n{html.escape(a['summary'])}"
+        kw = {"reply_markup": undo_markup(lang, a["id"])} if a.get("undoable") else {}
+    else:
+        text = tt["failed"].format(result=html.escape(a.get("result") or "")) + "\n" + html.escape(a["summary"])
+        kw = {}
+    msg = send(chat_id, text, **kw)
+    if msg:
+        from .models import AiAction
+        AiAction.objects.filter(pk=a["id"]).update(tg_msgs=[[chat_id, msg.get("message_id")]])
+
+
 def update_action_messages(action):
     """Rewrite the confirmation message(s) after a decision was made anywhere."""
     lang = getattr(settings, "AI_OWNER_LANG", "uz")
     for chat_id, mid in action.tg_msgs or []:
         chat = AiChat.objects.filter(chat_id=chat_id).first()
         tt = t(chat.lang if chat else lang)
+        kw = {}
         if action.status == "done":
             tail = tt["done"].format(result=html.escape(action.result))
+            if actions.can_undo(action):
+                kw["reply_markup"] = undo_markup(chat.lang if chat else lang, action.pk)
+        elif action.status == "undone":
+            tail = tt["undone"]
         elif action.status == "cancelled":
             tail = tt["cancelled"]
         elif action.status == "expired":
             tail = tt["expired"]
         else:
             tail = tt["failed"].format(result=html.escape(action.result))
-        edit(chat_id, mid, f"{html.escape(action.summary)}\n\n{tail}")
+        edit(chat_id, mid, f"{html.escape(action.summary)}\n\n{tail}", **kw)
 
 
 # ── One-time setup (manage.py tg_setup) ─────────────────────────────────────

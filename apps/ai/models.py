@@ -117,6 +117,7 @@ class AiAction(models.Model):
         CANCELLED = "cancelled", _("Cancelled")
         EXPIRED = "expired", _("Expired")
         FAILED = "failed", _("Failed")
+        UNDONE = "undone", _("Undone")
 
     kind = models.CharField(max_length=30)
     params = models.JSONField(default=dict)
@@ -153,6 +154,8 @@ class AiChat(models.Model):
     history = models.JSONField(default=list, blank=True)  # [{"role": "user"|"model", "text": ...}]
     busy_since = models.DateTimeField(null=True, blank=True)
     digest_on = models.BooleanField(default=True, help_text=_("Send the 08:30 / 18:00 report here."))
+    auto_confirm = models.BooleanField(
+        default=True, help_text=_("Apply changes at once (with an undo button) instead of asking to confirm."))
     last_activity = models.DateTimeField(auto_now=True)
 
     class Meta:

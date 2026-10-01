@@ -307,22 +307,50 @@ async function toggleRecording() {
 
 let lastFocus = null;
 
+const isPhone = () => matchMedia("(max-width: 768px)").matches;
+
+/**
+ * Phone: size the sheet to the visual viewport. When the on-screen keyboard opens,
+ * Android Chrome and iOS Safari shrink only the visual viewport (100dvh stays), so a
+ * fixed full-height panel keeps its composer under the keys and the browser pans the
+ * page, pushing the header off screen. Tracking visualViewport keeps both in view.
+ */
+function fitViewport() {
+  const vv = window.visualViewport;
+  if (!vv || els.panel.hidden || !isPhone()) {
+    root.style.removeProperty("--ai-vt");
+    root.style.removeProperty("--ai-vh");
+    delete root.dataset.kb;
+    return;
+  }
+  const keyboard = window.innerHeight - vv.height > 120;
+  root.style.setProperty("--ai-vt", `${Math.max(0, Math.round(vv.offsetTop))}px`);
+  root.style.setProperty("--ai-vh", `${Math.round(vv.height)}px`);
+  root.dataset.kb = keyboard ? "true" : "false";
+  scrollDown();
+}
+
 export async function open(question) {
   if (!state.opened) { await fetchStatus(); renderHistory(); state.opened = true; }
   lastFocus = document.activeElement;
   root.dataset.open = "true";
   els.panel.hidden = false;
   els.fab.setAttribute("aria-expanded", "true");
-  if (matchMedia("(max-width: 768px)").matches) window.scrollLock?.(true);
+  if (isPhone()) window.scrollLock?.(true);
+  fitViewport();
   scrollDown();
   if (question) { els.input.value = question; autosize(); ask(question); }
-  else setTimeout(() => els.input.focus({ preventScroll: true }), 50);
+  // Desktop: focus the field right away. Phone: let the visitor read the greeting and
+  // the suggested questions first; a keyboard popping up over them looks broken.
+  else if (!isPhone()) setTimeout(() => els.input.focus({ preventScroll: true }), 50);
 }
 
 export function close() {
   root.dataset.open = "false";
   els.panel.hidden = true;
   els.fab.setAttribute("aria-expanded", "false");
+  els.input.blur();
+  fitViewport();
   window.scrollLock?.(false);
   if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); else els.fab.focus();
 }
@@ -371,5 +399,13 @@ export function init(r) {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !els.panel.hidden) { e.stopPropagation(); close(); }
   });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", fitViewport);
+    window.visualViewport.addEventListener("scroll", fitViewport);
+  }
+  window.addEventListener("orientationchange", () => setTimeout(fitViewport, 300));
+  // Keep the field visible above the keyboard when it gets focus (the panel resize
+  // is handled by fitViewport; this only nudges the log to its end).
+  els.input.addEventListener("focus", () => setTimeout(scrollDown, 250));
   window.__aiWidget = { open, close, ask };
 }

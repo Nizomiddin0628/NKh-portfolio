@@ -78,5 +78,5 @@ class ReminderAdmin(admin.ModelAdmin):
 
 @admin.register(AiChat)
 class AiChatAdmin(admin.ModelAdmin):
-    list_display = ["chat_id", "lang", "mode", "state", "last_activity"]
+    list_display = ["chat_id", "lang", "mode", "auto_confirm", "digest_on", "state", "last_activity"]
     readonly_fields = ["chat_id", "history", "run", "busy_since", "last_activity"]

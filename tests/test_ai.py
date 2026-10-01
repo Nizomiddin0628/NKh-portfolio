@@ -165,8 +165,72 @@ def test_guest_cannot_propose(db):
 
 
 def test_unknown_field_refused(db):
-    res = tools.run(tools.Ctx(role="owner"), "update_settings", {"field": "email", "value": "x@y.z"})
+    res = tools.run(tools.Ctx(role="owner"), "update_settings", {"field": "avatar", "value": "x"})
     assert not res["ok"] and not AiAction.objects.exists()
+
+
+def test_auto_mode_applies_and_undoes(db):
+    ctx = tools.Ctx(role="owner", channel="telegram", auto=True)
+    res = tools.run(ctx, "update_settings", {"field": "headline", "lang": "uz", "value": "Avto sarlavha"})
+    assert res["ok"] and res["status"] == "DONE"
+    assert SiteSettings.load().headline_uz == "Avto sarlavha"
+    action = AiAction.objects.get()
+    assert action.status == "done" and actions.can_undo(action)
+    actions.undo(action.pk)
+    assert SiteSettings.load().headline_uz != "Avto sarlavha"
+    assert AiAction.objects.get().status == "undone"
+    with pytest.raises(actions.ActionError):
+        actions.undo(action.pk)
+
+
+def test_reply_lead_always_waits(db):
+    lead = Lead.objects.create(name="Bob", contact="bob@example.com", need="A website for my shop")
+    ctx = tools.Ctx(role="owner", channel="telegram", auto=True)
+    res = tools.run(ctx, "reply_lead", {"id": lead.pk, "subject": "Hi", "body": "Thanks for reaching out, Bob. " * 2})
+    # email is not configured in tests, so validation refuses; nothing must have been sent or auto-applied
+    assert not res["ok"] and not AiAction.objects.filter(status="done").exists()
+
+
+def test_item_editor_and_technologies(db, project):
+    from apps.projects.models import CaseSection, Metric
+    from apps.resume.models import Experience, ExperienceBullet, Skill, SkillGroup
+    sec = CaseSection.objects.create(project=project, kind="problem", body_en="Old text")
+    exp = Experience.objects.create(company="ACME", role_en="Engineer", start_date="2024-01-01")
+    group = SkillGroup.objects.create(name_en="Backend")
+    ctx = tools.Ctx(role="owner", channel="telegram", auto=True)
+
+    detail = tools.run(ctx, "project_detail", {"slug": project.slug})
+    assert detail["project"]["sections"][0]["id"] == sec.pk
+    assert tools.run(ctx, "resume", {"section": "experience"})["experience"][0]["id"] == exp.pk
+
+    res = tools.run(ctx, "update_item", {"item": "section", "id": sec.pk, "field": "body", "lang": "uz", "value": "Yangi matn"})
+    assert res["ok"] and CaseSection.objects.get(pk=sec.pk).body_uz == "Yangi matn"
+    res = tools.run(ctx, "update_item", {"item": "section", "id": sec.pk, "field": "kind", "value": "nonsense"})
+    assert not res["ok"] and "must be one of" in res["error"]
+    res = tools.run(ctx, "update_item", {"item": "section", "id": sec.pk, "field": "slug", "value": "x"})
+    assert not res["ok"]
+
+    res = tools.run(ctx, "add_item", {"item": "bullet", "parent": str(exp.pk),
+                                      "fields": '{"text_en": "Built the API", "text_uz": "API yaratdim"}'})
+    assert res["ok"] and ExperienceBullet.objects.get(experience=exp).text_uz == "API yaratdim"
+    res = tools.run(ctx, "add_item", {"item": "skill", "parent": str(group.pk), "fields": '{"name": "Django", "depth": "core"}'})
+    assert res["ok"] and Skill.objects.get(name="Django").group == group
+    res = tools.run(ctx, "add_item", {"item": "metric", "parent": project.slug,
+                                      "fields": '{"label_en": "Manual entry", "value_after": "4 min/day"}'})
+    assert res["ok"] and Metric.objects.get(project=project).value_after == "4 min/day"
+    res = tools.run(ctx, "add_item", {"item": "metric", "parent": project.slug, "fields": '{"label_en": "x"}'})
+    assert not res["ok"] and "value_after" in res["error"]
+
+    bullet = ExperienceBullet.objects.get()
+    res = tools.run(ctx, "remove_item", {"item": "bullet", "id": bullet.pk})
+    assert res["ok"] and not ExperienceBullet.objects.exists()
+    actions.undo(AiAction.objects.latest("pk").pk)
+    assert ExperienceBullet.objects.get(pk=bullet.pk).text_en == "Built the API"
+
+    res = tools.run(ctx, "project_technologies", {"slug": project.slug, "add": ["FastAPI", "Redis"]})
+    assert res["ok"] and set(project.technologies.values_list("name", flat=True)) >= {"FastAPI", "Redis"}
+    actions.undo(AiAction.objects.latest("pk").pk)
+    assert not project.technologies.filter(name="FastAPI").exists()
 
 
 def test_cancel_and_expiry(db):
@@ -309,8 +373,26 @@ def test_telegram_guest_is_refused(db, monkeypatch):
 
 
 @override_settings(**AI)
+def test_telegram_owner_auto_applies_with_undo(db, monkeypatch):
+    sent = fake_telegram(monkeypatch)
+    fake_gemini(monkeypatch, [{"call": ("remember_fact", {"text": "I also take freelance work"})},
+                              {"text": "Eslab qoldim."}])
+    telegram.process_update({"message": {"chat": {"id": 777}, "from": {"id": 777}, "text": "eslab qol: freelance ham olaman"}})
+    assert AiKnowledge.objects.get().text == "I also take freelance work"
+    done_msg = next(p for m, p in sent if m == "sendMessage" and "reply_markup" in p and "inline_keyboard" in p["reply_markup"]
+                    and p["reply_markup"]["inline_keyboard"][0][0]["callback_data"].startswith("aiundo:"))
+    assert "✅" in done_msg["text"]
+    action_id = int(done_msg["reply_markup"]["inline_keyboard"][0][0]["callback_data"].split(":")[-1])
+    telegram.process_update({"callback_query": {"id": "1", "from": {"id": 777}, "data": f"aiundo:{action_id}",
+                                                "message": {"chat": {"id": 777}, "message_id": 9, "text": "x"}}})
+    assert not AiKnowledge.objects.exists() and AiAction.objects.get().status == "undone"
+    assert any(m == "editMessageText" and "↩️" in p["text"] for m, p in sent)
+
+
+@override_settings(**AI)
 def test_telegram_owner_gets_answer_and_confirm_buttons(db, monkeypatch):
     sent = fake_telegram(monkeypatch)
+    AiChat.objects.create(chat_id=777, auto_confirm=False)
     fake_gemini(monkeypatch, [{"call": ("remember_fact", {"text": "I also take freelance work"})},
                               {"text": "Tayyor, tasdiqlang."}])
     telegram.process_update({"message": {"chat": {"id": 777}, "from": {"id": 777}, "text": "eslab qol: freelance ham olaman"}})

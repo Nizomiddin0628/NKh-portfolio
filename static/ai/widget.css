@@ -178,14 +178,21 @@
 
 /* ── Phone: full screen sheet ─────────────────────────────────────────── */
 @media (max-width: 768px) {
+  /* The sheet follows the *visual* viewport: when the keyboard opens, widget.js sets
+     --ai-vt/--ai-vh from visualViewport so the header stays on screen and the composer
+     sits right above the keys (100dvh does not shrink for the keyboard on Android). */
   .ai-panel {
-    inset: 0; width: auto; height: 100dvh; border-radius: 0; border: 0;
+    inset: auto; top: var(--ai-vt, 0px); left: 0; right: 0;
+    width: auto; height: var(--ai-vh, 100dvh); border-radius: 0; border: 0;
     background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none;
     animation-name: ai-in-sheet;
   }
   @keyframes ai-in-sheet { from { transform: translateY(100%); } }
   .ai-head { padding-top: calc(0.8rem + env(safe-area-inset-top)); }
+  .ai[data-kb="true"] .ai-head { padding-top: 0.6rem; }
+  .ai[data-kb="true"] .ai-composer { padding-bottom: 0.6rem; }
+  .ai[data-kb="true"] .ai-note { display: none; }
   .ai-msg { max-width: 92%; }
 }
-@media (max-width: 768px) and (display-mode: standalone) { .ai-panel { height: 100vh; } }
+@media (max-width: 768px) and (display-mode: standalone) { .ai-panel { height: var(--ai-vh, 100vh); } }
 @media print { .ai { display: none; } }

@@ -46,6 +46,8 @@ L = {
         "mode_local": "🏠 Sayt ma'lumotlari", "mode_web": "🌐 Global (internet)",
         "digest": "Kunlik hisobot 08:30 va 18:00", "on": "🔔 yoqilgan", "off": "🔕 o'chirilgan",
         "toggle_digest": "🔔 Hisobotni yoqish/o'chirish", "toggle_mode": "🌐/🏠 Rejimni almashtirish",
+        "auto": "O'zgarishlar", "auto_on": "⚡ darhol bajariladi, ↩️ qaytarish mumkin",
+        "auto_off": "✅ faqat tasdiqdan keyin", "toggle_auto": "⚡/✅ Avto-tasdiqni almashtirish",
         "draft_q": "#{id} so'rovga {lang_name} tilida qisqa, samimiy javob xatini tayyorla. Mijoz ehtiyojini va mos loyihalarimni hisobga ol. "
                    "Email bo'lsa reply_lead bilan tayyorla, bo'lmasa faqat matnni ber.",
         "draft_msg_q": "#{id} kontakt xabariga javob matnini tayyorla (faqat matn, yuborma).",
@@ -73,6 +75,8 @@ L = {
         "mode_local": "🏠 Данные сайта", "mode_web": "🌐 Глобальный (интернет)",
         "digest": "Ежедневный отчёт 08:30 и 18:00", "on": "🔔 включён", "off": "🔕 выключен",
         "toggle_digest": "🔔 Вкл/выкл отчёт", "toggle_mode": "🌐/🏠 Сменить режим",
+        "auto": "Изменения", "auto_on": "⚡ выполняются сразу, можно вернуть ↩️",
+        "auto_off": "✅ только после подтверждения", "toggle_auto": "⚡/✅ Авто-подтверждение вкл/выкл",
         "draft_q": "Подготовь короткий дружелюбный ответ на заявку #{id} на языке: {lang_name}. Учти потребность клиента и мои подходящие проекты. "
                    "Если есть email — подготовь через reply_lead, иначе дай только текст.",
         "draft_msg_q": "Подготовь текст ответа на сообщение #{id} из формы контакта (только текст, не отправляй).",
@@ -100,6 +104,8 @@ L = {
         "mode_local": "🏠 Site data", "mode_web": "🌐 Global (web)",
         "digest": "Daily report 08:30 and 18:00", "on": "🔔 on", "off": "🔕 off",
         "toggle_digest": "🔔 Report on/off", "toggle_mode": "🌐/🏠 Switch mode",
+        "auto": "Changes", "auto_on": "⚡ applied at once, ↩️ undo available",
+        "auto_off": "✅ only after confirmation", "toggle_auto": "⚡/✅ Auto-apply on/off",
         "draft_q": "Draft a short, friendly reply to lead #{id} in {lang_name}. Consider their need and my matching projects. "
                    "If they left an email, prepare it with reply_lead; otherwise give only the text.",
         "draft_msg_q": "Draft a reply to contact message #{id} (text only, do not send).",
@@ -284,9 +290,10 @@ def settings_view(chat):
     lines = [x["settings_title"], "",
              f"{x['lang']}: <b>{LANG_NAMES.get(chat.lang, chat.lang)}</b>",
              f"{x['mode']}: <b>{x['mode_web'] if chat.mode == 'web' else x['mode_local']}</b>",
-             f"{x['digest']}: <b>{x['on'] if chat.digest_on else x['off']}</b>"]
+             f"{x['digest']}: <b>{x['on'] if chat.digest_on else x['off']}</b>",
+             f"{x['auto']}: <b>{x['auto_on'] if chat.auto_confirm else x['auto_off']}</b>"]
     kb = [[btn(("• " if c == chat.lang else "") + name, f"m:lang:{c}") for c, name in LANG_NAMES.items()],
-          [btn(x["toggle_mode"], "m:mode")], [btn(x["toggle_digest"], "m:dig")]]
+          [btn(x["toggle_mode"], "m:mode")], [btn(x["toggle_auto"], "m:auto")], [btn(x["toggle_digest"], "m:dig")]]
     return "\n".join(lines), kb
 
 
@@ -357,6 +364,10 @@ def on_callback(chat, data):
     if what == "dig":
         chat.digest_on = not chat.digest_on
         chat.save(update_fields=["digest_on"])
+        return ("edit", *settings_view(chat))
+    if what == "auto":
+        chat.auto_confirm = not chat.auto_confirm
+        chat.save(update_fields=["auto_confirm"])
         return ("edit", *settings_view(chat))
     return None
 
