@@ -17,6 +17,7 @@ export default {
       q: "Can you build a booking bot for my clinic?",
       a: "Yes. He built AI Kotib — a Telegram secretary for restaurants. I've sent him your request; expect a reply today.",
       lead: "New lead", need: "Clinic · booking bot", b1: "Contacted", b2: "Draft reply",
+      today: "Today", rep1: "Daily report", rep2: "Visits 13 · Leads 0",
     },
     uz: {
       steps: [
@@ -29,6 +30,7 @@ export default {
       q: "Klinikam uchun navbatga yozadigan bot qila olasizmi?",
       a: "Ha. U restoranlar uchun AI Kotib — Telegram kotibini qilgan. So'rovingizni unga yubordim, bugun javob beradi.",
       lead: "Yangi so'rov", need: "Klinika · navbat boti", b1: "Bog'landim", b2: "Javob tayyorla",
+      today: "Bugun", rep1: "Kunlik hisobot", rep2: "Tashrif 13 · So'rov 0",
     },
     ru: {
       steps: [
@@ -41,6 +43,7 @@ export default {
       q: "Сделаете бот записи для моей клиники?",
       a: "Да. Он сделал AI Kotib — Telegram-секретаря для ресторанов. Я передал ему вашу заявку, ответ будет сегодня.",
       lead: "Новая заявка", need: "Клиника · бот записи", b1: "Связался", b2: "Черновик ответа",
+      today: "Сегодня", rep1: "Отчёт за день", rep2: "Визиты 13 · Заявки 0",
     },
   },
 
@@ -106,33 +109,50 @@ export default {
     const send = h("circle", { cx: 238, cy: 218, r: 8, fill: `url(#${uid}g)` }, svg);
     h("path", { d: "M234.5 218h7m-3-3 3 3-3 3", stroke: "#fff", "stroke-width": 1.4, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
 
-    // ── Owner's Telegram ──
-    const PX = 268;
-    h("rect", { x: PX, y: 12, width: 120, height: 226, rx: 16, fill: "#0e1621" }, svg);
-    h("rect", { x: PX, y: 12, width: 120, height: 30, rx: 16, fill: "#17212b" }, svg);
-    h("rect", { x: PX, y: 30, width: 120, height: 12, fill: "#17212b" }, svg);
-    h("circle", { cx: PX + 16, cy: 27, r: 7, fill: "#2b5278" }, svg);
-    h("text", { x: PX + 28, y: 30.5, "font-size": 10, fill: "#e8edf3", class: "db", text: "Telegram" }, svg);
-    const badge = h("g", { opacity: 0 }, svg);
-    h("circle", { cx: PX + 106, cy: 27, r: 7, fill: "#3fcf8e" }, badge);
-    h("text", { x: PX + 106, y: 30.5, "font-size": 9, fill: "#0e1621", "text-anchor": "middle", class: "db", text: "1" }, badge);
+    // ── Owner's Telegram (day theme on light, night theme on dark) ──
+    const PX = 268, PW = 120;
+    const tclip = h("clipPath", { id: `${uid}t` }, defs);
+    h("rect", { x: PX, y: 12, width: PW, height: 226, rx: 16 }, tclip);
+    const tg = h("g", { "clip-path": `url(#${uid}t)` }, svg);
+    h("rect", { x: PX, y: 12, width: PW, height: 226, fill: "var(--tg-bg)" }, tg);
+    h("rect", { x: PX, y: 12, width: PW, height: 28, fill: "var(--tg-head)" }, tg);
+    h("line", { x1: PX, x2: PX + PW, y1: 40, y2: 40, stroke: "var(--tg-line)" }, tg);
+    h("circle", { cx: PX + 15, cy: 26, r: 8, fill: "var(--tg-avatar)" }, tg);
+    h("text", { x: PX + 15, y: 29, "font-size": 7, fill: "#fff", "text-anchor": "middle", class: "db", text: "NX" }, tg);
+    h("text", { x: PX + 28, y: 24.5, "font-size": 9, fill: "var(--tg-text)", class: "db", text: "Portfolio bot" }, tg);
+    h("text", { x: PX + 28, y: 34, "font-size": 7, fill: "var(--tg-faint)", text: "bot" }, tg);
+    const badge = h("g", { opacity: 0 }, tg);
+    h("circle", { cx: PX + 106, cy: 26, r: 6.5, fill: "#3fcf8e" }, badge);
+    h("text", { x: PX + 106, y: 29, "font-size": 8, fill: "#0e1621", "text-anchor": "middle", class: "db", text: "1" }, badge);
 
-    const lead = h("g", { opacity: 0 }, svg);
-    h("rect", { x: PX + 8, y: 54, width: 104, height: 112, rx: 10, fill: "#182533" }, lead);
-    h("text", { x: PX + 16, y: 72, "font-size": 10.5, fill: "#ffffff", class: "db", text: t.lead }, lead);
-    const need = h("text", { x: PX + 16, y: 89, "font-size": 9.5, fill: "#c3cfdc" }, lead);
-    wrapText(need, t.need, 20, 12);
-    h("text", { x: PX + 16, y: 120, "font-size": 8.8, fill: "#7fb6e8", class: "dm", text: "+998 90 ··· 1234" }, lead);
-    h("text", { x: PX + 16, y: 134, "font-size": 9, fill: "#6d7f92", class: "dm", text: "uz · 12:04" }, lead);
+    const chat = h("g", {}, tg);
+    // Earlier conversation, so the screen is a real chat, not an empty box
+    h("rect", { x: PX + 44, y: 47, width: 32, height: 12, rx: 6, fill: "var(--tg-faint)", opacity: 0.35 }, chat);
+    h("text", { x: PX + 60, y: 55.5, "font-size": 6.5, fill: "#fff", "text-anchor": "middle", text: t.today }, chat);
+    h("rect", { x: PX + 6, y: 64, width: 96, height: 34, rx: 8, fill: "var(--tg-bubble)" }, chat);
+    h("text", { x: PX + 12, y: 76, "font-size": 8, fill: "var(--tg-text)", class: "db", text: t.rep1 }, chat);
+    h("text", { x: PX + 12, y: 88, "font-size": 7.5, fill: "var(--tg-soft)", text: t.rep2 }, chat);
+    h("text", { x: PX + 98, y: 94.5, "font-size": 5.5, fill: "var(--tg-faint)", "text-anchor": "end", class: "dm", text: "08:30" }, chat);
+    h("rect", { x: PX + 62, y: 103, width: 52, height: 18, rx: 8, fill: "var(--tg-me)" }, chat);
+    h("text", { x: PX + 68, y: 115, "font-size": 7.5, fill: "var(--tg-me-text)", class: "dm", text: "/leads" }, chat);
+    h("text", { x: PX + 110, y: 117.5, "font-size": 5.5, fill: "var(--tg-me-meta)", "text-anchor": "end", class: "dm", text: "✓✓" }, chat);
+
+    const lead = h("g", { opacity: 0 }, chat);
+    h("rect", { x: PX + 6, y: 127, width: 104, height: 70, rx: 8, fill: "var(--tg-bubble)" }, lead);
+    h("text", { x: PX + 12, y: 140, "font-size": 8.5, fill: "var(--tg-text)", class: "db", text: t.lead }, lead);
+    const need = h("text", { x: PX + 12, y: 152, "font-size": 7.5, fill: "var(--tg-soft)" }, lead);
+    wrapText(need, t.need, 22, 10);
+    h("text", { x: PX + 12, y: 177, "font-size": 7.5, fill: "var(--tg-link)", class: "dm", text: "+998 90 ··· 1234" }, lead);
+    h("text", { x: PX + 104, y: 192.5, "font-size": 5.5, fill: "var(--tg-faint)", "text-anchor": "end", class: "dm", text: "12:04" }, lead);
     const btns = [t.b1, t.b2].map((label, i) => {
-      const y = 174 + i * 26;
-      const gg = h("g", { opacity: 0 }, svg);
-      h("rect", { x: PX + 8, y, width: 104, height: 22, rx: 8, fill: "#1f3448" }, gg);
-      h("text", { x: PX + 60, y: y + 14.5, "font-size": 9.5, fill: "#e8edf3", "text-anchor": "middle", text: label }, gg);
+      const y = 200 + i * 18;
+      const gg = h("g", { opacity: 0 }, chat);
+      h("rect", { x: PX + 6, y, width: 104, height: 16, rx: 6, fill: "var(--tg-btn)", opacity: 0.92 }, gg);
+      h("text", { x: PX + 58, y: y + 11, "font-size": 7.5, fill: "var(--tg-btn-text)", "text-anchor": "middle", class: "db", text: label }, gg);
       return gg;
     });
 
-    return { body, scroll, qG, tools, dots, dotEls, aG, aSpans, aFull, input, send, badge, lead, btns, ph: t.ph };
+    return { body, scroll, qG, tools, dots, dotEls, aG, aSpans, aFull, input, send, badge, lead, btns, chat, ph: t.ph };
   },
 
   async play(api, s, t) {
@@ -166,7 +186,7 @@ export default {
 
     api.step(3);
     await api.tween(s.badge, [{ opacity: 0 }, { opacity: 1 }], { dur: 220 });
-    await api.show(s.lead, 520, "translateY(14px)");
+    await api.show(s.lead, 480, "translateY(10px)");
     for (const b of s.btns) await api.show(b, 300, "translateY(6px)");
     api.poster();
     await api.wait(2000);

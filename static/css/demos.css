@@ -210,3 +210,15 @@
 .demo .m-ui    { fill: var(--map-ui); stroke: var(--map-ui-line); }
 .demo .m-route { fill: none; stroke: var(--map-route); stroke-linecap: round; stroke-linejoin: round; }
 .demo .m-routef{ fill: var(--map-route); }
+
+/* ── Telegram palette: day theme on light, night theme on dark ─────────── */
+.demo {
+  --tg-bg: #dfe6ec; --tg-head: #ffffff; --tg-bubble: #ffffff; --tg-me: #e3fbd1; --tg-text: #0f1419;
+  --tg-soft: #4b5862; --tg-faint: #8b979f; --tg-link: #2f86d6; --tg-btn: #ffffff; --tg-btn-text: #2f86d6;
+  --tg-me-text: #0f1419; --tg-me-meta: #4fae4e; --tg-avatar: #5aa2e0; --tg-line: rgba(0, 0, 0, 0.08);
+}
+:root[data-theme="dark"] .demo {
+  --tg-bg: #0e1621; --tg-head: #17212b; --tg-bubble: #182533; --tg-me: #2b5278; --tg-text: #e8edf3;
+  --tg-soft: #9fb0c3; --tg-faint: #6d7f92; --tg-link: #7fb6e8; --tg-btn: #1f3448; --tg-btn-text: #e8edf3;
+  --tg-me-text: #e8edf3; --tg-me-meta: #9cc4ea; --tg-avatar: #2b5278; --tg-line: rgba(255, 255, 255, 0.06);
+}

@@ -1,7 +1,7 @@
 /* Contact: what happens to a message after "Send". The visitor's form,
    the server log, my phone, and the reply landing back in their inbox. */
 
-const TG = { bg: "#0e1621", head: "#17212b", bubble: "#182533", me: "#2b5278", text: "#e8edf3", soft: "#9fb0c3", faint: "#6d7f92" };
+const TG = { bg: "var(--tg-bg)", head: "var(--tg-head)", bubble: "var(--tg-bubble)", me: "var(--tg-me)", text: "var(--tg-text)", soft: "var(--tg-soft)", faint: "var(--tg-faint)", link: "var(--tg-link)", meText: "var(--tg-me-text)", meMeta: "var(--tg-me-meta)", avatar: "var(--tg-avatar)" };
 const TERM = { bg: "#0b1120", bar: "#141c2e", text: "#c9d4e6", dim: "#5d6b86", ok: "#3fcf8e", key: "#7fb6e8" };
 
 export default {
@@ -113,23 +113,23 @@ export default {
     // ── My phone ──
     h("rect", { x: 276, y: 12, width: 114, height: 226, rx: 16, fill: TG.bg }, svg);
     h("path", { d: "M276 42V28q0-16 16-16h82q16 0 16 16v14z", fill: TG.head }, svg);
-    h("circle", { cx: 292, cy: 30, r: 7, fill: "#2b5278" }, svg);
+    h("circle", { cx: 292, cy: 30, r: 7, fill: TG.avatar }, svg);
     h("text", { x: 303, y: 28, "font-size": 9, fill: TG.text, class: "db", text: "Portfolio bot" }, svg);
     h("text", { x: 303, y: 38, "font-size": 7.5, fill: TG.faint, text: "bot" }, svg);
     const note = h("g", { opacity: 0 }, svg);
     h("rect", { x: 284, y: 52, width: 98, height: 96, rx: 9, fill: TG.bubble }, note);
     h("text", { x: 292, y: 68, "font-size": 9, fill: TG.text, class: "db", text: t.fresh }, note);
-    h("text", { x: 292, y: 82, "font-size": 8.5, fill: "#7fb6e8", text: "Aziz Karimov" }, note);
+    h("text", { x: 292, y: 82, "font-size": 8.5, fill: TG.link, text: "Aziz Karimov" }, note);
     const prev = h("text", { x: 292, y: 97, "font-size": 8.5, fill: TG.soft }, note);
     wrapText(prev, t.text, 18, 11);
     [...prev.querySelectorAll("tspan")].slice(3).forEach((s) => s.remove());
     h("text", { x: 374, y: 143, "font-size": 7, fill: TG.faint, "text-anchor": "end", class: "dm", text: "10:42" }, note);
     const mine = h("g", { opacity: 0 }, svg);
     h("rect", { x: 300, y: 158, width: 82, height: 50, rx: 9, fill: TG.me }, mine);
-    const mineTxt = h("text", { x: 307, y: 172, "font-size": 8.5, fill: TG.text }, mine);
+    const mineTxt = h("text", { x: 307, y: 172, "font-size": 8.5, fill: TG.meText }, mine);
     wrapText(mineTxt, t.reply, 15, 11);
     [...mineTxt.querySelectorAll("tspan")].slice(3).forEach((s) => s.remove());
-    h("text", { x: 376, y: 204, "font-size": 7, fill: "#cfe0f1", "text-anchor": "end", class: "dm", text: "12:15 ✓✓" }, mine);
+    h("text", { x: 376, y: 204, "font-size": 7, fill: TG.meMeta, "text-anchor": "end", class: "dm", text: "12:15 ✓✓" }, mine);
     const replied = h("text", { x: 333, y: 226, "font-size": 8.5, fill: "#3fcf8e", "text-anchor": "middle", opacity: 0, text: `✓ ${t.replied}` }, svg);
 
     return { wires, packet, form, name, bodySpans, bodyFull, caret, btn, btnBg, btnText, inbox, logs, note, mine, replied };

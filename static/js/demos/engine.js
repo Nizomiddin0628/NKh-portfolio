@@ -31,11 +31,16 @@ const reducedMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 export function h(tag, attrs = {}, parent = null) {
   const el = document.createElementNS(NS, tag);
+  let style = "";
   for (const [k, v] of Object.entries(attrs)) {
     if (v === undefined || v === null || v === false) continue;
     if (k === "text") el.textContent = v;
+    // Presentation attributes cannot read CSS variables; move them to style
+    else if ((k === "fill" || k === "stroke" || k === "stop-color") && typeof v === "string" && v.startsWith("var(")) style += `${k}:${v};`;
+    else if (k === "style") style += v.endsWith(";") ? v : `${v};`;
     else el.setAttribute(k, v);
   }
+  if (style) el.setAttribute("style", style);
   if (parent) parent.append(el);
   return el;
 }

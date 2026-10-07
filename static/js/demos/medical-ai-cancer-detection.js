@@ -79,7 +79,7 @@ function tissue() {
 }
 
 export default {
-  duration: 6700,
+  duration: 6900,
   rest: 1600,
   i18n: {
     en: {
@@ -87,27 +87,27 @@ export default {
         "A biopsy image is opened in the tool",
         "YOLOv5 looks at the whole tissue in one pass",
         "Suspicious regions are boxed and graded",
-        "A Gleason score for the pathologist, in about 0.1 s",
+        "Diagnosis by the highest grade found, in about 0.1 s",
       ],
-      model: "MODEL", image: "IMAGE", detect: "Detect", results: "RESULTS", ready: "Ready", found: "3 regions · 0.10 s",
+      model: "MODEL", image: "IMAGE", detect: "Detect", results: "RESULTS", ready: "Ready", found: "3 regions · 0.10 s", dx: "DIAGNOSIS", risk: "Intermediate risk",
     },
     uz: {
       steps: [
         "Biopsiya tasviri dasturda ochiladi",
         "YOLOv5 to'qimani bir o'tishda to'liq ko'rib chiqadi",
         "Shubhali sohalar ramkaga olinib, darajasi aniqlanadi",
-        "Patolog uchun Gleason bali — taxminan 0.1 s da",
+        "Eng yuqori daraja bo'yicha tashxis — taxminan 0.1 s da",
       ],
-      model: "MODEL", image: "TASVIR", detect: "Aniqlash", results: "NATIJA", ready: "Tayyor", found: "3 ta soha · 0.10 s",
+      model: "MODEL", image: "TASVIR", detect: "Aniqlash", results: "NATIJA", ready: "Tayyor", found: "3 ta soha · 0.10 s", dx: "TASHXIS", risk: "O'rta xavf",
     },
     ru: {
       steps: [
         "Снимок биопсии открывается в программе",
         "YOLOv5 просматривает всю ткань за один проход",
         "Подозрительные участки выделяются и получают степень",
-        "Балл Глисона для патолога — примерно за 0,1 с",
+        "Диагноз по самой высокой степени — примерно за 0,1 с",
       ],
-      model: "МОДЕЛЬ", image: "СНИМОК", detect: "Найти", results: "РЕЗУЛЬТАТ", ready: "Готово", found: "3 участка · 0,10 с",
+      model: "МОДЕЛЬ", image: "СНИМОК", detect: "Найти", results: "РЕЗУЛЬТАТ", ready: "Готово", found: "3 участка · 0,10 с", dx: "ДИАГНОЗ", risk: "Средний риск",
     },
   },
 
@@ -125,7 +125,7 @@ export default {
     h("rect", { x: 0, y: 0, width: 400, height: 250, class: "d-card" }, svg);
     h("rect", { x: 0, y: 0, width: 400, height: 19, class: "d-card2" }, svg);
     h("rect", { x: 6, y: 5, width: 9, height: 9, rx: 2, fill: "#d1477a" }, svg);
-    h("text", { x: 20, y: 13, "font-size": 8, class: "d-tx2", text: "Gleason Detector — biopsy_0412.png" }, svg);
+    h("text", { x: 20, y: 13, "font-size": 8, class: "d-tx2", text: "Prostate AI — biopsy_0412.png" }, svg);
     h("path", { d: "M352 10h7M369 6.5h6v6h-6zM385 6.5l6 6m0-6-6 6", class: "s-tx3", fill: "none", "stroke-width": 1 }, svg);
     h("line", { x1: 0, x2: 400, y1: 19, y2: 19, class: "d-line" }, svg);
 
@@ -170,12 +170,20 @@ export default {
       return g;
     });
     h("line", { x1: X, x2: X + 128, y1: 182, y2: 182, class: "d-line" }, svg);
-    h("text", { x: X, y: 197, "font-size": 7, class: "d-tx3 dm", text: "GLEASON" }, svg);
-    const score = h("text", { x: X, y: 220, "font-size": 18, class: "d-tx dd", opacity: 0, text: "3 + 4 = 7" }, svg);
+    // Diagnosis = the highest grade found: Grade 3 low, Grade 4 intermediate, Grade 5 high risk
+    h("text", { x: X, y: 195, "font-size": 7, class: "d-tx3 dm", text: t.dx }, svg);
+    const score = h("g", { opacity: 0 }, svg);
+    h("text", { x: X, y: 212, "font-size": 14, fill: COL.g4, class: "dd", text: "Grade 4" }, score);
+    h("text", { x: X + 128, y: 211, "font-size": 8, class: "d-tx2", "text-anchor": "end", text: t.risk }, score);
+    [["G3", "#ffc23c"], ["G4", COL.g4], ["G5", "#d92d4a"]].forEach(([g, c], i) => {
+      h("rect", { x: X + i * 43, y: 220, width: 41, height: 4, rx: 2, fill: c, opacity: i === 1 ? 1 : 0.35 }, score);
+      h("text", { x: X + i * 43 + 20.5, y: 233, "font-size": 6.5, "text-anchor": "middle", class: i === 1 ? "d-tx dm db" : "d-tx3 dm", text: g }, score);
+    });
+    h("path", { d: `M${X + 64.5} 218.5l-3-4h6z`, class: "d-tx" }, score);
 
     // Status bar
-    h("line", { x1: 0, x2: 400, y1: 242, y2: 242, class: "d-line" }, svg);
-    const status = h("text", { x: 264, y: 248.5, "font-size": 6.5, class: "d-tx3 dm", text: t.ready }, svg);
+    h("line", { x1: 0, x2: 400, y1: 240, y2: 240, class: "d-line" }, svg);
+    const status = h("text", { x: 8, y: 247.5, "font-size": 6.5, class: "d-tx3 dm", text: t.ready }, svg);
 
     return { img, scan, boxes, btn, bar, rows, score, status };
   },

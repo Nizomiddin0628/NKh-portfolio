@@ -3,8 +3,9 @@
    into a change and waits for ✔ before touching the database. */
 
 const TG = {
-  bg: "#0e1621", head: "#17212b", bot: "#182533", me: "#2b5278", text: "#e8edf3",
-  soft: "#9fb0c3", faint: "#6d7f92", link: "#7fb6e8", ok: "#3fcf8e", warn: "#e2a54b", btn: "#1f3448",
+  bg: "var(--tg-bg)", head: "var(--tg-head)", bot: "var(--tg-bubble)", me: "var(--tg-me)", text: "var(--tg-text)",
+  soft: "var(--tg-soft)", faint: "var(--tg-faint)", link: "var(--tg-link)", ok: "#3fcf8e", warn: "#e2a54b", btn: "var(--tg-btn)",
+  meText: "var(--tg-me-text)", meMeta: "var(--tg-me-meta)", avatar: "var(--tg-avatar)",
 };
 
 export default {
@@ -70,7 +71,7 @@ export default {
     const CX = 124, CW = 264;
     h("rect", { x: CX, y: 12, width: CW, height: 226, rx: 14, fill: TG.bg }, svg);
     h("path", { d: `M${CX} 40V26q0-14 14-14h${CW - 28}q14 0 14 14v14z`, fill: TG.head }, svg);
-    h("circle", { cx: CX + 18, cy: 26, r: 8, fill: "#2b5278" }, svg);
+    h("circle", { cx: CX + 18, cy: 26, r: 8, fill: TG.avatar }, svg);
     h("text", { x: CX + 18, y: 29.5, "font-size": 8.5, fill: "#fff", "text-anchor": "middle", class: "db", text: "AI" }, svg);
     h("text", { x: CX + 32, y: 24, "font-size": 10.5, fill: TG.text, class: "db", text: "AI Kotib" }, svg);
     h("text", { x: CX + 32, y: 35, "font-size": 8.5, fill: TG.faint, text: "bot" }, svg);
@@ -96,14 +97,14 @@ export default {
     const voice = h("g", { opacity: 0 }, msgs);
     const VX = CX + 110;
     h("rect", { x: VX, y: 132, width: 144, height: 34, rx: 10, fill: TG.me }, voice);
-    h("circle", { cx: VX + 17, cy: 149, r: 10, fill: "#fff" }, voice);
-    h("path", { d: `M${VX + 14} 144v10l8-5z`, fill: TG.me }, voice);
+    h("circle", { cx: VX + 17, cy: 149, r: 10, fill: TG.meMeta }, voice);
+    h("path", { d: `M${VX + 14} 144v10l8-5z`, fill: "#fff" }, voice);
     const bars = [];
     for (let i = 0; i < 20; i++) {
       const hh = 4 + Math.abs(Math.sin(i * 1.7)) * 12;
-      bars.push(h("rect", { x: VX + 33 + i * 4.3, y: 149 - hh / 2, width: 2.4, height: hh, rx: 1.2, fill: "#a8c7e6", opacity: 0.55 }, voice));
+      bars.push(h("rect", { x: VX + 33 + i * 4.3, y: 149 - hh / 2, width: 2.4, height: hh, rx: 1.2, fill: TG.meMeta, opacity: 0.55 }, voice));
     }
-    h("text", { x: VX + 136, y: 162, "font-size": 7.5, fill: "#cfe0f1", "text-anchor": "end", class: "dm", text: "0:04" }, voice);
+    h("text", { x: VX + 136, y: 162, "font-size": 7.5, fill: TG.meMeta, "text-anchor": "end", class: "dm", text: "0:04" }, voice);
     const heard = h("text", { x: VX + 144, y: 180, "font-size": 9.5, fill: TG.soft, "text-anchor": "end", "font-style": "italic", opacity: 0, text: t.heard }, msgs);
 
     // 3. Confirmation card
@@ -151,8 +152,8 @@ export default {
 
     api.step(3);
     await api.tween(s.ripple, [{ opacity: 0.35, transform: "scale(0.2)" }, { opacity: 0, transform: "scale(2.6)" }], { dur: 520 });
-    s.okBg.setAttribute("fill", TG.ok);
-    s.okText.setAttribute("fill", "#0e1621");
+    s.okBg.style.fill = TG.ok;
+    s.okText.style.fill = "#0e1621";
     s.okText.textContent = `✔ ${t.done}`;
     await api.hide(s.noBtn, 300);
     await api.wait(1800);

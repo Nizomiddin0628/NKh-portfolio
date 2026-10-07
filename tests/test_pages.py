@@ -79,3 +79,12 @@ def test_contact_page_has_flow_demo(seeded, client):
 def test_about_has_facts_and_work(seeded, client):
     html = client.get(reverse("core:about")).content.decode()
     assert "about-facts" in html and "data-carousel" in html
+
+
+@pytest.mark.django_db
+def test_importmap_is_valid_json(seeded, client):
+    import json
+    import re
+    html = client.get(reverse("core:home")).content.decode()
+    m = re.search(r'<script type="importmap">(.*?)</script>', html, re.S)
+    assert m and "lenis" in json.loads(m.group(1))["imports"]

@@ -22,6 +22,10 @@ Sahna mavjud bo'lgan loyihalar: smart-yard-gate-automation, medical-ai-cancer-de
 3. `DEMO_SLUGS` ga slug qo'shing.
 4. `duration` — bitta sikl uzunligi (ms). Karusel nuqtasi shu vaqt ichida to'ladi, keyingi kartaga esa sahna `demo:end` bergandan keyin o'tadi.
 
+## Kesh
+
+`base.html` dagi import map (`{% module_importmap %}`) `static/js` dagi barcha modullarni xeshli URL'larga yo'naltiradi. Shu tufayli deploy'dan keyin brauzer eski `ui.js` yoki demo faylini keshdan bermaydi. Yangi JS fayl qo'shilsa, alohida hech narsa qilish shart emas: `collectstatic` uni o'zi map'ga qo'shadi.
+
 ## Qoidalar
 
 - Sahna "multfilm" emas, haqiqiy mahsulotning o'zi kabi ko'rinsin: haqiqiy UI (oyna sarlavhasi, Leaflet tugmalari, Telegram ranglari, OpenCV/matplotlib oynalari), haqiqiy geografiya, kamera kadri uchun shovqin va vinyetka. Sakrab chiqadigan `scale(0.4)` kabi effektlardan foydalanmang, harakat sokin bo'lsin.

@@ -19,7 +19,18 @@ function Step($text) { Write-Host "`n-> $text" -ForegroundColor Cyan }
 if (-not $Zip) {
     $latest = Get-ChildItem "$HOME\Downloads\portfolio-update-*.zip" -ErrorAction SilentlyContinue |
               Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    if ($latest) { $Zip = $latest.FullName }
+    if ($latest) {
+        # A zip older than the last commit is a leftover that was applied (or replaced) long ago.
+        # Applying it again silently reverts newer files, so it is skipped.
+        $headUnix = git log -1 --format=%ct 2>$null
+        $headTime = if ($headUnix) { [DateTimeOffset]::FromUnixTimeSeconds([int64]$headUnix).LocalDateTime } else { [DateTime]::MinValue }
+        if ($latest.LastWriteTime -lt $headTime) {
+            Write-Host "Skipping $($latest.Name): it is older than the last commit ($headTime)." -ForegroundColor Yellow
+            Write-Host "Move old zips out of Downloads: Move-Item $HOME\Downloads\portfolio-update-*.zip $HOME\Downloads\portfolio-applied\" -ForegroundColor Yellow
+        } else {
+            $Zip = $latest.FullName
+        }
+    }
 }
 
 if ($Zip) {
