@@ -3,7 +3,7 @@
    Telegram a moment later. */
 
 export default {
-  duration: 9900,
+  duration: 10300,
   rest: 1600,
   i18n: {
     en: {
@@ -140,7 +140,7 @@ export default {
     await api.wait(400);
     s.input.setAttribute("class", "d-tx");
     await api.type(s.input, t.q.length > 30 ? t.q.slice(0, 29) + "…" : t.q, 30);
-    await api.tween(s.send, [{ transform: "scale(1)" }, { transform: "scale(0.82)" }, { transform: "scale(1)" }], { dur: 260 });
+    await api.tween(s.send, [{ transform: "scale(1)" }, { transform: "scale(0.92)" }, { transform: "scale(1)" }], { dur: 260 });
     s.input.textContent = s.ph;
     s.input.setAttribute("class", "d-tx3");
     await api.show(s.qG, 420, "translateY(10px)");
@@ -165,11 +165,10 @@ export default {
     await api.wait(350);
 
     api.step(3);
-    await api.show(s.badge, 260, "scale(0.4)");
+    await api.tween(s.badge, [{ opacity: 0 }, { opacity: 1 }], { dur: 220 });
     await api.show(s.lead, 520, "translateY(14px)");
     for (const b of s.btns) await api.show(b, 300, "translateY(6px)");
     api.poster();
-    api.loop(s.badge, [{ transform: "scale(1)" }, { transform: "scale(1.2)" }, { transform: "scale(1)" }], { duration: 1400 });
     await api.wait(2000);
   },
 };

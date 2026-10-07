@@ -28,7 +28,10 @@ export function initHeader() {
   const scrim = document.querySelector("[data-nav-scrim]");
 
   const setMenu = (open) => {
+    if (!nav || !toggle) return;
+    if (!open && nav.dataset.open !== "true") return;   // closing a closed menu must not unlock other locks
     nav.dataset.open = String(open);
+    header?.classList.toggle("is-menu-open", open);
     if (scrim) scrim.dataset.open = String(open);
     toggle.setAttribute("aria-expanded", String(open));
     window.scrollLock?.(open);
@@ -39,7 +42,7 @@ export function initHeader() {
   // Menyu tashqarisiga bosilganda yopiladi
   scrim?.addEventListener("click", () => {
     setMenu(false);
-    toggle.focus();
+    toggle.focus({ preventScroll: true });
   });
 
   // Havola bosilganda menyu yopiladi
@@ -50,7 +53,7 @@ export function initHeader() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && nav?.dataset.open === "true") {
       setMenu(false);
-      toggle.focus();
+      toggle.focus({ preventScroll: true });
     }
   });
 
@@ -72,7 +75,7 @@ export function initHeader() {
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && langMenu?.dataset.open === "true") {
-      langMenu.dataset.open = "false"; langBtn.focus();
+      langMenu.dataset.open = "false"; langBtn.focus({ preventScroll: true });
     }
   });
 }

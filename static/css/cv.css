@@ -58,3 +58,56 @@
 @media screen and (max-width: 720px) {
   .cv { padding: 1.25rem; border-radius: var(--radius); }
 }
+
+/* -- Screen-only extras: photo, skill chips, experience timeline -------- */
+.cv__avatar { display: none; }
+.cv__screen-only { display: none; }
+@media screen {
+  .cv__print-only { display: none; }
+  .cv__screen-only { display: flex; }
+  .cv__head { align-items: center; }
+  .cv__id { flex: 1 1 auto; min-width: 0; }
+  .cv__avatar {
+    display: block; flex: none;
+    width: 76px; height: 76px; border-radius: 22px; object-fit: cover;
+    border: 1px solid var(--border);
+    box-shadow: 0 18px 40px -22px color-mix(in srgb, var(--indigo) 70%, transparent);
+  }
+  .cv__entry .cv__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; padding: 0; margin: 0.5rem 0 0; }
+  .cv__entry .cv__chips li {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    padding: 0.28rem 0.6rem; border-radius: var(--radius-full);
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-soft);
+  }
+  .cv__entry .cv__chips li.is-core {
+    color: var(--text);
+    border-color: color-mix(in srgb, var(--turquoise) 45%, var(--border));
+    background: color-mix(in srgb, var(--turquoise) 10%, var(--surface));
+  }
+  .cv__section--timeline .cv__entry {
+    position: relative;
+    padding-left: 1.4rem;
+    border-left: 1px solid var(--border);
+    margin-left: 0.3rem;
+    padding-bottom: 0.2rem;
+  }
+  .cv__section--timeline .cv__entry::before {
+    content: ""; position: absolute; left: -5px; top: 0.45rem;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--surface); border: 2px solid var(--turquoise);
+  }
+  .cv__section--timeline .cv__entry:first-of-type::before {
+    background: var(--turquoise);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--turquoise) 20%, transparent);
+  }
+  .cv__link { text-decoration: none; transition: color var(--dur-fast) var(--ease); }
+  .cv__link:hover { color: var(--indigo); }
+  .cv__link-arrow { color: var(--text-faint); font-weight: 400; }
+}
+@media screen and (max-width: 720px) {
+  .cv__head { gap: 1rem; }
+  .cv__avatar { width: 64px; height: 64px; border-radius: 18px; }
+  .cv__contacts { text-align: left; width: 100%; }
+  .cv__actions { justify-content: stretch; }
+  .cv__actions .btn { flex: 1 1 auto; }
+}

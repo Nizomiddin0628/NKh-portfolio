@@ -9,6 +9,8 @@ Har bir loyiha kartochkasida statik rasm o'rniga loyihaning o'zi ishlab turgan m
 | `static/js/demos/engine.js` | Dvigatel: lazy import, ko'rinmasa pauza, karuselda faqat faol karta, `prefers-reduced-motion` uchun statik kadr |
 | `static/js/demos/<slug>.js` | Bitta loyiha sahnasi (`build` + `play`, `i18n` en/uz/ru) |
 | `static/css/demos.css` | Sahna ranglari (sayt tokenlaridan), loyiha sahifasidagi panel |
+| `static/js/demos/map-kit.js` | Xarita sahnalari uchun: proyeksiya, yo'llar, Interstate belgilari, Leaflet tugmalari, pin va markerlar |
+| `static/js/demos/contact-flow.js` | Contact sahifasi: xabar formadan serverga, Telegram'ga va javob sifatida qaytib kelishi |
 | `apps/core/templatetags/site_extras.py` | `DEMO_SLUGS` va `has_demo` filtri |
 
 Sahna mavjud bo'lgan loyihalar: smart-yard-gate-automation, medical-ai-cancer-detection, ai-portfolio-assistant, driver-drowsiness-detector, restaurant-erp, ai-kotib-restaurant, live-truck-map, roadside-service-locator. Qolgan loyihalarda avvalgidek muqova rasmi chiqadi.
@@ -21,6 +23,10 @@ Sahna mavjud bo'lgan loyihalar: smart-yard-gate-automation, medical-ai-cancer-de
 4. `duration` — bitta sikl uzunligi (ms). Karusel nuqtasi shu vaqt ichida to'ladi, keyingi kartaga esa sahna `demo:end` bergandan keyin o'tadi.
 
 ## Qoidalar
+
+- Sahna "multfilm" emas, haqiqiy mahsulotning o'zi kabi ko'rinsin: haqiqiy UI (oyna sarlavhasi, Leaflet tugmalari, Telegram ranglari, OpenCV/matplotlib oynalari), haqiqiy geografiya, kamera kadri uchun shovqin va vinyetka. Sakrab chiqadigan `scale(0.4)` kabi effektlardan foydalanmang, harakat sokin bo'lsin.
+- Xarita zoom bo'lganda faqat asosiy qatlam kattalashadi (`vector-effect: non-scaling-stroke`). Yozuvlar, pinlar va markerlar har kadrda qayta proyeksiya qilinadi, shuning uchun o'lchami o'zgarmaydi.
+- `transform` atributi bilan joylashtirilgan guruhni `api.show()` bilan chiqarmang, chunki CSS `transform` atributni bosib ketadi. Faqat opacity tween ishlating.
 
 - Koordinatalar `viewBox="0 0 400 250"`. Telefonda karta ~330 px bo'ladi, shuning uchun matn kamida 9–10 birlik bo'lsin.
 - Ranglar faqat klasslar orqali beriladi (`d-card`, `d-tx`, `d-acc`, `s-tq` …). Atribut ichida `var(--…)` ishlamaydi, kerak bo'lsa `style` dan foydalaning.

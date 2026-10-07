@@ -168,3 +168,45 @@
   .demo-panel__live::before { animation: none; }
   .demo:not(.is-ready)::after { animation: none; }
 }
+
+/* ── Contact page: the message flow, on every screen size ─────────────── */
+.contact-demo { display: grid; gap: 0.75rem; width: 100%; max-width: 620px; justify-self: end; }
+.contact-demo .demo-panel__caption {
+  display: flex; gap: 0.75rem; align-items: baseline;
+  min-height: 2.8em; margin: 0;
+  font-size: var(--step--1); line-height: 1.4; color: var(--text-soft);
+}
+.contact-demo .demo-panel__caption::before {
+  content: attr(data-step);
+  flex: none;
+  font-family: var(--font-mono); font-size: var(--step--2);
+  color: var(--turquoise); letter-spacing: 0.06em;
+}
+@media (max-width: 999px) { .contact-demo { justify-self: stretch; max-width: 560px; } }
+
+/* ── Map palette (Truck map, Roadside) — light and dark map styles ────── */
+.demo {
+  --map-land: #f2efe9; --map-land2: #e6e3dc; --map-water: #aad3df; --map-park: #d6e9cf;
+  --map-road: #ffffff; --map-road-case: #d8d3c8; --map-hwy: #f8d27a; --map-hwy-case: #d6a945;
+  --map-border: #a99fb8; --map-label: #5f6368; --map-halo: rgba(255, 255, 255, 0.85);
+  --map-ui: #ffffff; --map-ui-line: rgba(0, 0, 0, 0.18); --map-route: #1a73e8;
+}
+:root[data-theme="dark"] .demo {
+  --map-land: #1d2431; --map-land2: #232b39; --map-water: #0f2638; --map-park: #1a2e2a;
+  --map-road: #2c3548; --map-road-case: #1a2130; --map-hwy: #7c6a3d; --map-hwy-case: #4c4026;
+  --map-border: #59617a; --map-label: #9aa4b6; --map-halo: rgba(14, 20, 32, 0.85);
+  --map-ui: #1f2736; --map-ui-line: rgba(255, 255, 255, 0.14); --map-route: #6ea8ff;
+}
+.demo .m-land  { fill: var(--map-land); }
+.demo .m-land2 { fill: var(--map-land2); }
+.demo .m-water { fill: var(--map-water); }
+.demo .m-park  { fill: var(--map-park); }
+.demo .m-road  { fill: none; stroke: var(--map-road); stroke-linecap: round; stroke-linejoin: round; }
+.demo .m-roadc { fill: none; stroke: var(--map-road-case); stroke-linecap: round; stroke-linejoin: round; }
+.demo .m-hwy   { fill: none; stroke: var(--map-hwy); stroke-linecap: round; stroke-linejoin: round; }
+.demo .m-hwyc  { fill: none; stroke: var(--map-hwy-case); stroke-linecap: round; stroke-linejoin: round; }
+.demo .m-border{ fill: none; stroke: var(--map-border); stroke-dasharray: 5 3 1 3; }
+.demo .m-label { fill: var(--map-label); stroke: var(--map-halo); stroke-width: 2.6px; paint-order: stroke; stroke-linejoin: round; }
+.demo .m-ui    { fill: var(--map-ui); stroke: var(--map-ui-line); }
+.demo .m-route { fill: none; stroke: var(--map-route); stroke-linecap: round; stroke-linejoin: round; }
+.demo .m-routef{ fill: var(--map-route); }

@@ -3,7 +3,7 @@
    from the till to every module the payment touches. */
 
 export default {
-  duration: 8500,
+  duration: 8200,
   rest: 1600,
   i18n: {
     en: {
@@ -45,27 +45,42 @@ export default {
     const sum = (v) => v.toLocaleString("ru-RU").replace(/ /g, " ");
 
     // ── Receipt ──
-    h("rect", { x: 12, y: 12, width: 140, height: 226, rx: 12, class: "d-card" }, svg);
-    h("text", { x: 24, y: 33, "font-size": 10.5, class: "d-tx db", text: t.till }, svg);
-    h("text", { x: 24, y: 47, "font-size": 9.5, class: "d-tx3 dm", text: "#1044 · Dilnoza" }, svg);
-    h("line", { x1: 24, x2: 140, y1: 57, y2: 57, class: "d-line", "stroke-dasharray": "3 3" }, svg);
+    // POS terminal: a thermal receipt on the left, the pay key under it
+    const PAPER = "#fbfbf7", INK = "#2b2b2b", INK2 = "#7a7a76";
+    h("rect", { x: 8, y: 8, width: 148, height: 234, rx: 10, class: "d-card" }, svg);
+    let zig = "M20 20H144V170";
+    for (let x = 144; x > 20; x -= 6) zig += `L${x - 3} 174L${x - 6} 170`;
+    h("path", { d: zig + "Z", fill: PAPER, stroke: "rgba(0,0,0,0.08)", style: "filter: drop-shadow(0 2px 3px rgba(0,0,0,0.12))" }, svg);
+    const R = { fill: INK, class: "dm" };
+    h("text", { x: 82, y: 34, "font-size": 9, "text-anchor": "middle", class: "dm db", fill: INK, text: "LAZZAT" }, svg);
+    h("text", { x: 82, y: 44, "font-size": 7, "text-anchor": "middle", fill: INK2, class: "dm", text: t.till }, svg);
+    h("text", { x: 28, y: 57, "font-size": 7, fill: INK2, class: "dm", text: "#1044  07.10  12:41" }, svg);
+    h("text", { x: 136, y: 57, "font-size": 7, fill: INK2, class: "dm", "text-anchor": "end", text: "Dilnoza" }, svg);
+    h("line", { x1: 28, x2: 136, y1: 63, y2: 63, stroke: INK2, "stroke-dasharray": "2 2", "stroke-width": 0.8 }, svg);
     const items = [["Osh ×2", 84000], ["Somsa ×3", 27000], ["Choy", 6000]].map(([name, price], i) => {
-      const y = 76 + i * 20;
+      const y = 78 + i * 15;
       const g = h("g", { opacity: 0 }, svg);
-      h("text", { x: 24, y, "font-size": 11, class: "d-tx", text: name }, g);
-      h("text", { x: 140, y, "font-size": 10.5, class: "d-tx2 dm", "text-anchor": "end", text: sum(price) }, g);
+      h("text", { x: 28, y, "font-size": 8.5, ...R, text: name }, g);
+      h("text", { x: 136, y, "font-size": 8.5, ...R, "text-anchor": "end", text: sum(price) }, g);
       return { g, price };
     });
-    h("line", { x1: 24, x2: 140, y1: 140, y2: 140, class: "d-line", "stroke-dasharray": "3 3" }, svg);
-    h("text", { x: 24, y: 160, "font-size": 10, class: "d-tx3", text: t.total }, svg);
-    const total = h("text", { x: 140, y: 180, "font-size": 16, class: "d-tx dd", "text-anchor": "end", text: "0" }, svg);
+    h("line", { x1: 28, x2: 136, y1: 128, y2: 128, stroke: INK2, "stroke-dasharray": "2 2", "stroke-width": 0.8 }, svg);
+    h("text", { x: 28, y: 146, "font-size": 9, fill: INK, class: "dm db", text: t.total.toUpperCase() }, svg);
+    const total = h("text", { x: 136, y: 146, "font-size": 11, fill: INK, class: "dm db", "text-anchor": "end", text: "0" }, svg);
+    h("text", { x: 82, y: 161, "font-size": 6.5, fill: INK2, "text-anchor": "middle", class: "dm", text: "UzCard · Humo · Click · Payme" }, svg);
     const btn = h("g", {}, svg);
-    const btnBg = h("rect", { x: 24, y: 196, width: 116, height: 30, rx: 9, class: "d-acc" }, btn);
-    const btnText = h("text", { x: 82, y: 215.5, "font-size": 11.5, fill: "#fff", "text-anchor": "middle", class: "db", text: t.pay }, btn);
+    const btnBg = h("rect", { x: 20, y: 196, width: 124, height: 34, rx: 8, class: "d-acc" }, btn);
+    const btnText = h("text", { x: 82, y: 217, "font-size": 11.5, fill: "#fff", "text-anchor": "middle", class: "db", text: t.pay }, btn);
+
+    // Dashboard header over the module tiles
+    h("rect", { x: 164, y: 8, width: 228, height: 22, rx: 6, class: "d-card" }, svg);
+    h("rect", { x: 171, y: 13.5, width: 11, height: 11, rx: 3, class: "d-acc" }, svg);
+    h("text", { x: 188, y: 22.5, "font-size": 8.5, class: "d-tx db", text: "Lazzat ERP" }, svg);
+    h("text", { x: 384, y: 22.5, "font-size": 7.5, class: "d-tx2 dm", "text-anchor": "end", text: "Chilonzor ▾  12:41" }, svg);
 
     // ── Module tiles ──
-    const W = 106, H = 70, X = [168, 282], Y = [12, 90, 168];
-    const from = { x: 140, y: 211 };
+    const W = 111, H = 64, X = [164, 281], Y = [36, 106, 176];
+    const from = { x: 144, y: 213 };
     const wires = h("g", {}, svg);
     const tiles = t.mods.map((label, i) => {
       const x = X[i % 2], y = Y[Math.floor(i / 2)];
@@ -74,11 +89,11 @@ export default {
       const wire = h("path", { d, class: "d-line", opacity: 0.55 }, wires);
       const pulse = h("circle", { r: 3.2, class: "d-tq", opacity: 0, cx: from.x, cy: from.y }, svg);
       const g = h("g", { opacity: 0.5 }, svg);
-      const bg = h("rect", { x, y, width: W, height: H, rx: 10, class: "d-card" }, g);
-      const ring = h("rect", { x: x + 0.5, y: y + 0.5, width: W - 1, height: H - 1, rx: 10, fill: "none", class: "s-tq", "stroke-width": 1.6, opacity: 0 }, g);
-      h("text", { x: x + 10, y: y + 18, "font-size": 8.5, class: "d-tx3 dm", text: label }, g);
-      const value = h("text", { x: x + 10, y: y + 40, "font-size": 13.5, class: "d-tx dd" }, g);
-      const sub = h("text", { x: x + 10, y: y + 57, "font-size": 9.5, class: "d-tx2" }, g);
+      const bg = h("rect", { x, y, width: W, height: H, rx: 8, class: "d-card" }, g);
+      const ring = h("rect", { x: x + 0.5, y: y + 0.5, width: W - 1, height: H - 1, rx: 8, fill: "none", class: "s-tq", "stroke-width": 1.4, opacity: 0 }, g);
+      h("text", { x: x + 10, y: y + 16, "font-size": 7.5, class: "d-tx3 dm", text: label }, g);
+      const value = h("text", { x: x + 10, y: y + 36, "font-size": 13, class: "d-tx dd" }, g);
+      const sub = h("text", { x: x + 10, y: y + 52, "font-size": 8.5, class: "d-tx2" }, g);
       return { g, bg, ring, value, sub, wire, pulse, x, y };
     });
 
@@ -91,7 +106,7 @@ export default {
     rep.value.textContent = "33.6%"; rep.sub.textContent = t.margin;
     // Tiny sales bars in the report tile
     const bars = [10, 14, 9, 17, 13, 20].map((v, i) =>
-      h("rect", { x: rep.x + 62 + i * 6.5, y: rep.y + 60 - v, width: 4, height: v, rx: 1, class: "d-acc o-b", opacity: 0.55 }, rep.g));
+      h("rect", { x: rep.x + 66 + i * 6.5, y: rep.y + 56 - v, width: 4, height: v, rx: 1, class: "d-acc o-b", opacity: 0.55 }, rep.g));
 
     return { items, total, btn, btnBg, btnText, tiles, bars, sum };
   },
@@ -100,7 +115,7 @@ export default {
     api.step(0);
     let running = 0;
     for (const it of s.items) {
-      await api.show(it.g, 320, "translateX(-8px)");
+      await api.tween(it.g, [{ opacity: 0 }, { opacity: 1 }], { dur: 260 });
       const before = running;
       running += it.price;
       await api.count(s.total, before, running, 380, (v) => s.sum(Math.round(v / 1000) * 1000));
@@ -109,7 +124,7 @@ export default {
     await api.wait(300);
 
     api.step(1);
-    await api.tween(s.btn, [{ transform: "scale(1)" }, { transform: "scale(0.94)" }, { transform: "scale(1)" }], { dur: 300 });
+    await api.tween(s.btn, [{ transform: "scale(1)" }, { transform: "scale(0.97)" }, { transform: "scale(1)" }], { dur: 300 });
     s.btnBg.setAttribute("class", "d-ok");
     s.btnText.textContent = `✓ ${t.paid}`;
     await api.wait(250);
@@ -128,7 +143,7 @@ export default {
       tile.pulse.style.opacity = "0";
       tile.g.style.opacity = "1";
       api.tween(tile.ring, [{ opacity: 0.9 }, { opacity: 0 }], { dur: 1100, delay: 200 }).catch(() => {});
-      await api.tween(tile.g, [{ transform: "scale(1.04)" }, { transform: "scale(1)" }], { dur: 420 });
+      await api.tween(tile.g, [{ transform: "scale(1.015)" }, { transform: "scale(1)" }], { dur: 420 });
     })();
 
     const updates = [

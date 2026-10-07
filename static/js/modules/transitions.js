@@ -11,9 +11,16 @@ const reduced = () =>
 
 let lenis = null;
 
-/** Lightbox va ⌘K skrollni qulflaydi. */
+/** Menu, lightbox, ⌘K and the AI sheet lock the page scroll.
+ *  The lock goes on <html>, never on <body>: html and body use
+ *  overflow-x: clip, so overflow on <body> turns it into its own scroll
+ *  container — the sticky header then scrolls away with the page and the
+ *  mobile menu opens off-screen while the page can no longer be scrolled. */
 window.scrollLock = (locked) => {
-  document.body.style.overflow = locked ? "hidden" : "";
+  const root = document.documentElement;
+  root.style.overflow = locked ? "hidden" : "";
+  document.body.style.overflow = "";
+  root.classList.toggle("is-scroll-locked", locked);
   if (lenis) locked ? lenis.stop() : lenis.start();
 };
 

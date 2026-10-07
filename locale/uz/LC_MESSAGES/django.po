@@ -368,3 +368,12 @@ msgstr "Qanday ishlaydi"
 
 msgid "Live demo"
 msgstr "Jonli namoyish"
+
+msgid "At a glance"
+msgstr "Qisqacha"
+
+msgid "In production since"
+msgstr "Real loyihalarda ishlay boshlagan yil"
+
+msgid "Your message is saved on the server, reaches my Telegram at once, and you get a reply within one working day"
+msgstr "Xabaringiz serverda saqlanadi, shu zahoti Telegram'imga tushadi va bir ish kuni ichida javob olasiz"

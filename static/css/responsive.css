@@ -94,6 +94,7 @@
   .carousel__item {
     flex: 0 0 84vw;
     max-width: 420px;
+    min-width: 0;               /* the nowrap chip row must not widen the card */
     scroll-snap-align: center;
     transform: scale(0.93);
     opacity: 0.55;
@@ -247,6 +248,19 @@
     visibility: visible;
     pointer-events: auto;
   }
+
+  /* backdrop-filter makes the header the containing block of its fixed
+     children, so the panel and the scrim would be tied to the 64px header
+     box. While the menu is open the header drops the filter and the
+     fixed layers measure against the viewport again. */
+  .header.is-menu-open {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--bg);
+  }
+  /* Brand and the close button stay sharp above the scrim */
+  .header.is-menu-open .brand,
+  .header.is-menu-open .header__tools { position: relative; z-index: 71; }
 
   /* Ortidagi sahifani xiralashtiruvchi qatlam.
      Alohida <button> — bosilganda menyu yopiladi. */

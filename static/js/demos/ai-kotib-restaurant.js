@@ -8,7 +8,7 @@ const TG = {
 };
 
 export default {
-  duration: 10700,
+  duration: 11200,
   rest: 1600,
   i18n: {
     en: {
@@ -128,7 +128,7 @@ export default {
     await api.wait(500);
     await api.tween(s.clockArc, [{ strokeDashoffset: C * 0.04 }, { strokeDashoffset: 0 }], { dur: 700 });
     s.time.textContent = "08:30";
-    await api.tween(s.clockCard, [{ transform: "scale(1)" }, { transform: "scale(1.05)" }, { transform: "scale(1)" }], { dur: 420 });
+    await api.tween(s.clockCard, [{ transform: "scale(1)" }, { transform: "scale(1.02)" }, { transform: "scale(1)" }], { dur: 420 });
     await api.show(s.rep, 420, "translateY(10px)");
     for (const l of s.lines) await api.show(l, 300, "translateX(-6px)");
     await api.wait(700);

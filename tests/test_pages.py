@@ -67,3 +67,15 @@ def test_demo_on_card_and_detail(seeded, client):
     other.slug = "no-demo-here"
     other.save()
     assert "data-demo-panel" not in client.get(other.get_absolute_url()).content.decode()
+
+
+@pytest.mark.django_db
+def test_contact_page_has_flow_demo(seeded, client):
+    html = client.get(reverse("core:contact")).content.decode()
+    assert 'data-demo="contact-flow"' in html
+
+
+@pytest.mark.django_db
+def test_about_has_facts_and_work(seeded, client):
+    html = client.get(reverse("core:about")).content.decode()
+    assert "about-facts" in html and "data-carousel" in html

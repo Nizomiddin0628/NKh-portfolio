@@ -368,3 +368,12 @@ msgstr "Как это работает"
 
 msgid "Live demo"
 msgstr "Живая демонстрация"
+
+msgid "At a glance"
+msgstr "Коротко"
+
+msgid "In production since"
+msgstr "Работаю в продакшене с"
+
+msgid "Your message is saved on the server, reaches my Telegram at once, and you get a reply within one working day"
+msgstr "Сообщение сохраняется на сервере, сразу приходит мне в Telegram, и в течение рабочего дня вы получаете ответ"

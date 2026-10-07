@@ -29,6 +29,32 @@
   {% endif %}
 </section>
 
+{# ── At a glance: four facts instead of another paragraph ──────────────── #}
+<section class="wrap about-facts" data-reveal-group aria-label="{% trans 'At a glance' %}">
+  <div class="about-fact">
+    <span class="about-fact__value"><span data-count="{{ project_total }}">{{ project_total }}</span></span>
+    <span class="about-fact__label">{% trans "Shipped projects" %}</span>
+  </div>
+  {% if since_year %}
+  <div class="about-fact">
+    <span class="about-fact__value">{{ since_year }}</span>
+    <span class="about-fact__label">{% trans "In production since" %}</span>
+  </div>
+  {% endif %}
+  {% if languages %}
+  <div class="about-fact">
+    <span class="about-fact__value"><span data-count="{{ languages|length }}">{{ languages|length }}</span></span>
+    <span class="about-fact__label">{% trans "Languages" %}</span>
+  </div>
+  {% endif %}
+  {% with ed=education.0 %}{% if ed and ed.grade %}
+  <div class="about-fact">
+    <span class="about-fact__value">{{ ed.grade|cut:" " }}</span>
+    <span class="about-fact__label">GPA · {{ ed|tr:"degree"|truncatechars:28 }}</span>
+  </div>
+  {% endif %}{% endwith %}
+</section>
+
 {% with about=site|tr:"about" %}
   {% if about %}
     <section class="section section--tight wrap about-story">
@@ -37,6 +63,24 @@
     </section>
   {% endif %}
 {% endwith %}
+
+{% if featured_projects %}
+<section class="section section--tight wrap" aria-labelledby="about-work-heading">
+  <div class="section__head section__head--row">
+    <div class="section__head-text">
+      <p class="eyebrow" data-reveal>{% trans "Selected work" %}</p>
+      <h2 id="about-work-heading" data-split>{% trans "Systems I have shipped" %}</h2>
+    </div>
+    <a class="link-arrow" href="{% url 'projects:list' %}" data-reveal>
+      {% trans "All projects" %} ({{ project_total }})
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  {% with carousel_projects=featured_projects %}
+    {% include "partials/project_carousel.html" %}
+  {% endwith %}
+</section>
+{% endif %}
 
 {% if experiences %}
 <section class="section section--tight wrap" aria-labelledby="exp-heading">

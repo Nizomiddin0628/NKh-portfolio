@@ -52,8 +52,13 @@ def home(request):
 
 def about(request):
     ctx = _base_context(request)
+    experiences = Experience.objects.filter(is_published=True).prefetch_related("bullets")
+    first = experiences.order_by("start_date").first()
     ctx.update({
-        "experiences": Experience.objects.filter(is_published=True).prefetch_related("bullets"),
+        "experiences": experiences,
+        "since_year": first.start_date.year if first and first.start_date else None,
+        "project_total": Project.objects.filter(is_published=True).count(),
+        "featured_projects": Project.objects.filter(is_published=True).prefetch_related("images", "technologies"),
         "education": Education.objects.all(),
         "skill_groups": SkillGroup.objects.prefetch_related("skills"),
         "languages": LanguageSkill.objects.all(),

@@ -21,38 +21,14 @@
     </p>
   {% endif %}
     </div>
-    <svg class="cta-art" viewBox="0 0 560 280" role="img"
-         aria-label="Your message goes from the form to Django, then to Telegram and email, and gets a reply within one day">
-      <defs>
-        <linearGradient id="cta-g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="560" y2="0">
-          <stop offset="0" style="stop-color: var(--turquoise)"/>
-          <stop offset="1" style="stop-color: var(--indigo)"/>
-        </linearGradient>
-      </defs>
-      <path class="wire" d="M120 140 L170 140"/>
-      <path class="wire" d="M280 140 C305 140 305 68 330 68"/>
-      <path class="wire" d="M280 140 C305 140 305 212 330 212"/>
-      <path class="wire" d="M430 68 C450 68 450 140 470 140"/>
-      <path class="wire" d="M430 212 C450 212 450 140 470 140"/>
-      <path class="flow" d="M120 140 L170 140"/>
-      <path class="flow flow--slow" d="M280 140 C305 140 305 68 330 68"/>
-      <path class="flow" d="M280 140 C305 140 305 212 330 212"/>
-      <path class="flow" d="M430 68 C450 68 450 140 470 140"/>
-      <path class="flow flow--slow" d="M430 212 C450 212 450 140 470 140"/>
-
-      <g class="node"><rect x="10" y="108" width="110" height="64" rx="12"/><circle class="live" cx="106" cy="120" r="3"/>
-        <text x="65" y="138" text-anchor="middle">Your message</text><text class="s" x="65" y="156" text-anchor="middle">form</text></g>
-      <g class="node node--accent"><rect x="170" y="108" width="110" height="64" rx="12"/>
-        <text x="225" y="138" text-anchor="middle">Django</text><text class="s" x="225" y="156" text-anchor="middle">saved + checked</text></g>
-      <g class="node"><rect x="330" y="40" width="100" height="56" rx="12"/>
-        <text x="380" y="64" text-anchor="middle">Telegram</text><text class="s" x="380" y="81" text-anchor="middle">instant</text></g>
-      <g class="node"><rect x="330" y="184" width="100" height="56" rx="12"/>
-        <text x="380" y="208" text-anchor="middle">Email</text><text class="s" x="380" y="225" text-anchor="middle">copy</text></g>
-      <g class="node node--accent"><rect x="470" y="108" width="84" height="64" rx="12"/>
-        <text x="512" y="138" text-anchor="middle">Reply</text><text class="s" x="512" y="156" text-anchor="middle">&lt; 1 day</text></g>
-      <circle class="ping" cx="470" cy="140" r="5"/>
-      <circle class="dot" cx="470" cy="140" r="3.5"/>
-    </svg>
+    {# What happens after "Send": form → server → my Telegram → your inbox #}
+    <div class="contact-demo" data-demo-panel data-reveal data-reveal-delay="200">
+      <div class="demo-panel__stage">
+        <div class="demo" data-demo="contact-flow" role="img"
+             aria-label="{% trans 'Your message is saved on the server, reaches my Telegram at once, and you get a reply within one working day' %}"></div>
+      </div>
+      <p class="demo-panel__caption" data-demo-caption aria-live="polite"></p>
+    </div>
   </div>
 
   <div class="contact">

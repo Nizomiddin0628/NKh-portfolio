@@ -17,7 +17,10 @@
     </div>
 
     <header class="cv__head">
-      <div>
+      {% if site.avatar_display %}
+        <img class="cv__avatar" src="{{ site.avatar_display.url }}?v={{ site.updated_at|date:'U' }}" alt="" width="96" height="96" decoding="async">
+      {% endif %}
+      <div class="cv__id">
         <h1 class="cv__name">{{ site.full_name }}</h1>
         <p class="cv__title">{{ site.job_title }}</p>
       </div>
@@ -34,7 +37,7 @@
     {% endwith %}
 
     {% if experiences %}
-    <section class="cv__section">
+    <section class="cv__section cv__section--timeline">
       <h2>{% trans "Experience" %}</h2>
       {% for job in experiences %}
         <div class="cv__entry">
@@ -54,7 +57,7 @@
       {% for p in projects %}
         <div class="cv__entry">
           <div class="cv__entry-head">
-            <span class="cv__entry-title">{{ p.title }}</span>
+            <a class="cv__entry-title cv__link" href="{{ p.get_absolute_url }}">{{ p.title }}<span class="cv__link-arrow" aria-hidden="true"> ↗</span></a>
             <span class="cv__entry-meta">{{ p.period }}</span>
           </div>
           <p style="font-size:var(--step--1);color:var(--text-soft)">{{ p|tr:"tagline" }}</p>
@@ -71,7 +74,8 @@
         {% for g in skill_groups %}
           <div class="cv__entry" style="margin-bottom:0.8rem">
             <span class="cv__entry-title">{{ g|tr:"name" }}</span>
-            <p style="font-size:var(--step--1);color:var(--text-soft)">{% for s in g.skills.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            <p class="cv__print-only" style="font-size:var(--step--1);color:var(--text-soft)">{% for s in g.skills.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            <ul class="cv__chips cv__screen-only">{% for s in g.skills.all %}<li class="{% if s.depth == 'core' %}is-core{% endif %}">{{ s.name }}</li>{% endfor %}</ul>
           </div>
         {% endfor %}
       </section>

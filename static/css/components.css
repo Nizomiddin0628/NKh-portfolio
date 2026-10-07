@@ -1175,7 +1175,77 @@
   .about-story { grid-template-columns: 200px minmax(0, 1fr); align-items: start; }
   .about-story .eyebrow { position: sticky; top: calc(var(--header-h) + 2rem); }
 }
-.about-story__body { font-size: var(--step-1); line-height: 1.6; max-width: 62ch; }
+.about-story__body { font-size: var(--step-1); line-height: 1.6; max-width: 62ch; counter-reset: story; }
+
+/* The opening paragraph reads as a lead; every paragraph that starts with a
+   bold phrase ("Where I am strongest.") becomes a numbered card, so the
+   story scans in blocks instead of one long wall of text on a phone. */
+.about-story__body > p:first-child {
+  font-size: var(--step-2);
+  line-height: 1.35;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  padding-left: 1.1rem;
+  border-left: 3px solid;
+  border-image: linear-gradient(var(--turquoise), var(--indigo)) 1;
+}
+.about-story__body > p:has(> strong:first-child) {
+  counter-increment: story;
+  position: relative;
+  margin-top: 1rem;
+  padding: 1.15rem 1.25rem 1.2rem 3.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text-soft);
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease-out);
+}
+.about-story__body > p:has(> strong:first-child):hover { border-color: var(--border-strong); }
+.about-story__body > p:has(> strong:first-child)::before {
+  content: counter(story, decimal-leading-zero);
+  position: absolute; left: 1.15rem; top: 1.3rem;
+  font-family: var(--font-mono); font-size: var(--step--2);
+  color: var(--turquoise); letter-spacing: 0.06em;
+}
+.about-story__body > p > strong:first-child {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-1);
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* At a glance */
+.about-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-block: clamp(1rem, 3vw, 2rem);
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+@media (min-width: 820px) { .about-facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.about-fact {
+  display: grid; gap: 0.35rem; align-content: start;
+  padding: clamp(1.1rem, 3vw, 1.75rem);
+  background: var(--surface);
+}
+.about-fact__value {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: var(--step-3); line-height: 1; letter-spacing: -0.04em;
+  background: linear-gradient(120deg, var(--text) 40%, var(--indigo));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.about-fact__label { font-size: var(--step--1); color: var(--text-soft); line-height: 1.35; }
+@media (max-width: 819px) {
+  .about-fact__value { font-size: var(--step-2); }
+}
 
 /* Timeline: a gradient line grows with the scroll, dots light up */
 .timeline--draw { position: relative; }

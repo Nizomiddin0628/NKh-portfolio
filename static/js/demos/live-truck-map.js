@@ -1,223 +1,303 @@
-/* Live Truck Map: a dot-matrix map of the US with trucks moving along the
-   interstates. The feed refreshes, nearby trucks sit in clusters, a unit is
-   searched and the map flies to it: speed, road and a low-fuel warning. */
+/* Live Truck Map, drawn like the dispatch screen it is: a fleet list on the
+   left, a real map of the Texas–Oklahoma corridor on the right. Positions
+   arrive in steps (the feed is polled, not streamed), alerts stand out,
+   and picking a unit flies the map to it with a Leaflet-style popup.
 
-const OUTLINE = [
-  [-124.7, 48.4], [-122.8, 49.0], [-95.2, 49.0], [-94.8, 49.4], [-89.6, 48.0], [-84.8, 46.6], [-83.4, 45.8],
-  [-82.4, 43.0], [-79.0, 43.3], [-76.5, 44.2], [-74.7, 45.0], [-71.5, 45.0], [-69.2, 47.4], [-67.8, 47.1],
-  [-67.0, 44.8], [-70.6, 43.0], [-70.0, 41.7], [-71.9, 41.3], [-74.0, 40.6], [-74.9, 38.9], [-75.9, 37.3],
-  [-75.5, 35.2], [-77.9, 33.9], [-80.8, 32.0], [-81.4, 30.4], [-80.1, 26.9], [-80.4, 25.2], [-81.8, 26.1],
-  [-82.8, 27.9], [-83.6, 29.9], [-85.3, 29.7], [-87.6, 30.3], [-89.6, 30.2], [-89.4, 29.1], [-91.4, 29.4],
-  [-93.8, 29.7], [-95.0, 29.2], [-97.2, 27.6], [-97.4, 25.9], [-99.1, 26.4], [-101.4, 29.8], [-103.1, 29.0],
-  [-104.5, 29.6], [-106.5, 31.8], [-108.2, 31.3], [-111.1, 31.3], [-114.8, 32.5], [-117.1, 32.5], [-118.5, 34.0],
-  [-120.6, 34.6], [-121.9, 36.6], [-122.5, 37.8], [-123.8, 39.8], [-124.2, 41.9], [-124.1, 43.7], [-124.0, 46.3],
+   Only the base map scales on zoom (strokes stay hairline); labels,
+   markers and clusters live in an overlay that is re-projected each
+   frame, so they keep their size exactly like a real web map. */
+
+import { cluster, controls, attribution, pathOf, projector, road, scaleBar, shield, vehicle } from "./map-kit.js";
+
+const MAP = { x: 124, w: 276 };
+const P = projector({ lon0: -108.6, lon1: -91.4, lat1: 39.6, latMid: 33, x: MAP.x, y: 0, w: MAP.w });
+
+const GULF = [[-97.17, 26.4], [-97.3, 27.6], [-97.0, 28.0], [-96.4, 28.4], [-95.0, 29.2], [-94.4, 29.55], [-93.8, 29.72],
+  [-92.6, 29.6], [-91.3, 29.4], [-91.3, 26.4]];
+const MEXICO = [[-108.7, 31.33], [-106.53, 31.78], [-106.0, 31.4], [-104.9, 30.6], [-104.5, 29.6], [-103.3, 28.98],
+  [-102.7, 29.75], [-101.4, 29.77], [-100.9, 29.3], [-99.5, 27.5], [-99.1, 26.4], [-97.2, 26.0], [-108.7, 26.0]];
+const BORDERS = [
+  [[-106.6, 32.0], [-103.06, 32.0], [-103.04, 37.0]],
+  [[-103.04, 36.5], [-100.0, 36.5], [-100.0, 34.56], [-99.2, 34.35], [-98.1, 34.13], [-97.2, 33.85], [-96.3, 33.75],
+    [-95.2, 33.9], [-94.48, 33.64], [-94.04, 33.55], [-94.04, 31.0], [-93.6, 30.0], [-93.8, 29.72]],
+  [[-94.48, 33.64], [-94.43, 35.4], [-94.62, 36.5], [-94.62, 39.7]],
+  [[-108.7, 37.0], [-94.62, 37.0]],
+  [[-94.04, 33.02], [-91.3, 33.0]],
+  [[-94.62, 36.5], [-91.3, 36.5]],
 ];
-const ROADS = {
-  "I-5": [[-117.16, 32.72], [-118.24, 34.05], [-121.49, 38.58], [-122.68, 45.52], [-122.33, 47.61]],
-  "I-10": [[-118.24, 34.05], [-112.07, 33.45], [-106.49, 31.76], [-98.49, 29.42], [-95.37, 29.76], [-90.07, 29.95], [-81.66, 30.33]],
-  "I-40": [[-118.24, 34.05], [-117.0, 34.9], [-111.65, 35.2], [-106.65, 35.08], [-101.83, 35.22], [-97.52, 35.47], [-92.29, 34.75], [-90.05, 35.15], [-86.78, 36.16], [-78.64, 35.78]],
-  "I-80": [[-122.42, 37.77], [-119.81, 39.53], [-111.89, 40.76], [-104.82, 41.14], [-95.94, 41.26], [-87.63, 41.88], [-81.69, 41.5], [-74.0, 40.71]],
-  "I-35": [[-99.5, 27.5], [-98.49, 29.42], [-97.74, 30.27], [-96.8, 32.78], [-97.52, 35.47], [-94.58, 39.1], [-93.6, 41.59], [-93.27, 44.98]],
-  "I-95": [[-80.19, 25.76], [-81.66, 30.33], [-81.1, 32.08], [-77.44, 37.54], [-76.61, 39.29], [-74.0, 40.71], [-71.06, 42.36]],
-  "I-70": [[-104.99, 39.74], [-94.58, 39.1], [-90.2, 38.63], [-86.16, 39.77], [-82.99, 39.96], [-76.61, 39.29]],
+const LAKES = [[-96.7, 33.86, 0.32, 0.07], [-93.8, 31.4, 0.07, 0.42], [-95.6, 35.28, 0.18, 0.08], [-94.2, 31.1, 0.12, 0.2], [-107.2, 33.2, 0.05, 0.25]];
+const HWY = {
+  "40": [[-108.7, 35.08], [-106.65, 35.08], [-104.68, 34.94], [-103.72, 35.17], [-101.83, 35.22], [-100.2, 35.22], [-97.52, 35.47], [-95.6, 35.45], [-94.4, 35.39], [-92.29, 34.75], [-91.3, 34.85]],
+  "35": [[-98.49, 29.42], [-97.74, 30.27], [-97.15, 31.55], [-97.05, 32.8], [-97.2, 33.9], [-97.52, 35.47], [-97.4, 36.5], [-97.33, 37.69], [-96.6, 38.5], [-95.7, 39.6]],
+  "20": [[-106.49, 31.76], [-103.49, 31.42], [-102.08, 31.99], [-99.73, 32.45], [-97.33, 32.75], [-96.8, 32.78], [-95.3, 32.35], [-93.75, 32.52], [-91.3, 32.4]],
+  "10": [[-108.7, 32.3], [-106.49, 31.76], [-104.83, 31.04], [-102.88, 30.89], [-100.0, 30.4], [-98.49, 29.42], [-95.37, 29.76], [-94.1, 30.08], [-91.3, 30.4]],
+  "45": [[-96.8, 32.78], [-96.0, 31.3], [-95.37, 29.76], [-94.9, 29.3]],
+  "44": [[-98.49, 33.91], [-97.52, 35.47], [-95.99, 36.15], [-94.6, 37.1], [-93.3, 37.2]],
+  "27": [[-101.85, 33.58], [-101.71, 34.18], [-101.83, 35.22]],
+  "25": [[-106.78, 32.31], [-106.65, 35.08], [-105.94, 35.69], [-104.44, 36.9], [-104.6, 38.3], [-104.8, 39.6]],
+  "30": [[-96.8, 32.78], [-95.6, 33.15], [-94.05, 33.43], [-92.29, 34.75]],
+  "37": [[-98.49, 29.42], [-97.9, 28.4], [-97.4, 27.8]],
 };
+const CITIES = [
+  ["Albuquerque", -106.65, 35.08, 1], ["El Paso", -106.49, 31.76, 1], ["Amarillo", -101.83, 35.22, 0], ["Lubbock", -101.85, 33.58, 0],
+  ["Midland", -102.08, 31.99, 0], ["Oklahoma City", -97.52, 35.47, 1], ["Tulsa", -95.99, 36.15, 0], ["Wichita", -97.33, 37.69, 0],
+  ["Dallas", -96.8, 32.78, 1], ["Austin", -97.74, 30.27, 0], ["San Antonio", -98.49, 29.42, 1], ["Houston", -95.37, 29.76, 1],
+["Little Rock", -92.29, 34.75, 0], ["Corpus Christi", -97.4, 27.8, 0],
+];
+const STATES = [["TEXAS", -99.6, 31.2], ["OKLAHOMA", -98.2, 36.15], ["NEW MEXICO", -106.0, 34.0], ["KANSAS", -98.6, 38.6], ["ARKANSAS", -92.9, 35.95], ["LOUISIANA", -92.5, 31.4]];
 
-const K = 8.1;
-const px = ([lon, lat]) => [14 + (lon + 125) * 0.79 * K, 30 + (49.6 - lat) * K];
-
-function inside([x, y], poly) {
-  let ins = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const [xi, yi] = poly[i], [xj, yj] = poly[j];
-    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) ins = !ins;
-  }
-  return ins;
-}
+const STATUS = { move: "#34a853", idle: "#8a94a6", fuel: "#f29900", fault: "#d93025" };
 
 export default {
-  duration: 11300,
+  duration: 11100,
   rest: 1400,
   i18n: {
     en: {
       steps: [
-        "575 trucks, positions pulled from the Motive API",
+        "575 trucks, positions from the Motive API",
         "The map refreshes every ~10 seconds",
-        "Nearby trucks group into clusters",
-        "Find a unit: speed, fuel and faults at a glance",
+        "Faults and low fuel stand out",
+        "Pick a unit: speed, road and fuel at a glance",
       ],
-      find: "Find unit", trucks: "trucks", updated: "updated", fuel: "Fuel", low: "Low fuel",
+      fleet: "Fleet", live: "Live", ago: "s ago", search: "Search unit", fuel: "Fuel", low: "Low fuel", idle: "Idle", fault: "Fault",
+      heading: "heading W", near: "near",
     },
     uz: {
       steps: [
-        "575 ta mashina, joylashuvi Motive API'dan olinadi",
+        "575 ta mashina, joylashuvi Motive API'dan",
         "Xarita har ~10 soniyada yangilanadi",
-        "Yaqin mashinalar klasterlarga birlashadi",
-        "Mashinani toping: tezlik, yoqilg'i va nosozlik bir qarashda",
+        "Nosozlik va kam yoqilg'i darrov ko'zga tashlanadi",
+        "Mashinani tanlang: tezlik, yo'l va yoqilg'i bir qarashda",
       ],
-      find: "Mashina raqami", trucks: "ta mashina", updated: "yangilandi", fuel: "Yoqilg'i", low: "Yoqilg'i kam",
+      fleet: "Park", live: "Jonli", ago: "s oldin", search: "Mashina raqami", fuel: "Yoqilg'i", low: "Yoqilg'i kam", idle: "Turibdi", fault: "Nosozlik",
+      heading: "g'arbga", near: "yaqinida",
     },
     ru: {
       steps: [
         "575 тягачей, координаты из Motive API",
         "Карта обновляется каждые ~10 секунд",
-        "Соседние машины собираются в кластеры",
-        "Найдите юнит: скорость, топливо и неисправности сразу",
+        "Неисправности и низкое топливо видны сразу",
+        "Выберите юнит: скорость, трасса и топливо сразу",
       ],
-      find: "Найти юнит", trucks: "машин", updated: "обновлено", fuel: "Топливо", low: "Мало топлива",
+      fleet: "Парк", live: "Онлайн", ago: "с назад", search: "Найти юнит", fuel: "Топливо", low: "Мало топлива", idle: "Стоит", fault: "Неисправность",
+      heading: "на запад", near: "около",
     },
   },
 
   build(svg, { h, rng }, t) {
-    const R = rng(5);
-    const poly = OUTLINE.map(px);
-    const map = h("g", { class: "vb" }, svg);
+    const R = rng(9);
+    const uid = "tm" + Math.random().toString(36).slice(2, 8);
+    const defs = h("defs", {}, svg);
+    const clip = h("clipPath", { id: `${uid}c` }, defs);
+    h("rect", { x: MAP.x, y: 0, width: MAP.w, height: 250 }, clip);
 
-    // Dot-matrix land: one path, one draw call
-    let dots = "";
-    for (let y = 30; y < 236; y += 6.2) {
-      for (let x = 10; x < 392; x += 6.2) {
-        if (inside([x, y], poly)) dots += `M${x.toFixed(1)} ${y.toFixed(1)}h0`;
-      }
-    }
-    const land = h("path", { d: dots, class: "s-line", "stroke-width": 2.6, "stroke-linecap": "round", opacity: 0.9 }, map);
-
-    // Interstates
+    // ── Base map (this group zooms) ──
+    const frame = h("g", { "clip-path": `url(#${uid}c)` }, svg);
+    const base = h("g", { class: "vb" }, frame);
+    h("rect", { x: MAP.x - 400, y: -400, width: 1200, height: 1200, class: "m-land" }, base);
+    h("path", { d: pathOf(MEXICO, P, true), class: "m-land2" }, base);
+    h("path", { d: pathOf(GULF, P, true), class: "m-water" }, base);
+    LAKES.forEach(([lon, lat, rx, ry]) => {
+      const [x, y] = P([lon, lat]);
+      h("ellipse", { cx: x, cy: y, rx: rx * P.kx, ry: ry * P.ky, class: "m-water" }, base);
+    });
+    BORDERS.forEach((b) => h("path", { d: pathOf(b, P), class: "m-border", "stroke-width": 0.8, "vector-effect": "non-scaling-stroke" }, base));
     const roads = {};
-    for (const [name, pts] of Object.entries(ROADS)) {
-      const d = pts.map((p, i) => `${i ? "L" : "M"}${px(p).map((v) => v.toFixed(1)).join(" ")}`).join("");
-      roads[name] = h("path", { d, fill: "none", class: "s-tx3", "stroke-width": 1.1, "stroke-linejoin": "round", opacity: 0.45 }, map);
+    for (const [num, pts] of Object.entries(HWY)) {
+      const d = pathOf(pts, P);
+      road(h, base, d, "hwy");
+      roads[num] = h("path", { d, fill: "none", stroke: "none" }, base);   // geometry for movement
     }
+    base.querySelectorAll(".m-hwy, .m-hwyc").forEach((el) => el.setAttribute("vector-effect", "non-scaling-stroke"));
 
-    // Clusters
-    const cluster = (lon, lat, n) => {
-      const [x, y] = px([lon, lat]);
-      const g = h("g", { opacity: 0 }, map);
-      h("circle", { cx: x, cy: y, r: 13, class: "d-acc", opacity: 0.18 }, g);
-      h("circle", { cx: x, cy: y, r: 9.5, class: "d-acc" }, g);
-      const label = h("text", { x, y: y + 3.4, "font-size": 9, fill: "#fff", "text-anchor": "middle", class: "dm db", text: n }, g);
-      return { g, label };
-    };
-    const clusters = [cluster(-96.8, 32.78, "42"), cluster(-87.63, 41.88, "37"), cluster(-118.24, 34.05, "29")];
+    // ── Overlay (re-projected, never scaled) ──
+    const over = h("g", { "clip-path": `url(#${uid}c)` }, svg);
+    const labels = [];
+    STATES.forEach(([name, lon, lat]) => {
+      const [x, y] = P([lon, lat]);
+      labels.push({ x, y, el: h("text", { "font-size": 7, class: "m-label", "text-anchor": "middle", "letter-spacing": 2.2, "font-weight": 600, opacity: 0.55, text: name }, over) });
+    });
+    const LEFT = new Set(["Dallas", "Houston", "Oklahoma City", "San Antonio", "Little Rock"]);
+    CITIES.forEach(([name, lon, lat, big]) => {
+      const [x, y] = P([lon, lat]);
+      const left = LEFT.has(name);
+      const dot = h("circle", { r: big ? 2.3 : 1.7, style: "fill: var(--map-label); stroke: var(--map-halo)", "stroke-width": 0.9 }, over);
+      const el = h("text", { "font-size": big ? 8.5 : 7.5, class: "m-label", "font-weight": big ? 600 : 500, "text-anchor": left ? "end" : "start", text: name }, over);
+      labels.push({ x, y, el, dot, dx: left ? -4 : 4, dy: left ? -3 : 3 });
+    });
+    const shields = [["40", -94.9, 35.41], ["35", -97.1, 31.95], ["20", -100.9, 32.25], ["10", -103.9, 30.95], ["44", -96.8, 35.82], ["45", -96.0, 31.25], ["25", -106.3, 33.6]]
+      .map(([n, lon, lat]) => { const [x, y] = P([lon, lat]); return { x, y, el: shield(h, over, 0, 0, n, 1) }; });
 
-    // Trucks
-    const names = Object.keys(ROADS);
-    const trucks = [];
-    for (let i = 0; i < 26; i++) {
-      const road = roads[names[i % names.length]];
-      trucks.push({
-        road, len: road.getTotalLength(), pos: R(), speed: (0.012 + R() * 0.02) * (R() > 0.5 ? 1 : -1),
-        el: h("circle", { r: 2.7, class: "d-tq" }, map),
-      });
-    }
-    const fault = trucks[3];                                  // on I-80
-    fault.el.setAttribute("class", "d-bad");
-    const ring = h("circle", { r: 3, class: "s-bad", fill: "none", "stroke-width": 1.2 }, map);
-    const target = { road: roads["I-40"], len: roads["I-40"].getTotalLength(), pos: 0.36, speed: 0.016 };
-    target.el = h("circle", { r: 3.1, class: "d-warn" }, map);
+    // Clusters where the fleet is dense
+    const clusters = [["48", -96.15, 32.95], ["36", -94.75, 29.95], ["21", -96.85, 35.2], ["17", -98.05, 29.05]]
+      .map(([n, lon, lat]) => { const [x, y] = P([lon, lat]); return { x, y, c: cluster(h, over, 0, 0, Number(n)) }; });
+
+    // Trucks on the roads
+    const pick = ["40", "40", "35", "35", "20", "20", "10", "10", "44", "45", "27", "25", "30", "37", "40", "35", "20", "10", "25", "30", "40"];
+    const trucks = pick.map((num, i) => {
+      const status = i === 9 ? "fuel" : i % 6 === 3 ? "idle" : "move";
+      const v = vehicle(h, over, STATUS[status]);
+      return { road: roads[num], len: roads[num].getTotalLength(), pos: 0.06 + R() * 0.88, dir: R() > 0.5 ? 1 : -1, status, v, step: status === "idle" || status === "fault" ? 0 : 0.012 + R() * 0.01 };
+    });
+    const target = { road: roads["40"], len: roads["40"].getTotalLength(), pos: 0.37, dir: -1, status: "fuel", step: 0.006, v: vehicle(h, over, STATUS.fuel) };
     trucks.push(target);
+    // #1150: stopped with a fault on I-44 near Tulsa
+    const fault = { road: roads["44"], len: roads["44"].getTotalLength(), pos: 0.6, dir: 1, status: "fault", step: 0, v: vehicle(h, over, STATUS.fault) };
+    trucks.push(fault);
+    const faultRing = h("circle", { r: 6, fill: "none", stroke: STATUS.fault, "stroke-width": 1.4 }, over);
 
-    // ── HUD (outside the zoomed group) ──
-    const search = h("g", {}, svg);
-    h("rect", { x: 12, y: 10, width: 128, height: 24, rx: 12, class: "d-card" }, search);
-    h("circle", { cx: 27, cy: 21.5, r: 4.2, fill: "none", class: "s-tx3", "stroke-width": 1.4 }, search);
-    h("path", { d: "M30 24.5l3 3", class: "s-tx3", "stroke-width": 1.4, "stroke-linecap": "round" }, search);
-    const q = h("text", { x: 39, y: 26, "font-size": 10.5, class: "d-tx3", text: t.find }, search);
+    // Map chrome
+    controls(h, svg, 376, 8);
+    attribution(h, svg, 400, 250);
+    scaleBar(h, svg, 132, 240, 40, "100 mi");
 
-    const hud = h("g", {}, svg);
-    h("rect", { x: 268, y: 10, width: 120, height: 24, rx: 12, class: "d-card" }, hud);
-    h("text", { x: 280, y: 26, "font-size": 10.5, class: "d-tx dm db", text: "575" }, hud);
-    const hudLabel = h("text", { x: 304, y: 26, "font-size": 9.5, class: "d-tx2", text: t.trucks }, hud);
-    const C = 2 * Math.PI * 6;
-    h("circle", { cx: 374, cy: 22, r: 6, fill: "none", class: "s-line", "stroke-width": 2 }, hud);
-    const arc = h("circle", { cx: 374, cy: 22, r: 6, fill: "none", class: "s-tq", "stroke-width": 2, "stroke-dasharray": C, "stroke-dashoffset": C, style: "transform: rotate(-90deg)" }, hud);
+    // Popup for the picked truck (screen coordinates; the truck is flown to 262,152)
+    const popup = h("g", { opacity: 0 }, svg);
+    h("path", { d: "M200 54h124a6 6 0 0 1 6 6v68a6 6 0 0 1-6 6h-56l-6 7-6-7h-56a6 6 0 0 1-6-6V60a6 6 0 0 1 6-6Z", class: "d-card", style: "filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18))" }, popup);
+    h("text", { x: 208, y: 71, "font-size": 10.5, class: "d-tx dd", text: "#1112" }, popup);
+    h("rect", { x: 268, y: 61, width: 56, height: 14, rx: 7, fill: STATUS.fuel, opacity: 0.16 }, popup);
+    h("text", { x: 296, y: 71, "font-size": 7.5, fill: STATUS.fuel, "text-anchor": "middle", class: "db", text: t.low }, popup);
+    h("text", { x: 208, y: 87, "font-size": 8.5, class: "d-tx2", text: `63 mph · ${t.heading}` }, popup);
+    h("text", { x: 208, y: 99, "font-size": 8, class: "d-tx3", text: `I-40 ${t.near} Amarillo, TX` }, popup);
+    h("text", { x: 208, y: 115, "font-size": 7.5, class: "d-tx3", text: t.fuel }, popup);
+    h("text", { x: 322, y: 115, "font-size": 7.5, fill: STATUS.fuel, "text-anchor": "end", class: "dm db", text: "12%" }, popup);
+    h("rect", { x: 208, y: 119, width: 114, height: 4, rx: 2, class: "d-card2" }, popup);
+    const fuelBar = h("rect", { x: 208, y: 119, width: 114 * 0.12, height: 4, rx: 2, fill: STATUS.fuel, class: "o-l" }, popup);
 
-    // Tooltip card for the found truck
-    const tip = h("g", { opacity: 0 }, svg);
-    h("rect", { x: 222, y: 136, width: 164, height: 92, rx: 12, class: "d-card" }, tip);
-    h("text", { x: 236, y: 158, "font-size": 13, class: "d-tx dd", text: "#1112" }, tip);
-    h("rect", { x: 300, y: 146, width: 76, height: 17, rx: 8.5, class: "d-warn", opacity: 0.18 }, tip);
-    h("text", { x: 338, y: 158, "font-size": 9, class: "d-warn db", "text-anchor": "middle", text: t.low }, tip);
-    h("text", { x: 236, y: 180, "font-size": 10.5, class: "d-tx2 dm", text: "63 mph · I-40 W" }, tip);
-    h("text", { x: 236, y: 203, "font-size": 9.5, class: "d-tx3", text: t.fuel }, tip);
-    h("rect", { x: 236, y: 210, width: 136, height: 5, rx: 2.5, class: "d-card2" }, tip);
-    const fuel = h("rect", { x: 236, y: 210, width: 136 * 0.12, height: 5, rx: 2.5, class: "d-warn o-l" }, tip);
-    h("text", { x: 372, y: 203, "font-size": 9.5, class: "d-warn dm db", "text-anchor": "end", text: "12%" }, tip);
-    const leader = h("path", { fill: "none", class: "s-acc", "stroke-width": 1, "stroke-dasharray": "3 3", opacity: 0 }, svg);
+    // ── Fleet list ──
+    h("rect", { x: 0, y: 0, width: MAP.x, height: 250, class: "d-card" }, svg);
+    h("text", { x: 10, y: 20, "font-size": 11, class: "d-tx db", text: t.fleet }, svg);
+    h("text", { x: 114, y: 20, "font-size": 9.5, class: "d-tx2 dm", "text-anchor": "end", text: "575" }, svg);
+    const liveDot = h("circle", { cx: 13, cy: 31, r: 2.6, fill: STATUS.move }, svg);
+    const updated = h("text", { x: 19, y: 34, "font-size": 7.5, class: "d-tx3", text: `${t.live} · 2 ${t.ago}` }, svg);
+    h("rect", { x: 8, y: 41, width: 108, height: 18, rx: 5, class: "d-card2" }, svg);
+    h("circle", { cx: 18, cy: 49.5, r: 3, fill: "none", class: "s-tx3", "stroke-width": 1.1 }, svg);
+    h("path", { d: "M20.2 51.8l2.2 2.2", class: "s-tx3", "stroke-width": 1.1, "stroke-linecap": "round" }, svg);
+    const query = h("text", { x: 27, y: 53, "font-size": 8, class: "d-tx3", text: t.search }, svg);
+    [["move", "412"], ["idle", "131"], ["fault", "32"]].forEach(([k, n], i) => {
+      h("circle", { cx: 13 + i * 36, cy: 70, r: 2.6, fill: STATUS[k] }, svg);
+      h("text", { x: 19 + i * 36, y: 73, "font-size": 8, class: "d-tx2 dm", text: n }, svg);
+    });
+    const rows = [
+      ["#1112", "63 mph", "I-40 · Amarillo, TX", "fuel"],
+      ["#1203", "58 mph", "I-35 · Waco, TX", "move"],
+      ["#1150", "—", `${t.fault} · Tulsa, OK`, "fault"],
+      ["#0967", "61 mph", "I-20 · Abilene, TX", "move"],
+      ["#1088", "0 mph", `${t.idle} · Dallas, TX`, "idle"],
+    ].map(([unit, spd, where, st], i) => {
+      const y = 82 + i * 32;
+      const g = h("g", {}, svg);
+      const bg = h("rect", { x: 4, y, width: 116, height: 29, rx: 5, fill: "transparent" }, g);
+      h("circle", { cx: 12, cy: y + 10, r: 2.8, fill: STATUS[st] }, g);
+      h("text", { x: 19, y: y + 13, "font-size": 9, class: "d-tx db dm", text: unit }, g);
+      h("text", { x: 114, y: y + 13, "font-size": 8, class: "d-tx2 dm", "text-anchor": "end", text: spd }, g);
+      h("text", { x: 19, y: y + 24, "font-size": 7.5, class: "d-tx3", text: where }, g);
+      return { g, bg };
+    });
 
-    return { map, land, roads, clusters, trucks, fault, ring, target, q, arc, C, hudLabel, tip, fuel, leader, t };
+    return { base, labels, shields, clusters, trucks, target, fault, faultRing, popup, fuelBar, updated, liveDot, rows, query };
   },
 
   async play(api, s, t) {
-    const place = (tr) => {
-      const pt = tr.road.getPointAtLength(tr.pos * tr.len);
-      tr.el.setAttribute("cx", pt.x.toFixed(1));
-      tr.el.setAttribute("cy", pt.y.toFixed(1));
-      return pt;
+    const view = { z: 1, tx: 0, ty: 0 };
+    const at = (x, y) => [view.tx + x * view.z, view.ty + y * view.z];
+    const pointOf = (tr, pos) => {
+      const len = tr.len;
+      const a = tr.road.getPointAtLength(Math.max(0, Math.min(1, pos)) * len);
+      const b = tr.road.getPointAtLength(Math.max(0, Math.min(1, pos + 0.004 * tr.dir)) * len);
+      return { x: a.x, y: a.y, deg: (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + 90 };
     };
-    s.trucks.forEach(place);
-    const placeRing = () => {
-      s.ring.setAttribute("cx", s.fault.el.getAttribute("cx"));
-      s.ring.setAttribute("cy", s.fault.el.getAttribute("cy"));
-    };
-    placeRing();
+    s.trucks.forEach((tr) => { tr.from = tr.pos; tr.to = tr.pos; });
+    let blend = 1;
 
-    const zoomTo = (pt, z) => `translate(${(200 - pt.x * z).toFixed(1)}px, ${(120 - pt.y * z).toFixed(1)}px) scale(${z})`;
-    // After the zoom the found truck sits at the stage centre (200, 120)
-    const showTip = () => s.leader.setAttribute("d", "M205 124 L222 150");
+    const render = () => {
+      s.base.style.transform = `translate(${view.tx.toFixed(2)}px, ${view.ty.toFixed(2)}px) scale(${view.z.toFixed(4)})`;
+      for (const l of s.labels) {
+        const [x, y] = at(l.x, l.y);
+        if (l.dot) { l.dot.setAttribute("cx", x.toFixed(1)); l.dot.setAttribute("cy", y.toFixed(1)); }
+        l.el.setAttribute("x", (x + (l.dx || 0)).toFixed(1));
+        l.el.setAttribute("y", (y + (l.dy || 0)).toFixed(1));
+      }
+      for (const sh of s.shields) { const [x, y] = at(sh.x, sh.y); sh.el.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`); }
+      for (const c of s.clusters) { const [x, y] = at(c.x, c.y); c.c.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`); }
+      for (const tr of s.trucks) {
+        const p = pointOf(tr, tr.from + (tr.to - tr.from) * blend);
+        const [x, y] = at(p.x, p.y);
+        tr.screen = [x, y];
+        tr.v.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${p.deg.toFixed(0)})`);
+      }
+      const [fx, fy] = s.fault.screen;
+      s.faultRing.setAttribute("cx", fx.toFixed(1));
+      s.faultRing.setAttribute("cy", fy.toFixed(1));
+    };
+
+    // One poll of the feed: every truck eases to its next reported position
+    const poll = async () => {
+      s.trucks.forEach((tr) => {
+        tr.from = tr.from + (tr.to - tr.from) * blend;
+        tr.to = Math.max(0.02, Math.min(0.98, tr.from + tr.step * tr.dir));
+      });
+      blend = 0;
+      await api.tick(900, (p) => { blend = p; render(); }, "inOut");
+    };
+
+    const flyTo = (tr, z) => {
+      const p = pointOf(tr, tr.to);
+      return { z, tx: 262 - p.x * z, ty: 152 - p.y * z };
+    };
+
+    render();
 
     if (api.instant) {
-      s.clusters.forEach((c) => { c.g.style.opacity = "1"; });
-      const pt = place(s.target);
-      s.map.style.transform = zoomTo(pt, 2.3);
-      showTip();
-      s.tip.style.opacity = "1";
-      s.leader.style.opacity = "0.8";
-      s.q.textContent = "1112";
-      s.q.setAttribute("class", "d-tx dm");
+      Object.assign(view, flyTo(s.target, 2.4));
+      render();
+      s.rows[0].bg.setAttribute("class", "d-card2");
+      s.popup.style.opacity = "1";
       api.step(3);
       api.poster();
     }
 
-    let frozen = false;
-    api.spawn(() => api.tick(Infinity, () => {
-      for (const tr of s.trucks) {
-        if (frozen && tr === s.target) continue;
-        tr.pos = (tr.pos + tr.speed * 0.016 + 1) % 1;
-        place(tr);
-      }
-      placeRing();
-    }));
-    api.loop(s.ring, [{ transform: "scale(1)", opacity: 0.9 }, { transform: "scale(3.4)", opacity: 0 }], { duration: 1400, easing: "ease-out" });
+    // "Updated N s ago" ticks every second, resets on each poll
+    let since = 2;
+    api.spawn(async () => {
+      for (;;) { await api.wait(1000); since += 1; s.updated.textContent = `${t.live} · ${since} ${t.ago}`; }
+    });
+    api.loop(s.faultRing, [{ transform: "scale(0.8)", opacity: 0.9 }, { transform: "scale(2.6)", opacity: 0 }], { duration: 1500, easing: "ease-out" });
+    api.loop(s.liveDot, [{ opacity: 1 }, { opacity: 0.35 }], { duration: 1000, direction: "alternate" });
 
     api.step(0);
-    await api.tween(s.land, [{ opacity: 0 }, { opacity: 0.9 }], { dur: 700 });
-    await Promise.all(Object.values(s.roads).map((r, i) => api.draw(r, 900 + i * 60)));
+    await api.wait(900);
 
     api.step(1);
-    await api.tween(s.arc, [{ strokeDashoffset: s.C }, { strokeDashoffset: 0 }], { dur: 2200, ease: "linear" });
-    const old = s.hudLabel.textContent;
-    s.hudLabel.textContent = s.t.updated;
-    s.hudLabel.setAttribute("class", "d-tq");
-    s.arc.style.strokeDashoffset = String(s.C);
-    await api.wait(700);
-    s.hudLabel.textContent = old;
-    s.hudLabel.setAttribute("class", "d-tx2");
+    for (let i = 0; i < 2; i++) {
+      since = 0;
+      s.updated.textContent = `${t.live} · 0 ${t.ago}`;
+      await poll();
+      await api.wait(1300);
+    }
 
     api.step(2);
-    for (const c of s.clusters) await api.show(c.g, 360, "scale(0.4)");
-    await api.wait(700);
+    s.rows[2].bg.setAttribute("class", "d-card2");
+    await api.wait(1200);
+    s.rows[2].bg.setAttribute("class", "");
 
     api.step(3);
-    s.q.setAttribute("class", "d-tx dm");
-    s.q.textContent = "";
-    await api.type(s.q, "1112", 9);
-    frozen = true;
-    const pt = place(s.target);
-    await api.tween(s.map, [{ transform: "translate(0px, 0px) scale(1)" }, { transform: zoomTo(pt, 2.3) }], { dur: 1100, ease: "cubic-bezier(0.65, 0, 0.35, 1)" });
-    showTip();
-    api.tween(s.leader, [{ opacity: 0 }, { opacity: 0.8 }], { dur: 300 }).catch(() => {});
-    await api.show(s.tip, 420, "translateY(8px)");
-    await api.tween(s.fuel, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { dur: 600 });
-    await api.wait(2000);
+    s.query.setAttribute("class", "d-tx dm");
+    await api.type(s.query, "1112", 10);
+    s.rows[0].bg.setAttribute("class", "d-card2");
+    await api.wait(250);
+    const from = { ...view };
+    const to = flyTo(s.target, 2.4);
+    await api.tick(1300, (p) => {
+      // zoom out a touch mid-flight, like Leaflet's flyTo
+      const z = from.z + (to.z - from.z) * p;
+      view.z = z;
+      view.tx = from.tx + (to.tx - from.tx) * p;
+      view.ty = from.ty + (to.ty - from.ty) * p;
+      render();
+    }, "inOut");
+    await api.show(s.popup, 320, "translateY(4px)");
+    await api.tween(s.fuelBar, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { dur: 500 });
+    await api.wait(2200);
   },
 };
