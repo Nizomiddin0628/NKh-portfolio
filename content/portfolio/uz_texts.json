@@ -3,37 +3,37 @@
   "model": "SiteSettings",
   "key": {},
   "field": "headline",
-  "uz": "Kuzatadigan, mustaqil qaror qabul qiladigan va inson aralashuvisiz ishlaydigan tizimlar yarataman."
+  "uz": "Kuzatadigan, o'zi qaror qabul qiladigan va odam aralashuvisiz ishlaydigan tizimlar yarataman."
  },
  {
   "model": "SiteSettings",
   "key": {},
   "field": "intro",
-  "uz": "Backend qismida Python va Django, kompyuter ko'rish sohasida YOLO va OpenCV bilan ishlayman. Hozirda AQSH bozorida faoliyat yurituvchi logistika kompaniyasining ichki tizimlarini ishlab chiqmoqdaman: 500 ta yuk mashinasi va 600 ta tirkama."
+  "uz": "Backendda Python va Django, kameralar bilan ishlashda YOLO va OpenCV. Hozir AQSH bozorida ishlaydigan logistika kompaniyasining ichki tizimlarini ishlab chiqyapman: 500 ta yuk mashinasi va 600 ta tirkama."
  },
  {
   "model": "SiteSettings",
   "key": {},
   "field": "about",
-  "uz": "Asosiy yo'nalishim — backend dasturlash. Kompyuter ko'rish (computer vision) sohasiga esa ish taqozosi bilan kirib keldim: oldimdagi vazifalar har ikkisini ham talab qilardi.\n\nHozirda AQSH bozorida faoliyat yurituvchi logistika kompaniyasida ishlayman. Bu yerda hamma narsa haqiqiy: yuk mashinalari ham, turargoh ham. Tizim xato qilsa, haydovchi yopiq to'siq oldida kutib qoladi. Shu bois men kodning chiroyliligidan ko'ra, tunda hech kim kuzatmayotgan paytda tizim o'zini qanday tutishi haqida ko'proq o'ylayman.\n\n**Kuchli tomonim.** Kompaniyaning asosiy ma'lumotlari saqlanadigan tizimlar — avtopark, texnika, shartnomalar, hisob-fakturalar — uchun Django va PostgreSQL. Ma'lumot shakldan emas, kameradan kelsa — Python, YOLO va OpenCV. Eng qiziqarli vazifalar odatda shu ikki soha kesishgan joyda paydo bo'ladi: model raqamni o'qiydi, API kompaniyani tekshiradi va to'siq ochiladi.\n\n**Qayerdan boshlaganman.** Farg'ona davlat texnika universitetining \"Kompyuter injiniringi\" yo'nalishini 4.5/5.0 GPA bilan tamomlaganman. Bitiruv ishimda tibbiy tasvirlarda saraton belgilarini aniqlovchi YOLOv5 modelini yaratdim; keyinchalik bu ish Silk Road Health Data Science grantiga sazovor bo'ldi. Tibbiyot sohasidagi tajriba menga keyinchalik logistikada ham ko'p bor tasdiqlangan bir haqiqatni o'rgatdi: false negative va false positive bir xil xato emas, chegara qiymatini esa texnik mutaxassis emas, biznes belgilaydi.\n\n**Hozir nimani o'rganmoqdaman.** Tizimlarning infratuzilma qismini chuqurroq o'zlashtirmoqdaman: serverga joylashtirish, monitoring hamda bajargan ishimni boshqa mutaxassisga to'liq topshira olish. Bo'sh vaqtlarimda nemis tilini o'rganaman."
+  "uz": "Asosiy yo'nalishim — backend. Computer vision'ga esa ish taqozosi bilan o'tdim: oldimdagi vazifalar ikkalasini ham talab qilardi.\n\nHozir AQSH bozorida ishlaydigan logistika kompaniyasida ishlayman. Bu yerda hammasi real: yuk mashinalari ham, stoyanka ham. Tizim xato qilsa, haydovchi yopiq shlagbaum oldida kutib qoladi. Shuning uchun kodning chiroyliligidan ko'ra, tunda hech kim kuzatmay turganda tizim o'zini qanday tutishi haqida ko'proq o'ylayman.\n\n**Nimada kuchliman.** Kompaniyaning asosiy ma'lumotlari turadigan tizimlar — park, texnika, shartnomalar, hisob-fakturalar — uchun Django va PostgreSQL. Ma'lumot formadan emas, kameradan kelsa — Python, YOLO va OpenCV. Eng qiziq ishlar odatda shu ikkisi kesishgan joyda bo'ladi: model raqamni o'qiydi, API kompaniyani tekshiradi va shlagbaum ochiladi.\n\n**Qayerdan boshlaganman.** Farg'ona davlat texnika universitetining \"Kompyuter injiniringi\" yo'nalishini 4.5/5.0 GPA bilan tamomlaganman. Bitiruv ishimda tibbiy tasvirlarda saraton belgilarini aniqlaydigan YOLOv5 modelini yaratdim, keyinchalik bu ish Silk Road Health Data Science grantini yutdi. Tibbiyot bilan ishlash menga keyin logistikada ham ko'p bor tasdiqlangan bir narsani o'rgatdi: false negative va false positive bir xil xato emas, chegara qiymatini esa texnik emas, biznes hal qiladi.\n\n**Hozir nimani o'rganyapman.** Tizimlarning infratuzilma tomonini chuqurroq o'rganyapman: deploy, monitoring va qilgan ishimni boshqa odamga bemalol topshira olish. Bo'sh vaqtimda nemis tilini o'rganyapman."
  },
  {
   "model": "SiteSettings",
   "key": {},
   "field": "work_philosophy",
-  "uz": "Amaliyotda o'zini oqlagan uchta tamoyil."
+  "uz": "Real loyihalarda o'zini oqlagan uchta odat."
  },
  {
   "model": "SiteSettings",
   "key": {},
   "field": "availability_note",
-  "uz": "Backend va kompyuter ko'rish yo'nalishidagi ish takliflarini ko'rib chiqaman"
+  "uz": "Backend va computer vision yo'nalishidagi ish takliflariga ochiqman"
  },
  {
   "model": "SiteSettings",
   "key": {},
   "field": "meta_description",
-  "uz": "Nizomiddin Xalilov — backend va kompyuter ko'rish (computer vision) bo'yicha dasturchi. Django, PostgreSQL, YOLO va OpenCV asosida AQSH logistikasi uchun yaratilgan tizimlar."
+  "uz": "Nizomiddin Xalilov — backend va computer vision dasturchisi. Django, PostgreSQL, YOLO va OpenCV asosida AQSH logistikasi uchun ishlab chiqilgan tizimlar."
  },
  {
   "model": "Principle",
@@ -49,15 +49,7 @@
    "order": 0
   },
   "field": "body",
-  "uz": "Ushbu loyihalardagi har bir tezlik ko'rsatkichi kodga o'zgartirish kiritishdan oldin o'lchab olingan raqamdan boshlangan. Boshlang'ich o'lchovsiz «tezlashdi» degan gap shunchaki taxmin, xolos."
- },
- {
-  "model": "Principle",
-  "key": {
-   "order": 1
-  },
-  "field": "title",
-  "uz": "Namoyish uchun emas, nosozlik holati uchun loyihalang"
+  "uz": "Bu loyihalardagi har bir tezlik ko'rsatkichi kodni o'zgartirishdan oldin o'lchab olingan raqamdan boshlangan. Boshlang'ich o'lchovsiz «tezroq bo'ldi» degani shunchaki taxmin."
  },
  {
   "model": "Principle",
@@ -65,7 +57,7 @@
    "order": 1
   },
   "field": "body",
-  "uz": "Kamera o'chib qoladi, API javob bermaydi, raqamni loy qoplaydi. Muhandislikning eng qiziqarli jihati — aynan shunday vaziyatda tizim o'zini qanday tutishi. Hamma narsa joyida bo'lgan kuni ishlab turishi hali yutuq emas."
+  "uz": "Kamera o'chib qoladi, API javob bermaydi, raqamni loy bosib qoladi. Muhandislikning eng qiziq qismi — aynan shunday paytda tizim nima qilishi. Hammasi joyida bo'lgan kunda ishlashi hali yutuq emas."
  },
  {
   "model": "Principle",
@@ -73,7 +65,7 @@
    "order": 2
   },
   "field": "title",
-  "uz": "Tizimni tushunarli holatda topshiring"
+  "uz": "Tizimni tushunarli holda topshiring"
  },
  {
   "model": "Principle",
@@ -81,7 +73,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "Agar tizim ishlashi uchun men doimo yonida turishim kerak bo'lsa, demak u hali tayyor emas. Boshqaruv paneli, README hujjati va tushunarli jurnal yozuvlari ham ishning ajralmas qismi."
+  "uz": "Tizim ishlashi uchun men doim yonida turishim kerak bo'lsa, demak u hali tayyor emas. Admin panel, README va tushunarli loglar ham ishning bir qismi."
  },
  {
   "model": "Project",
@@ -89,15 +81,7 @@
    "slug": "smart-yard-gate-automation"
   },
   "field": "tagline",
-  "uz": "Turargohdagi 7 ta kamera, yagona tizim: transportni aniqlaydi, USDOT va unit raqamini o'qiydi, tashuvchi kompaniyani tekshiradi va to'siqni ochadi."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "smart-yard-gate-automation"
-  },
-  "field": "role",
-  "uz": "Kompyuter ko'rish, model o'qitish, backend"
+  "uz": "Stoyankadagi 7 ta kamera va bitta tizim: mashinani aniqlaydi, USDOT va unit raqamini o'qiydi, kompaniyani tekshiradi va shlagbaumni ochadi."
  },
  {
   "model": "Project",
@@ -105,7 +89,7 @@
    "slug": "smart-yard-gate-automation"
   },
   "field": "summary",
-  "uz": "Kameralar kuniga minglab surat yuborardi, biroq ulardan kerakli javobni olib bo'lmasdi: bu qaysi mashina, kimga tegishli, to'siqni ochish kerakmi? Turargohning o'z kadrlarida YOLOv11 modellarini o'qitdim: transport turi, rangi, USDOT, unit va tirkama raqamlari. So'ngra ularning natijalarini har bir mashina bo'yicha yagona yozuvga jamlab, FMCSA ma'lumotlar bazasi orqali tekshiradigan qildim."
+  "uz": "Kameralar kuniga minglab rasm yuborardi, lekin ulardan kerakli javobni olib bo'lmasdi: bu qaysi mashina, kimniki, shlagbaumni ochish kerakmi? Stoyankaning o'z kadrlarida YOLOv11 modellarini o'qitdim: mashina turi, rangi, USDOT, unit va tirkama raqamlari. Keyin ularning natijalarini har bir mashina uchun bitta kartochkaga jamlab, FMCSA bazasi orqali tekshiradigan qildim."
  },
  {
   "model": "Project",
@@ -113,7 +97,7 @@
    "slug": "smart-yard-gate-automation"
   },
   "field": "context",
-  "uz": "AQSH bozoridagi logistika kompaniyasida yakka o'zim ishlab chiqqanman; kompaniya turargohidagi kameralarda ishlaydi."
+  "uz": "AQSH bozoridagi logistika kompaniyasida yakka o'zim ishlab chiqqanman; kompaniya stoyankasidagi kameralarda ishlaydi."
  },
  {
   "model": "CaseSection",
@@ -131,7 +115,7 @@
    "order": 1
   },
   "field": "body",
-  "uz": "Turargohda 7 ta kamera bor, ular rasmlarni pochtaga tartibsiz yuborib turadi. Bitta yuk mashinasining to'rt tomondan o'nlab rasmi keladi va ular o'sha paytda o'tgan boshqa mashinalarning rasmlari bilan aralashib ketadi.\n\nTayyor «aqlli» kameralar davlat raqamini o'qiy olardi, lekin kabinadagi **USDOT** va **unit raqamini** o'qimasdi — logistika kompaniyasiga esa aynan shu ikkisi kerak. Rangni aniqlaydigan tayyor modellar ham bizning kadrlarda adashardi: quyosh past bo'lsa, soya tushsa yoki tirkama kir bo'lsa, kulrang mashina oq bo'lib ko'rinardi."
+  "uz": "Stoyankada 7 ta kamera bor, ular rasmlarni pochtaga tartibsiz yuborib turadi. Bitta yuk mashinasining to'rt tomondan o'nlab rasmi keladi va ular o'sha paytda o'tgan boshqa mashinalarning rasmlari bilan aralashib ketadi.\n\nTayyor «aqlli» kameralar davlat raqamini o'qiy olardi, lekin kabinadagi **USDOT** va **unit raqamini** o'qimasdi — logistika kompaniyasiga esa aynan shu ikkisi kerak. Rangni aniqlaydigan tayyor modellar ham bizning kadrlarda adashardi: quyosh past bo'lsa, soya tushsa yoki tirkama kir bo'lsa, kulrang mashina oq bo'lib ko'rinardi."
  },
  {
   "model": "CaseSection",
@@ -140,7 +124,7 @@
    "order": 2
   },
   "field": "heading",
-  "uz": "Bitta murakkab model o'rniga bir nechta ixtisoslashgan model"
+  "uz": "Bitta katta model o'rniga bir nechta kichik modellar"
  },
  {
   "model": "CaseSection",
@@ -149,7 +133,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "- **Transportni aniqlash** — YOLOv11 real vaqt rejimida *yuk mashinasi*, *tirkamali yuk mashinasi* va *yengil avtomobil*ni ajratadi.\n- **Rang** — turargoh rasmlarida alohida o'qitilgan model, chunki umumiy modellar bizdagi yorug'likda to'g'ri ishlamadi.\n- **USDOT va unit raqamini o'qish** — model kabinadagi raqamni topadi, keyin o'sha qism kesib olinib o'qiladi. USDOT **FMCSA API**ga yuboriladi va kompaniya nomi, holati hamda kontaktlari qaytadi.\n- **Tirkama raqamini o'qish** — yangi kameralar tirkama raqamini o'qiy olmasdi, shuning uchun buni alohida model bajaradi.\n- **Yig'ma yozuv** — yuqoridagi barcha natijalar har bir mashina uchun yagona yozuvga yig'iladi: turi, rangi, USDOT, unit, davlat raqami va buni tasdiqlaydigan rasmlar.\n\nKichik modellarni qayta o'qitish va tekshirish oson: raqam noto'g'ri o'qilsa, xato qaysi bosqichda ketgani darhol ko'rinadi."
+  "uz": "- **Transportni aniqlash** — YOLOv11 real vaqtda *yuk mashinasi*, *tirkamali yuk mashinasi* va *yengil avtomobil*ni ajratadi.\n- **Rang** — stoyanka rasmlarida alohida o'qitilgan model, chunki umumiy modellar bizdagi yorug'likda to'g'ri ishlamadi.\n- **USDOT va unit raqamini o'qish** — model kabinadagi raqamni topadi, keyin o'sha qism kesib olinib o'qiladi. USDOT **FMCSA API**ga yuboriladi va kompaniya nomi, holati hamda kontaktlari qaytadi.\n- **Tirkama raqamini o'qish** — yangi kameralar tirkama raqamini o'qiy olmasdi, shuning uchun buni alohida model bajaradi.\n- **Case summary** — yuqoridagi barcha natijalar har bir mashina uchun bitta kartochkaga yig'iladi: turi, rangi, USDOT, unit, davlat raqami va buni tasdiqlaydigan rasmlar.\n\nKichik modellarni qayta o'qitish va tekshirish oson: raqam noto'g'ri o'qilsa, xato qaysi bosqichda ketgani darhol ko'rinadi."
  },
  {
   "model": "CaseSection",
@@ -158,7 +142,7 @@
    "order": 3
   },
   "field": "heading",
-  "uz": "Tizim qismlari qanday bog'langan"
+  "uz": "Qismlar bir-biriga qanday ulangan"
  },
  {
   "model": "CaseSection",
@@ -167,16 +151,7 @@
    "order": 3
   },
   "field": "body",
-  "uz": "```\n7 ta kamera → transportni aniqlash (YOLOv11) → rang modeli\n                          ↓\n        USDOT / unit / tirkama raqamini o'qish\n                          ↓\n     FMCSA API (kompaniya, holat, kontaktlar)\n                          ↓\n  mashina bo'yicha yozuv → to'siq qoidalari → ochish / yopish\n                          ↓\n         hodisalar jurnali (Django + PostgreSQL)\n```"
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
-   "order": 4
-  },
-  "field": "heading",
-  "uz": "Hozirgi holati"
+  "uz": "```\n7 ta kamera → transportni aniqlash (YOLOv11) → rang modeli\n                          ↓\n        USDOT / unit / tirkama raqamini o'qish\n                          ↓\n     FMCSA API (kompaniya, holat, kontaktlar)\n                          ↓\n har mashinaga kartochka → shlagbaum qoidalari → ochish / yopish\n                          ↓\n         hodisalar jurnali (Django + PostgreSQL)\n```"
  },
  {
   "model": "CaseSection",
@@ -185,7 +160,7 @@
    "order": 4
   },
   "field": "body",
-  "uz": "Har bir modelning aniqligi **82–95%**; ular turargohdan olingan **1 500** dan ortiq belgilangan rasmda o'qitilgan.\n\nTo'siq ikki kamera bilan boshqariladi: tashqi kamera kelgan mashinani aniqlab, ochish buyrug'ini yuboradi, ichki kamera esa mashina o'tib ketganini ko'rib, yopish buyrug'ini beradi. Har bir qaror jurnalga yoziladi. Hozircha yengil avtomobillar avtomatik o'tadi, yuk mashinalari esa to'lov bosqichini kutadi. Keyingi qadam — turargoh uchun oylik to'lov qilgan yuk mashinalarini to'xtatmasdan o'tkazish."
+  "uz": "Har bir modelning aniqligi **82–95%**; ular stoyankadan olingan **1 500** dan ortiq belgilangan rasmda o'qitilgan.\n\nShlagbaum ikki kamera bilan boshqariladi: tashqi kamera kelgan mashinani aniqlab, ochish buyrug'ini yuboradi, ichki kamera esa mashina o'tib ketganini ko'rib, yopish buyrug'ini beradi. Har bir qaror jurnalga yoziladi. Hozircha yengil avtomobillar avtomatik o'tadi, yuk mashinalari esa to'lov bosqichini kutadi. Keyingi qadam — stoyanka uchun oylik to'lov qilgan yuk mashinalarini to'xtatmasdan o'tkazish."
  },
  {
   "model": "CaseSection",
@@ -194,7 +169,7 @@
    "order": 5
   },
   "field": "heading",
-  "uz": "Qaytadan boshlasam, nimani o'zgartirardim"
+  "uz": "Qaytadan qilsam, nimani o'zgartirardim"
  },
  {
   "model": "CaseSection",
@@ -203,34 +178,7 @@
    "order": 5
   },
   "field": "body",
-  "uz": "Murakkab kadrlarni — yaltirash, yomg'ir, tun, kadrdan yarmi chiqib qolgan mashina — birinchi kundanoq to'play boshlagan bo'lardim. Modellar aynan shunday suratlar o'quv to'plamiga qo'shilganda eng ko'p yaxshilandi, men esa dastlab ularni keraksiz deb chetga surgan edim."
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
-   "order": 0
-  },
-  "field": "label",
-  "uz": "Modellar aniqligi"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
-   "order": 0
-  },
-  "field": "note",
-  "uz": "Aniqlash, rang va raqam o'qish modellari"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
-   "order": 1
-  },
-  "field": "label",
-  "uz": "O'quv rasmlari"
+  "uz": "Qiyin kadrlarni — yaltirash, yomg'ir, tun, yarmi kadrdan chiqib qolgan mashina — birinchi kundanoq yig'ishni boshlagan bo'lardim. Modellar aynan shunday rasmlar o'quv to'plamiga qo'shilganda eng ko'p yaxshilandi, men esa boshida ularni keraksiz deb tashlab yuborgandim."
  },
  {
   "model": "Metric",
@@ -239,16 +187,7 @@
    "order": 1
   },
   "field": "note",
-  "uz": "Turargoh kameralaridan olinib, belgilab chiqilgan"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
-   "order": 2
-  },
-  "field": "label",
-  "uz": "Kamera oqimlari"
+  "uz": "Stoyanka kameralaridan olib belgilangan"
  },
  {
   "model": "Metric",
@@ -257,7 +196,7 @@
    "order": 2
   },
   "field": "note",
-  "uz": "Har bir mashina bo'yicha yagona yozuvga jamlanadi"
+  "uz": "Har bir mashina uchun bitta kartochkaga jamlanadi"
  },
  {
   "model": "ProjectImage",
@@ -266,7 +205,7 @@
    "order": 0
   },
   "field": "alt_text",
-  "uz": "Ichki va tashqi kameralar hamda hodisalar jurnali ko'rsatilgan to'siq paneli"
+  "uz": "Ichki va tashqi kameralar hamda hodisalar jurnali ko'rsatilgan shlagbaum paneli"
  },
  {
   "model": "ProjectImage",
@@ -275,7 +214,7 @@
    "order": 0
   },
   "field": "caption",
-  "uz": "To'siq boshqaruvi: tashqi kamera ochadi, ichki kamera yopadi, har bir hodisa yozib boriladi"
+  "uz": "Shlagbaum boshqaruvi: tashqi kamera ochadi, ichki kamera yopadi, har bir hodisa yozib boriladi"
  },
  {
   "model": "ProjectImage",
@@ -284,7 +223,7 @@
    "order": 1
   },
   "field": "alt_text",
-  "uz": "Bitta yuk mashinasining suratlari va USDOT raqami jamlangan yig'ma yozuv"
+  "uz": "Bitta yuk mashinasining rasmlari va USDOT raqami jamlangan kartochka"
  },
  {
   "model": "ProjectImage",
@@ -293,7 +232,7 @@
    "order": 1
   },
   "field": "caption",
-  "uz": "Yig'ma yozuv: bitta mashina, uning barcha suratlari, tasdiqlovchi kadr va tashuvchi kompaniya"
+  "uz": "Case summary: bitta mashina, uning barcha rasmlari, tasdiqlovchi kadr va kompaniya"
  },
  {
   "model": "ProjectImage",
@@ -302,7 +241,7 @@
    "order": 2
   },
   "field": "alt_text",
-  "uz": "Yuk mashinasi, tirkama va yengil avtomobil aniqlangan turargoh rasmlari"
+  "uz": "Yuk mashinasi, tirkama va yengil avtomobil aniqlangan stoyanka rasmlari"
  },
  {
   "model": "ProjectImage",
@@ -311,7 +250,7 @@
    "order": 2
   },
   "field": "caption",
-  "uz": "Turargohning haqiqiy kadrlarida transportni aniqlash"
+  "uz": "Stoyankaning real kadrlarida transportni aniqlash"
  },
  {
   "model": "ProjectImage",
@@ -344,28 +283,10 @@
   "model": "ProjectImage",
   "key": {
    "project__slug": "smart-yard-gate-automation",
-   "order": 4
-  },
-  "field": "caption",
-  "uz": "Oddiy kameralar o'qiy olmagan tirkama raqamini o'qish"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
    "order": 5
   },
   "field": "alt_text",
-  "uz": "O'qitish grafiklari: xatolik kamayib, precision va recall ortib boradi"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "smart-yard-gate-automation",
-   "order": 5
-  },
-  "field": "caption",
-  "uz": "Aniqlash modelini o'qitish jarayoni"
+  "uz": "O'qitish grafiklari: xatolik kamayadi, precision va recall o'sadi"
  },
  {
   "model": "Project",
@@ -373,15 +294,7 @@
    "slug": "restaurant-erp"
   },
   "field": "tagline",
-  "uz": "Restoranlar tarmog'i uchun yagona tizim: kassa, oshxona ekrani, menyu va tannarx, ombor, xodimlar, stol band qilish, bonuslar va hisobotlar — barcha filiallar uchun."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "restaurant-erp"
-  },
-  "field": "role",
-  "uz": "Mahsulot, backend, frontend"
+  "uz": "Restoranlar tarmog'i uchun bitta tizim: kassa, oshxona ekrani, menyu va tannarx, ombor, xodimlar, bron, bonuslar va hisobotlar — barcha filiallar uchun."
  },
  {
   "model": "Project",
@@ -389,7 +302,7 @@
    "slug": "restaurant-erp"
   },
   "field": "summary",
-  "uz": "Restoranlar odatda bir-biriga bog'lanmagan 4–5 ta dasturda ishlaydi: kassa alohida, ombor hisobi daftarda, ish haqi Excelda, vazifalar esa guruh chatida. Ushbu ERP tizimi barchasini bir joyga jamlaydi. Restoran egasi bitta ekranni ochib, har bir filial bo'yicha bugungi savdo, buyurtmalar, o'rtacha chek, mahsulot tannarxi ulushi (food cost), mehnat xarajatlari va sof foydani kechagi shu vaqt bilan solishtira oladi."
+  "uz": "Restoranlar odatda bir-biriga bog'lanmagan 4–5 ta dasturda ishlaydi: kassa alohida, ombor daftarda, ish haqi Excelda, vazifalar esa chatda. Bu ERP hammasini bir joyga yig'adi. Egasi bitta ekranni ochib, har bir filial bo'yicha bugungi savdo, buyurtmalar, o'rtacha chek, food cost, ish haqi xarajati va sof foydani kechagi shu vaqt bilan solishtirib ko'radi."
  },
  {
   "model": "Project",
@@ -397,7 +310,7 @@
    "slug": "restaurant-erp"
   },
   "field": "context",
-  "uz": "Shaxsiy loyiham; hozirda uch filialli restoranlar tarmog'ida sinovdan o'tmoqda."
+  "uz": "O'zimning loyiham; hozir uch filialli restoranlar tarmog'ida sinovdan o'tyapti."
  },
  {
   "model": "CaseSection",
@@ -406,7 +319,7 @@
    "order": 1
   },
   "field": "heading",
-  "uz": "Egasi raqamlardan juda kech xabar topadi"
+  "uz": "Egasi raqamlarni juda kech ko'radi"
  },
  {
   "model": "CaseSection",
@@ -415,7 +328,7 @@
    "order": 1
   },
   "field": "body",
-  "uz": "Bir nechta filiali bor restoran egasi mahsulot tannarxi ulushi oshganini yoki savdo pasayganini odatda oy oxirida, biror chora ko'rishga kech bo'lganda biladi. Savdo kassada, ombor hisobi daftarda, ish haqi Excelda, vazifalar esa guruh chatida yuritiladi — va ularni hech kim bir-biriga bog'lamaydi."
+  "uz": "Bir nechta filiali bor restoran egasi food cost oshib ketganini yoki savdo tushganini odatda oy oxirida, biror narsani o'zgartirishga kech bo'lganda biladi. Savdo kassada, ombor daftarda, ish haqi Excelda, vazifalar esa guruh chatida — va bularni hech kim bir-biriga bog'lamaydi."
  },
  {
   "model": "CaseSection",
@@ -433,16 +346,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "- **Savdo** — kassa, menyu va narxlar, zal va stollar, stol band qilish va navbat, oshpazlar uchun oshxona ekrani va zal uchun televizor ekrani.\n- **Ombor va tannarx** — minimal qoldig'i belgilangan mahsulotlar, har bir taomning tannarxi va joriy food cost ulushi; mahsulot kamayganda panel ogohlantiradi.\n- **Mijozlar va marketing** — bonus tizimi, buyurtma berish uchun Telegram bot, restoranning shaxsiy sayti va brend sahifasi.\n- **Xodimlar (HR)** — xodimlar, lavozim va vakolatlar, mehnat xarajatlari, yangi xodimlarni o'qitish moduli.\n- **Vazifalar** — Trello uslubidagi doska: muammo va topshiriqlar *yangi* bosqichidan *bajarildi* bosqichigacha o'tadi.\n- **Hisobotlar** — har bir ko'rsatkich filial va butun tarmoq kesimida: bugun, kecha, 7 kun, oy, yil."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "restaurant-erp",
-   "order": 3
-  },
-  "field": "heading",
-  "uz": "Hozirgi holati"
+  "uz": "- **Savdo** — kassa, menyu va narxlar, zal va stollar, bron va navbat, oshpazlar uchun oshxona ekrani va zal uchun TV ekran.\n- **Ombor va tannarx** — minimal qoldig'i belgilangan mahsulotlar, har bir taomning tannarxi va jonli food cost; mahsulot kamaysa, panel ogohlantiradi.\n- **Mijozlar va marketing** — bonus tizimi, buyurtma uchun Telegram bot, restoranning o'z sayti va brend sahifasi.\n- **Xodimlar (HR)** — xodimlar, rollar va huquqlar, ish haqi xarajati, yangi xodimlarni o'qitish moduli.\n- **Vazifalar** — Trello'ga o'xshash doska: muammo va topshiriqlar *yangi* bosqichidan *bajarildi*gacha o'tadi.\n- **Hisobotlar** — har bir ko'rsatkich filial va butun tarmoq kesimida: bugun, kecha, 7 kun, oy, yil."
  },
  {
   "model": "CaseSection",
@@ -451,16 +355,7 @@
    "order": 3
   },
   "field": "body",
-  "uz": "Tizim uch filialda sinovdan o'tmoqda. Endi restoran egasining ish kuni bitta ekrandan boshlanadi: kechagi kunga nisbatan savdo, holatlar bo'yicha buyurtmalar, eng ko'p sotilgan taomlar, filiallar taqqoslovi va buyurtma qilinishi lozim bo'lgan mahsulotlar ro'yxati."
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "restaurant-erp",
-   "order": 0
-  },
-  "field": "label",
-  "uz": "Modullar"
+  "uz": "Tizim uch filialda sinovdan o'tyapti. Endi egasining kuni bitta ekrandan boshlanadi: kechagiga nisbatan savdo, holati bo'yicha buyurtmalar, eng ko'p sotilgan taomlar, filiallar solishtiruvi va buyurtma berish kerak bo'lgan mahsulotlar ro'yxati."
  },
  {
   "model": "Metric",
@@ -477,17 +372,8 @@
    "project__slug": "restaurant-erp",
    "order": 1
   },
-  "field": "label",
-  "uz": "Sinovdagi filiallar"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "restaurant-erp",
-   "order": 1
-  },
   "field": "note",
-  "uz": "Barchasi yagona panelda"
+  "uz": "Hammasi bitta panelda"
  },
  {
   "model": "Metric",
@@ -505,16 +391,7 @@
    "order": 2
   },
   "field": "note",
-  "uz": "Savdo, buyurtmalar, chek, food cost, mehnat xarajati, foyda"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "restaurant-erp",
-   "order": 0
-  },
-  "field": "alt_text",
-  "uz": "Savdo, buyurtmalar, food cost va filiallar solishtiruvi ko'rsatilgan boshqaruv paneli"
+  "uz": "Savdo, buyurtmalar, chek, food cost, ish haqi, foyda"
  },
  {
   "model": "ProjectImage",
@@ -523,7 +400,7 @@
    "order": 0
   },
   "field": "caption",
-  "uz": "Egasining paneli: uch filial bo'yicha bugungi va kechagi ko'rsatkichlar"
+  "uz": "Egasining paneli: uch filial bo'yicha bugun va kecha"
  },
  {
   "model": "Project",
@@ -531,7 +408,7 @@
    "slug": "driver-safety-and-toll-automation"
   },
   "field": "tagline",
-  "uz": "Bir xil yondashuvga asoslangan ikki avtomatlashtirish: tartibsiz tashqi ma'lumotni jadval asosida olib, amalda foydalanish mumkin bo'lgan raqamlarga aylantirish."
+  "uz": "Bir xil yondashuvdagi ikki avtomatlashtirish: tartibsiz tashqi ma'lumotni jadval asosida olib kelib, amalda ishlatsa bo'ladigan raqamga aylantirish."
  },
  {
   "model": "Project",
@@ -539,7 +416,7 @@
    "slug": "driver-safety-and-toll-automation"
   },
   "field": "role",
-  "uz": "Backend, API integratsiya, ma'lumotlarni qayta ishlash"
+  "uz": "Backend, API integratsiya, ma'lumotlar pipeline'i"
  },
  {
   "model": "Project",
@@ -547,7 +424,7 @@
    "slug": "driver-safety-and-toll-automation"
   },
   "field": "summary",
-  "uz": "Kompaniya har hafta qo'lda qilib kelgan ikki ish. Haydovchilarning xavfsizlik hodisalari Motive tizimiga tushardi va ularni birma-bir o'qib chiqishardi. Pullik yo'l hisob-fakturalari fayl bo'lib kelardi va hamkor kompaniyalar o'rtasida kalkulyatorda bo'lib chiqilardi. Endi ikkalasi ham avtomatik: ma'lumot olinadi, tartibga keltiriladi, taqsimlanadi va hisobot tayyor bo'ladi."
+  "uz": "Kompaniya har hafta qo'lda qilib kelgan ikki ish. Haydovchilarning xavfsizlik hodisalari Motive'ga tushardi va ularni birma-bir o'qib chiqishardi. Pullik yo'l hisob-fakturalari fayl bo'lib kelardi va hamkor kompaniyalar o'rtasida kalkulyatorda bo'lib chiqilardi. Endi ikkalasi ham avtomatik: ma'lumot olinadi, tartibga keltiriladi, taqsimlanadi va hisobot tayyor bo'ladi."
  },
  {
   "model": "CaseSection",
@@ -565,7 +442,7 @@
    "order": 1
   },
   "field": "body",
-  "uz": "Motive har bir keskin tormozni, tezlik oshirishni va chalg'ish holatini allaqachon yozib borardi. Ya'ni ma'lumot bor edi. Faqat minglab alohida hodisadan *shu haydovchi ko'rsatkichlari yomonlashib bormoqda* degan xulosani chiqarib beradigan narsa yo'q edi.\n\nYo'l to'lovlarida esa muammo teskari edi: umumiy summa aniq, lekin kim to'lashi noaniq. Bitta hisob-faktura, ko'p mashina, bir nechta hamkor kompaniya va kim qancha to'lashini qo'lda hisoblaydigan bitta odam."
+  "uz": "Motive har bir keskin tormozni, tezlik oshirishni va chalg'ish holatini allaqachon yozib borardi. Ya'ni ma'lumot bor edi. Faqat minglab alohida hodisadan *shu haydovchi yomon tomonga ketyapti* degan xulosani chiqarib beradigan narsa yo'q edi.\n\nYo'l to'lovlarida esa muammo teskari edi: umumiy summa aniq, lekin kim to'lashi noaniq. Bitta hisob-faktura, ko'p mashina, bir nechta hamkor kompaniya va kim qancha to'lashini qo'lda hisoblaydigan bitta odam."
  },
  {
   "model": "CaseSection",
@@ -583,16 +460,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "**Xom hodisalar saqlanadi, ball ular asosida hisoblanadi.** Ball formulasi o'zgarib turadi — keyingi chorakda rahbariyat keskin tormozga boshqa vazn bermoqchi bo'lishi mumkin. Xom hodisalar o'zgarmaydi, ball esa ulardan qayta hisoblanadi. Faqat ballning o'zini saqlaganimda, formula har o'zgarganda ma'lumot yo'qolardi.\n\n**Idempotent sinxronizatsiya.** Motive sinxronizatsiyasi bir oraliq uchun ikki marta ishga tushsa ham hodisalar ikki marta sanalmaydi. Bu oddiy tuyuladi, lekin qo'lda yozilgan integratsiyalarda eng ko'p buziladigan joy aynan shu. Foydasi: vazifa yiqilsa, uni tekshirib o'tirmasdan qayta ishga tushirsa bo'ladi.\n\n**Taqsimlash qoidalari kodda emas, bazada.** Qaysi hamkor qaysi mashina uchun to'lashi — o'zgarib turadigan biznes kelishuv. Qoidalar jadvalda tursa, ularni moliya bo'limi o'zi yangilaydi; kodda tursa, har safar men yangilashim kerak bo'ladi.\n\n**Voz kechganim: real vaqt rejimidagi oqim.** Xavfsizlik ko'rsatkichlari uchun bir daqiqadan tezroq yangilanish shart emas. Jadval bo'yicha olib kelish soddaroq, tushunarliroq va API vaqtincha ishlamay qolsa ham keyingi safar muammosiz davom etadi."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "driver-safety-and-toll-automation",
-   "order": 3
-  },
-  "field": "heading",
-  "uz": "Hozirgi holati"
+  "uz": "**Xom hodisalar saqlanadi, ball ular asosida hisoblanadi.** Ball formulasi o'zgarib turadi — keyingi chorakda rahbariyat keskin tormozga boshqa vazn bermoqchi bo'lishi mumkin. Xom hodisalar o'zgarmaydi, ball esa ulardan qayta hisoblanadi. Faqat ballning o'zini saqlaganimda, formula har o'zgarganda ma'lumot yo'qolardi.\n\n**Idempotent sinxronizatsiya.** Motive sinxronizatsiyasi bir oraliq uchun ikki marta ishga tushsa ham hodisalar ikki marta sanalmaydi. Bu oddiy tuyuladi, lekin qo'lda yozilgan integratsiyalarda eng ko'p buziladigan joy aynan shu. Foydasi: vazifa yiqilsa, uni tekshirib o'tirmasdan qayta ishga tushirsa bo'ladi.\n\n**Taqsimlash qoidalari kodda emas, bazada.** Qaysi hamkor qaysi mashina uchun to'lashi — o'zgarib turadigan biznes kelishuv. Qoidalar jadvalda tursa, ularni moliya bo'limi o'zi yangilaydi; kodda tursa, har safar men yangilashim kerak bo'ladi.\n\n**Voz kechganim: real-time streaming.** Xavfsizlik ko'rsatkichlari uchun bir daqiqadan tezroq yangilanish shart emas. Jadval bo'yicha olib kelish soddaroq, tushunarliroq va API vaqtincha ishlamay qolsa ham keyingi safar muammosiz davom etadi."
  },
  {
   "model": "CaseSection",
@@ -610,7 +478,7 @@
    "order": 4
   },
   "field": "heading",
-  "uz": "Qaytadan boshlasam, nimani o'zgartirardim"
+  "uz": "Qaytadan qilsam, nimani o'zgartirardim"
  },
  {
   "model": "CaseSection",
@@ -654,15 +522,7 @@
    "slug": "fleet-asset-platform"
   },
   "field": "tagline",
-  "uz": "Avtoparkni boshqarish uchun yuritilgan beshta Google Sheets jadvali yagona veb-platformaga ko'chirildi."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "fleet-asset-platform"
-  },
-  "field": "role",
-  "uz": "Backend, ma'lumotlar modeli, boshqaruv panellari"
+  "uz": "Parkni boshqarish uchun yuritilgan beshta Google Sheets jadvali bitta veb-platformaga ko'chirildi."
  },
  {
   "model": "Project",
@@ -670,15 +530,7 @@
    "slug": "fleet-asset-platform"
   },
   "field": "summary",
-  "uz": "Avtopark (fleet) va aktivlar (asset) bo'limlari barcha ma'lumotni umumiy Google Sheets jadvallarida yuritardi: yuk mashinalari, kompaniyalar, har bir kabinadagi qurilmalar, texnik ko'riklar va tirkama ijaralari. Bu jadvallarni birma-bir Django platformasiga ko'chirdim, o'tish davrida Google Sheets bilan sinxron ishlashini ta'minladim va jadvalda qilib bo'lmaydigan imkoniyatlarni qo'shdim: muddat tugashi haqida ogohlantirish, holatlar bo'yicha aniq jarayon va har bir filtrda qayta hisoblanadigan summalar."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "fleet-asset-platform"
-  },
-  "field": "context",
-  "uz": "Avtopark, aktivlar va buxgalteriya bo'limlari uchun ichki platforma."
+  "uz": "Fleet va asset jamoalari hamma narsani umumiy Google Sheets jadvallarida yuritardi: yuk mashinalari, kompaniyalar, har bir kabinadagi qurilmalar, texnik ko'riklar va tirkama ijaralari. Bu jadvallarni birma-bir Django platformasiga ko'chirdim, o'tish davrida Google Sheets bilan sinxron ishlashini ta'minladim va jadvalda qilib bo'lmaydigan imkoniyatlarni qo'shdim: muddat tugashi haqida ogohlantirish, holatlar bo'yicha aniq jarayon va har bir filtrda qayta hisoblanadigan summalar."
  },
  {
   "model": "CaseSection",
@@ -687,7 +539,7 @@
    "order": 1
   },
   "field": "heading",
-  "uz": "Tizim vazifasini jadvallar bajarardi"
+  "uz": "Tizim o'rnida jadvallar ishlardi"
  },
  {
   "model": "CaseSection",
@@ -722,17 +574,8 @@
    "project__slug": "fleet-asset-platform",
    "order": 3
   },
-  "field": "heading",
-  "uz": "Nima o'zgardi"
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 3
-  },
   "field": "body",
-  "uz": "Avtopark bo'limi endi bir nechta nusxa o'rniga bitta ishonchli manbadan ishlaydi. Muddati tugayotgan hujjatlar muddat o'tib ketgandan keyin emas, oldinroq ko'rinadi. Ilgari ishdan chiqqan mashina bilan birga yo'qolib ketadigan qurilmalar endi aniq yo'ldan o'tadi: yo qaytariladi, yo puli undiriladi. Tirkamalar bo'limida 48 ta shartnoma va 16 ta lizing kompaniyasi bo'yicha 801 ta tirkama ko'rinadi, summalar esa tanlangan filtrga qarab hisoblanadi."
+  "uz": "Fleet jamoasi endi bir nechta nusxa o'rniga bitta ishonchli manbadan ishlaydi. Muddati tugayotgan hujjatlar muddat o'tib ketgandan keyin emas, oldinroq ko'rinadi. Ilgari ishdan chiqqan mashina bilan birga yo'qolib ketadigan qurilmalar endi aniq yo'ldan o'tadi: yo qaytariladi, yo puli undiriladi. Tirkamalar bo'limida 48 ta shartnoma va 16 ta lizing kompaniyasi bo'yicha 801 ta tirkama ko'rinadi, summalar esa tanlangan filtrga qarab hisoblanadi."
  },
  {
   "model": "CaseSection",
@@ -741,7 +584,7 @@
    "order": 4
   },
   "field": "heading",
-  "uz": "Qaytadan boshlasam, nimani o'zgartirardim"
+  "uz": "Qaytadan qilsam, nimani o'zgartirardim"
  },
  {
   "model": "CaseSection",
@@ -756,55 +599,10 @@
   "model": "Metric",
   "key": {
    "project__slug": "fleet-asset-platform",
-   "order": 0
-  },
-  "field": "label",
-  "uz": "Yuk mashinalari"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 0
-  },
-  "field": "note",
-  "uz": "Holatlar, muddat ogohlantirishlari, eksport"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fleet-asset-platform",
    "order": 1
   },
   "field": "label",
   "uz": "Shartnoma bo'yicha tirkamalar"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 1
-  },
-  "field": "note",
-  "uz": "48 ta shartnoma, 16 ta lizing kompaniyasi"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 2
-  },
-  "field": "label",
-  "uz": "Qurilma biriktirishlari"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 2
-  },
-  "field": "note",
-  "uz": "Yoqilg'i kartalari, PrePass, ELD, planshetlar"
  },
  {
   "model": "ProjectImage",
@@ -814,24 +612,6 @@
   },
   "field": "alt_text",
   "uz": "Tur, holat va kompaniya bo'yicha tirkama shartnomalari paneli"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 0
-  },
-  "field": "caption",
-  "uz": "Trailer Agreements: tur, holat va kompaniya bo'yicha 801 ta tirkama (moliyaviy raqamlar yashirilgan)"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "fleet-asset-platform",
-   "order": 2
-  },
-  "field": "alt_text",
-  "uz": "Har bir mashinaga biriktirilgan qurilmalar ko'rsatilgan Truck In Use jadvali"
  },
  {
   "model": "ProjectImage",
@@ -848,15 +628,7 @@
    "slug": "live-truck-map"
   },
   "field": "tagline",
-  "uz": "575 ta yuk mashinasi yagona xaritada, jonli rejimda: har biri qayerda, qanday tezlikda harakatlanmoqda, qaysi birida nosozlik bor yoki yoqilg'isi kam."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "live-truck-map"
-  },
-  "field": "role",
-  "uz": "Backend, xarita interfeysi"
+  "uz": "575 ta yuk mashinasi bitta xaritada, jonli rejimda: qaysi biri qayerda, qanday tezlikda ketyapti, qaysi birida nosozlik bor yoki yoqilg'isi kam."
  },
  {
   "model": "Project",
@@ -882,25 +654,7 @@
    "order": 1
   },
   "field": "body",
-  "uz": "- Har bir mashinani unit raqami, tezligi, eng yaqin shahar va oxirgi signal vaqti bilan ko'rish.\n- Kompaniya va holat bo'yicha filtrlash, faqat **nosozlik kodi** bor yoki **yoqilg'isi kam** mashinalarni chiqarish.\n- Unit, haydovchi yoki VIN bo'yicha qidirib, darhol mashinaga o'tish.\n- Tepadagi hisoblagichlar: xaritada nechta mashina bor, nechtasi yo'lda va nechtasi jonli ma'lumot yubormoqda."
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "live-truck-map",
-   "order": 0
-  },
-  "field": "label",
-  "uz": "Xaritadagi mashinalar"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "live-truck-map",
-   "order": 1
-  },
-  "field": "label",
-  "uz": "Yangilanish"
+  "uz": "- Har bir mashinani unit raqami, tezligi, eng yaqin shahar va oxirgi signal vaqti bilan ko'rish.\n- Kompaniya va holat bo'yicha filtrlash, faqat **nosozlik kodi** bor yoki **yoqilg'isi kam** mashinalarni chiqarish.\n- Unit, haydovchi yoki VIN bo'yicha qidirib, darhol mashinaga o'tish.\n- Tepadagi hisoblagichlar: xaritada nechta mashina bor, nechtasi yo'lda va nechtasi jonli ma'lumot yuboryapti."
  },
  {
   "model": "Metric",
@@ -935,15 +689,7 @@
    "slug": "driver-safety-events"
   },
   "field": "tagline",
-  "uz": "Har bir haydovchining xavfsizlik ogohlantirishlari Motive tizimidan olinadi va so'nggi suhbatdan keyingi hodisalar sanaladi — kamera jamoasi faqat zarur haydovchilarga qo'ng'iroq qiladi."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "driver-safety-events"
-  },
-  "field": "role",
-  "uz": "Backend, API integratsiya, boshqaruv paneli"
+  "uz": "Har bir haydovchining xavfsizlik ogohlantirishlari Motive'dan olinadi va oxirgi suhbatdan keyingi hodisalar sanaladi — kamera jamoasi faqat kerakli haydovchilarga qo'ng'iroq qiladi."
  },
  {
   "model": "Project",
@@ -951,7 +697,7 @@
    "slug": "driver-safety-events"
   },
   "field": "summary",
-  "uz": "Kamera jamoasi har kuni xavfsizlik ogohlantirishlarini Telegram bot va Motive tizimidan qo'lda Google Sheetsga ko'chirar, keyin hamma haydovchiga qo'ng'iroq qilishga harakat qilardi. Endi boshqaruv paneli ogohlantirishlar va xavfsizlik ballarini Motive API orqali o'zi yig'adi va har bir haydovchi bo'yicha faqat jamoa u bilan oxirgi marta gaplashgandan keyingi hodisalarni ko'rsatadi."
+  "uz": "Kamera jamoasi har kuni xavfsizlik ogohlantirishlarini Telegram bot va Motive'dan qo'lda Google Sheetsga ko'chirar, keyin hamma haydovchiga qo'ng'iroq qilishga harakat qilardi. Endi dashboard ogohlantirishlar va xavfsizlik ballarini Motive API orqali o'zi yig'adi va har bir haydovchi bo'yicha faqat jamoa u bilan oxirgi marta gaplashgandan keyingi hodisalarni ko'rsatadi."
  },
  {
   "model": "Project",
@@ -995,16 +741,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "Asosiy maydon — **Last action**. Jamoa haydovchi bilan gaplashgach, natijasini izohga yozadi va holatni yopadi. Shu sanadan boshlab boshqaruv paneli o'sha haydovchining faqat yangi hodisalarini turlari bo'yicha sanaydi va joriy xavfsizlik bali yonida ko'rsatadi.\n\n**Active** sahifasida sana va kompaniya filtrlari bilan kimga e'tibor kerakligi ko'rinadi. **Archive** sahifasida barcha yopilgan holatlar va jamoa nima qilgani saqlanadi, hisobot uchun eksport ham bor."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "driver-safety-events",
-   "order": 3
-  },
-  "field": "heading",
-  "uz": "Nima o'zgardi"
+  "uz": "Asosiy maydon — **Last action**. Jamoa haydovchi bilan gaplashgach, natijasini izohga yozadi va holatni yopadi. Shu sanadan boshlab dashboard o'sha haydovchining faqat yangi hodisalarini turlari bo'yicha sanaydi va joriy xavfsizlik bali yonida ko'rsatadi.\n\n**Active** sahifasida sana va kompaniya filtrlari bilan kimga e'tibor kerakligi ko'rinadi. **Archive** sahifasida barcha yopilgan holatlar va jamoa nima qilgani saqlanadi, hisobot uchun eksport ham bor."
  },
  {
   "model": "CaseSection",
@@ -1043,15 +780,6 @@
   "uz": "Hodisalar shu paytdan sanaladi"
  },
  {
-  "model": "Metric",
-  "key": {
-   "project__slug": "driver-safety-events",
-   "order": 1
-  },
-  "field": "note",
-  "uz": "Qo'ng'iroq faqat kerakli haydovchilarga"
- },
- {
   "model": "ProjectImage",
   "key": {
    "project__slug": "driver-safety-events",
@@ -1070,24 +798,6 @@
   "uz": "Active: oxirgi suhbatdan keyingi yangi hodisalar (ismlar xiralashtirilgan)"
  },
  {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "driver-safety-events",
-   "order": 1
-  },
-  "field": "alt_text",
-  "uz": "Yopilgan holatlar va jamoa harakatlari ko'rsatilgan Archive sahifasi"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "driver-safety-events",
-   "order": 1
-  },
-  "field": "caption",
-  "uz": "Archive: yopilgan holatlar va hisobot uchun eksport"
- },
- {
   "model": "Project",
   "key": {
    "slug": "medical-ai-cancer-detection"
@@ -1101,7 +811,7 @@
    "slug": "medical-ai-cancer-detection"
   },
   "field": "role",
-  "uz": "Tadqiqot, ma'lumotlar to'plami, model o'qitish, kompyuter dasturi"
+  "uz": "Tadqiqot, dataset, model o'qitish, desktop dastur"
  },
  {
   "model": "Project",
@@ -1110,14 +820,6 @@
   },
   "field": "summary",
   "uz": "Bitiruv malakaviy ishim. Patolog prostata saratonining darajasini mikroskop ostida to'qimaga qarab aniqlaydi, Grade 3 ni Grade 4 dan ajratish esa hatto tajribali mutaxassislar uchun ham qiyin. Men gistopatologik tasvirdagi shubhali joylarni belgilab, har biriga sinf (Benign, Grade 3, Grade 4 yoki Grade 5) va ishonch darajasini beradigan model yaratdim. U shifokorga ikkinchi fikr sifatida yordam beradi."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "medical-ai-cancer-detection"
-  },
-  "field": "context",
-  "uz": "Silk Road Health Data Science granti bilan qo'llab-quvvatlangan."
  },
  {
   "model": "CaseSection",
@@ -1153,16 +855,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "- **Ma'lumotlar.** 500 dan ortiq yuqori aniqlikdagi biopsiya tasviri; har bir hudud to'rt sinfdan biriga belgilandi: Benign, Grade 3, Grade 4, Grade 5.\n- **Tayyorlash.** Tasvirlar 640×640 o'lchamga keltirildi va mosaic hamda boshqa augmentatsiyalar yordamida **1 776** ta o'quv tasviriga ko'paytirildi.\n- **Model.** YOLOv5m — chunki u bitta o'tishda hududni ham *topadi*, ham *sinflaydi*. Shifokorga shunchaki «ha» yoki «yo'q» emas, muammo aynan qayerdaligi kerak.\n- **Tekshirish.** Ikkita test to'plami: o'quv ma'lumotlariga o'xshash 50 ta tasvir va model umuman ko'rmagan tasvirlar.\n- **Dastur.** Tkinter asosidagi kompyuter dasturi: tasvir yuklanadi, sinfi va ishonch darajasi ko'rsatilgan hududlar hamda qisqa xulosa chiqadi."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "medical-ai-cancer-detection",
-   "order": 3
-  },
-  "field": "heading",
-  "uz": "Natija"
+  "uz": "- **Ma'lumotlar.** 500 dan ortiq yuqori aniqlikdagi biopsiya tasviri; har bir hudud to'rt sinfdan biriga belgilandi: Benign, Grade 3, Grade 4, Grade 5.\n- **Tayyorlash.** Tasvirlar 640×640 o'lchamga keltirildi va mosaic hamda boshqa augmentatsiyalar yordamida **1 776** ta o'quv tasviriga ko'paytirildi.\n- **Model.** YOLOv5m — chunki u bitta o'tishda hududni ham *topadi*, ham *sinflaydi*. Shifokorga shunchaki «ha» yoki «yo'q» emas, muammo aynan qayerdaligi kerak.\n- **Tekshirish.** Ikkita test to'plami: o'quv ma'lumotlariga o'xshash 50 ta tasvir va model umuman ko'rmagan tasvirlar.\n- **Dastur.** Tkinter'da yozilgan desktop dastur: tasvir yuklanadi, sinfi va ishonch darajasi ko'rsatilgan hududlar hamda qisqa xulosa chiqadi."
  },
  {
   "model": "CaseSection",
@@ -1180,7 +873,7 @@
    "order": 4
   },
   "field": "heading",
-  "uz": "Qaytadan boshlasam, nimani o'zgartirardim"
+  "uz": "Qaytadan qilsam, nimani o'zgartirardim"
  },
  {
   "model": "CaseSection",
@@ -1190,42 +883,6 @@
   },
   "field": "body",
   "uz": "O'quv tasvirlaridagi 97% bilan yangi tasvirlardagi 89% o'rtasidagi farq — loyihadagi eng rostgo'y raqam: model o'quv to'plamining bir qismini yodlab olgan. Bugun bo'lsa, uzoqroq o'qitishdan oldin ko'proq laboratoriya va skanerlardan tasvir yig'gan bo'lardim, natijani esa bitta aniqlik raqami bilan emas, avvalo confusion matrix bilan ko'rsatardim."
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "medical-ai-cancer-detection",
-   "order": 0
-  },
-  "field": "label",
-  "uz": "Yangi tasvirlardagi aniqlik"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "medical-ai-cancer-detection",
-   "order": 0
-  },
-  "field": "note",
-  "uz": "O'quv to'plamida 97%"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "medical-ai-cancer-detection",
-   "order": 1
-  },
-  "field": "label",
-  "uz": "Grade 3 va Grade 4"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "medical-ai-cancer-detection",
-   "order": 1
-  },
-  "field": "note",
-  "uz": "Ajratish eng qiyin bo'lgan juftlik"
  },
  {
   "model": "Metric",
@@ -1243,16 +900,7 @@
    "order": 0
   },
   "field": "alt_text",
-  "uz": "Grade 3 hududlari aniqlangan biopsiya tasviri va xulosa ko'rsatilgan kompyuter dasturi"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "medical-ai-cancer-detection",
-   "order": 0
-  },
-  "field": "caption",
-  "uz": "Tashxis dasturi: asl tasvir, aniqlangan hududlar va xulosa"
+  "uz": "Grade 3 hududlari aniqlangan biopsiya tasviri va xulosa ko'rsatilgan desktop dastur"
  },
  {
   "model": "ProjectImage",
@@ -1270,7 +918,7 @@
    "order": 1
   },
   "field": "caption",
-  "uz": "Belgilangan ma'lumotlar to'plamidan namunalar"
+  "uz": "Belgilangan datasetdan namunalar"
  },
  {
   "model": "ProjectImage",
@@ -1296,15 +944,7 @@
    "slug": "trailer-toll-allocation"
   },
   "field": "tagline",
-  "uz": "Toll faylini yuklaysiz — tizim har bir to'lovni qaysi ijarachi kompaniya to'lashi lozimligini o'zi hisoblab beradi."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "trailer-toll-allocation"
-  },
-  "field": "role",
-  "uz": "Backend, ma'lumotlarni qayta ishlash"
+  "uz": "Toll faylini yuklaysiz — tizim har bir to'lovni qaysi ijarachi kompaniya to'lashi kerakligini o'zi hisoblab beradi."
  },
  {
   "model": "Project",
@@ -1312,16 +952,7 @@
    "slug": "trailer-toll-allocation"
   },
   "field": "summary",
-  "uz": "Brokerlik tirkamalari turli kompaniyalarga ijaraga beriladi, pullik yo'l hisob-fakturalari esa kompaniya bo'yicha emas, tirkama bo'yicha keladi. Ilgari ularni qo'lda taqsimlashardi. Endi toll fayli yuklanadi, har bir to'lov o'sha kuni tirkamadan qaysi kompaniya foydalanganiga qarab biriktiriladi va jami summalarni eksport qilish mumkin."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "trailer-toll-allocation",
-   "order": 1
-  },
-  "field": "heading",
-  "uz": "Qanday ishlaydi"
+  "uz": "Brokerage tirkamalari turli kompaniyalarga ijaraga beriladi, pullik yo'l hisob-fakturalari esa kompaniya bo'yicha emas, tirkama bo'yicha keladi. Ilgari ularni qo'lda taqsimlashardi. Endi toll fayli yuklanadi, har bir to'lov o'sha kuni tirkamadan qaysi kompaniya foydalanganiga qarab biriktiriladi va jami summalarni eksport qilish mumkin."
  },
  {
   "model": "CaseSection",
@@ -1338,35 +969,8 @@
    "project__slug": "trailer-toll-allocation",
    "order": 0
   },
-  "field": "label",
-  "uz": "Toll to'lovlarini qo'lda taqsimlash"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "trailer-toll-allocation",
-   "order": 0
-  },
   "field": "note",
   "uz": "Fayl yuklanishi bilan avtomatik bajariladi"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "trailer-toll-allocation",
-   "order": 0
-  },
-  "field": "alt_text",
-  "uz": "Summalar va har bir to'lov uchun mas'ul kompaniya ko'rsatilgan toll hisoboti"
- },
- {
-  "model": "ProjectImage",
-  "key": {
-   "project__slug": "trailer-toll-allocation",
-   "order": 0
-  },
-  "field": "caption",
-  "uz": "Toll hisoboti: har bir to'lov mas'ul kompaniyaga biriktirilgan (raqamlar xiralashtirilgan)"
  },
  {
   "model": "Project",
@@ -1374,15 +978,7 @@
    "slug": "fuel-discount-analytics"
   },
   "field": "tagline",
-  "uz": "AQSHning qaysi hududlarida dizel chegirmasi yo'nalishni o'zgartirishga arziydi — API orqali olingan yoqilg'i narxlari shtatlar, haftalar va yoqilg'i quyish shoxobchalari kesimida taqqoslandi."
- },
- {
-  "model": "Project",
-  "key": {
-   "slug": "fuel-discount-analytics"
-  },
-  "field": "role",
-  "uz": "Ma'lumotlar tahlili"
+  "uz": "AQSHning qaysi hududlarida dizel chegirmasi yo'nalishni o'zgartirishga arziydi — API orqali olingan yoqilg'i narxlari shtatlar, haftalar va yoqilg'i quyish shoxobchalari bo'yicha solishtirildi."
  },
  {
   "model": "Project",
@@ -1391,15 +987,6 @@
   },
   "field": "summary",
   "uz": "Yoqilg'i — yuk tashish parkining eng katta o'zgaruvchan xarajati, chegirmalar esa shtatga, hatto shoxobchaga qarab keskin farq qiladi. AQSHdagi yoqilg'i narxlari va chegirmalarini API orqali olib, uch kesimda tahlil qildim: shtatlar o'rtasidagi chegirma farqi, bitta shtatning oxirgi bir oydagi ko'rsatkichi va bitta shoxobchaning haftalik narxlari."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "fuel-discount-analytics",
-   "order": 1
-  },
-  "field": "heading",
-  "uz": "Ma'lumotlar nimani ko'rsatdi"
  },
  {
   "model": "CaseSection",
@@ -1427,24 +1014,6 @@
   },
   "field": "note",
   "uz": "Tahlil qilingan davr uchun"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fuel-discount-analytics",
-   "order": 1
-  },
-  "field": "label",
-  "uz": "Eng yuqori va eng past shtat"
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "fuel-discount-analytics",
-   "order": 1
-  },
-  "field": "note",
-  "uz": "Bir gallon uchun chegirma"
  },
  {
   "model": "ProjectImage",
@@ -1488,7 +1057,7 @@
    "slug": "roadside-service-locator"
   },
   "field": "tagline",
-  "uz": "Mashina magistralda buzilib qoldi. Ushbu modul haqiqatan yordam bera oladigan eng yaqin ustaxonani topadi va keyinchalik uning yordami qanday bo'lganini eslab qoladi."
+  "uz": "Mashina trassada buzilib qoldi. Bu modul haqiqatan yordam beradigan eng yaqin ustaxonani topadi va keyin yordam bergan-bermaganini eslab qoladi."
  },
  {
   "model": "Project",
@@ -1496,7 +1065,7 @@
    "slug": "roadside-service-locator"
   },
   "field": "role",
-  "uz": "Backend, geografik qidiruv, saralash"
+  "uz": "Backend, geografik qidiruv, reyting"
  },
  {
   "model": "Project",
@@ -1548,15 +1117,6 @@
    "project__slug": "roadside-service-locator",
    "order": 3
   },
-  "field": "heading",
-  "uz": "Hozirgi holati"
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "roadside-service-locator",
-   "order": 3
-  },
   "field": "body",
   "uz": "Dispetcher endi xaritadan qidirishdan emas, tayyor saralangan ro'yxatdan boshlaydi. Ilgari xodim ishdan ketsa, u bilan birga ketadigan tajriba endi bazada qoladi."
  },
@@ -1567,7 +1127,7 @@
    "order": 4
   },
   "field": "heading",
-  "uz": "Qaytadan boshlasam, nimani o'zgartirardim"
+  "uz": "Qaytadan qilsam, nimani o'zgartirardim"
  },
  {
   "model": "CaseSection",
@@ -1577,15 +1137,6 @@
   },
   "field": "body",
   "uz": "Boshida natija formasi majburiy emas edi, shuning uchun dastlabki haftalarda uni ko'pincha to'ldirishmadi va reyting o'rganadigan ma'lumot bo'lmadi. Uni chaqiruvni yopish uchun majburiy qadam qilganimda — bitta ekran, uchta bosish — tizim bir oy oldinroq foyda bera boshlagan bo'lardi."
- },
- {
-  "model": "Metric",
-  "key": {
-   "project__slug": "roadside-service-locator",
-   "order": 0
-  },
-  "field": "label",
-  "uz": "Qidiruv radiusi"
  },
  {
   "model": "Metric",
@@ -1603,7 +1154,7 @@
    "order": 0
   },
   "field": "alt_text",
-  "uz": "Illyustratsiya: yuk mashinasining GPS nuqtasi, 150 milya radius va oldingi natijalar bo'yicha saralangan servis punktlari"
+  "uz": "Illustratsiya: yuk mashinasining GPS nuqtasi, 150 milya radius va oldingi natijalar bo'yicha saralangan servislar"
  },
  {
   "model": "ProjectImage",
@@ -1620,7 +1171,7 @@
    "slug": "driver-drowsiness-detector"
   },
   "field": "tagline",
-  "uz": "Veb-kamera orqali real vaqt rejimida ko'z nisbati (Eye Aspect Ratio) hisoblanadi. Ko'z uzoq vaqt yumilib qolsa, tizim ogohlantiradi."
+  "uz": "Veb-kamera orqali real vaqtda ko'z nisbati (Eye Aspect Ratio) hisoblanadi. Ko'z uzoq yumilib qolsa, signal beradi."
  },
  {
   "model": "Project",
@@ -1628,7 +1179,7 @@
    "slug": "driver-drowsiness-detector"
   },
   "field": "role",
-  "uz": "Kompyuter ko'rish, to'liq mustaqil"
+  "uz": "Computer vision, boshidan oxirigacha o'zim"
  },
  {
   "model": "Project",
@@ -1636,7 +1187,7 @@
    "slug": "driver-drowsiness-detector"
   },
   "field": "summary",
-  "uz": "Bitta vazifaga yo'naltirilgan ixcham kompyuter ko'rish dasturi: MediaPipe yuzdagi nuqtalarni aniqlaydi, OpenCV har bir kadrda ko'z nisbatini hisoblaydi, ko'rsatkich uzoq vaqt chegaradan past tursa, ovozli va vizual ogohlantirish ishga tushadi."
+  "uz": "Kichik, bitta vazifaga qaratilgan computer vision dasturi: MediaPipe yuzdagi nuqtalarni topadi, OpenCV har bir kadrda ko'z nisbatini hisoblaydi, ko'rsatkich uzoq vaqt chegaradan past tursa, ovozli va vizual signal ishga tushadi."
  },
  {
   "model": "CaseSection",
@@ -1645,7 +1196,7 @@
    "order": 1
   },
   "field": "heading",
-  "uz": "Nima uchun yaratdim"
+  "uz": "Nega yaratdim"
  },
  {
   "model": "CaseSection",
@@ -1654,7 +1205,7 @@
    "order": 1
   },
   "field": "body",
-  "uz": "Uzoq masofaga yuk tashiydigan sohada ishlaganda haydovchining charchashi nazariy mavzu emas. Oldindan o'qitilgan modelsiz, oddiy noutbuk kamerasi va klassik kompyuter ko'rish usullari bilan qay darajagacha borish mumkinligini sinab ko'rmoqchi edim."
+  "uz": "Uzoq masofaga yuk tashiydigan sohada ishlaganda haydovchining charchashi nazariy mavzu emas. Oldindan o'qitilgan modelsiz, oddiy noutbuk kamerasi va klassik computer vision bilan qay darajagacha borish mumkinligini sinab ko'rmoqchi edim."
  },
  {
   "model": "CaseSection",
@@ -1672,16 +1223,7 @@
    "order": 2
   },
   "field": "body",
-  "uz": "**O'qitilgan klassifikator emas, geometriya.** EAR — oltita nuqtadan hisoblanadigan oddiy nisbat. Ma'lumotlar to'plami ham, o'qitish ham, GPU ham kerak emas, oddiy noutbukda ham to'liq kadr tezligida ishlaydi.\n\n**Bitta kadr emas, davomiylik.** Ko'z pirpiraganda ham EAR pasayadi. Shuning uchun faqat ketma-ket kadrlarda davom etgan pasayish hisobga olinadi. Foydali ogohlantirish bilan har pirpiraganda to'xtovsiz signal chaladigan qurilma o'rtasidagi farq aynan shunda."
- },
- {
-  "model": "CaseSection",
-  "key": {
-   "project__slug": "driver-drowsiness-detector",
-   "order": 3
-  },
-  "field": "heading",
-  "uz": "Natija"
+  "uz": "**O'qitilgan klassifikator emas, geometriya.** EAR — oltita nuqtadan hisoblanadigan oddiy nisbat. Dataset ham, o'qitish ham, GPU ham kerak emas, oddiy noutbukda ham to'liq kadr tezligida ishlaydi.\n\n**Bitta kadr emas, davomiylik.** Ko'z pirpiraganda ham EAR pasayadi. Shuning uchun faqat ketma-ket kadrlarda davom etgan pasayish hisobga olinadi. Foydali ogohlantirish bilan har pirpiraganda chiyillaydigan qurilma o'rtasidagi farq aynan shunda."
  },
  {
   "model": "CaseSection",
@@ -1690,7 +1232,7 @@
    "order": 3
   },
   "field": "body",
-  "uz": "Yorug' joyda yaxshi ishlaydi, kutilgan holatlarda esa aniqligi tushadi: yaltiraydigan ko'zoynak, qorong'ilik, boshni kameradan burib olish.\n\nBu loyihani portfolioda qoldirdim, chunki u o'z cheklovlarini yashirmaydi. Bundan tashqari, «bitta kadr emas, davomiylik» g'oyasini keyinchalik turargoh tizimida bir nechta kadr bo'yicha xulosa chiqarishda ham qo'lladim."
+  "uz": "Yorug' joyda yaxshi ishlaydi, kutilgan holatlarda esa aniqligi tushadi: yaltiraydigan ko'zoynak, qorong'ilik, boshni kameradan burib olish.\n\nBu loyihani portfolioda qoldirdim, chunki u o'z cheklovlarini yashirmaydi. Bundan tashqari, «bitta kadr emas, davomiylik» g'oyasini keyinchalik stoyanka tizimida bir nechta kadr bo'yicha xulosa chiqarishda ham qo'lladim."
  },
  {
   "model": "ProjectImage",
@@ -1715,24 +1257,8 @@
   "key": {
    "company": "International logistics company (US market)"
   },
-  "field": "role",
-  "uz": "Python dasturchi · Tizim administratori · IT yordam"
- },
- {
-  "model": "Experience",
-  "key": {
-   "company": "International logistics company (US market)"
-  },
-  "field": "employment_type",
-  "uz": "To'liq stavka"
- },
- {
-  "model": "Experience",
-  "key": {
-   "company": "International logistics company (US market)"
-  },
   "field": "summary",
-  "uz": "500 ta yuk mashinasi va 600 ta tirkamadan iborat avtopark uchun ichki dasturlar ishlab chiqaman: turargoh uchun kompyuter ko'rish tizimi, jamoalarning jadvallari o'rnini egallagan veb-platformalar hamda xavfsizlik, pullik yo'llar va yoqilg'i bo'yicha tahliliy vositalar. Ofisning IT infratuzilmasi ham mening zimmamda."
+  "uz": "500 ta yuk mashinasi va 600 ta tirkamadan iborat park uchun ichki dasturlar ishlab chiqaman: stoyanka uchun computer vision, jamoalarning jadvallari o'rnini bosgan veb-platformalar hamda xavfsizlik, pullik yo'llar va yoqilg'i bo'yicha tahlil vositalari. Ofisning IT infratuzilmasi ham mening zimmamda."
  },
  {
   "model": "ExperienceBullet",
@@ -1741,7 +1267,7 @@
    "order": 0
   },
   "field": "text",
-  "uz": "Transport turi, rangi, USDOT, unit va tirkama raqamlarini aniqlovchi YOLOv11 modellarini o'qitdim (82–95% aniqlik, 1 500+ surat) va ularni to'siqni avtomatik boshqarish tizimiga ulab berdim."
+  "uz": "Transport turi, rangi, USDOT, unit va tirkama raqamlarini aniqlaydigan YOLOv11 modellarini o'qitdim (82–95% aniqlik, 1 500+ rasm) va ularni shlagbaumni avtomatik boshqarish tizimiga uladim."
  },
  {
   "model": "ExperienceBullet",
@@ -1750,7 +1276,7 @@
    "order": 1
   },
   "field": "text",
-  "uz": "Avtopark va aktivlar bo'limlarini Google Sheetsdan Django platformasiga o'tkazdim: yuk mashinalari, kompaniyalar, qurilmalar, ishdan chiqqan mashinalar va undirishlar, texnik ko'rik, tirkama shartnomalari."
+  "uz": "Fleet va asset jamoalarini Google Sheetsdan Django platformasiga o'tkazdim: yuk mashinalari, kompaniyalar, qurilmalar, ishdan chiqqan mashinalar va undirishlar, texnik ko'rik, tirkama shartnomalari."
  },
  {
   "model": "ExperienceBullet",
@@ -1759,7 +1285,7 @@
    "order": 2
   },
   "field": "text",
-  "uz": "Motive API asosida xavfsizlik boshqaruv panelini yaratdim: u har bir haydovchining ogohlantirishlarini jamoa u bilan so'nggi marta gaplashgan kundan boshlab sanaydi."
+  "uz": "Motive API asosida xavfsizlik dashboardini yaratdim: u har bir haydovchining ogohlantirishlarini jamoa u bilan oxirgi marta gaplashgan kundan boshlab sanaydi."
  },
  {
   "model": "ExperienceBullet",
@@ -1786,23 +1312,7 @@
    "order": 5
   },
   "field": "text",
-  "uz": "IT yordam: Windows o'rnatish va ish o'rinlarini sozlash, carrier sales ofisidagi barcha kompyuterlarga Krisp dasturini o'rnatish, texnik nosozliklarni bartaraf etish."
- },
- {
-  "model": "Education",
-  "key": {
-   "institution": "Fergana State Technical University"
-  },
-  "field": "degree",
-  "uz": "Bakalavr, Kompyuter injiniringi"
- },
- {
-  "model": "Education",
-  "key": {
-   "institution": "Fergana State Technical University"
-  },
-  "field": "field_of_study",
-  "uz": "Kompyuter injiniringi"
+  "uz": "IT yordam: Windows o'rnatish va ish joylarini sozlash, carrier sales ofisidagi barcha kompyuterlarga Krisp o'rnatish, texnik nosozliklarni bartaraf etish."
  },
  {
   "model": "Education",
@@ -1817,24 +1327,8 @@
   "key": {
    "name_en": "Backend"
   },
-  "field": "name",
-  "uz": "Backend"
- },
- {
-  "model": "SkillGroup",
-  "key": {
-   "name_en": "Backend"
-  },
   "field": "note",
-  "uz": "Vaqtimning asosiy qismi shunga sarflanadi"
- },
- {
-  "model": "SkillGroup",
-  "key": {
-   "name_en": "Computer vision & AI"
-  },
-  "field": "name",
-  "uz": "Kompyuter ko'rish va sun'iy intellekt"
+  "uz": "Ko'p vaqtim shunga ketadi"
  },
  {
   "model": "SkillGroup",
@@ -1842,23 +1336,7 @@
    "name_en": "Computer vision & AI"
   },
   "field": "note",
-  "uz": "Tajriba uchun emas, amaldagi tizimlar uchun"
- },
- {
-  "model": "SkillGroup",
-  "key": {
-   "name_en": "Data"
-  },
-  "field": "name",
-  "uz": "Ma'lumotlar"
- },
- {
-  "model": "SkillGroup",
-  "key": {
-   "name_en": "Infrastructure"
-  },
-  "field": "name",
-  "uz": "Infratuzilma"
+  "uz": "Faqat notebookda emas, real ishlab chiqarishda"
  },
  {
   "model": "SkillGroup",
@@ -1866,15 +1344,7 @@
    "name_en": "Infrastructure"
   },
   "field": "note",
-  "uz": "Tizim administratori sifatidagi kundalik vazifalarim ham shu"
- },
- {
-  "model": "SkillGroup",
-  "key": {
-   "name_en": "Frontend"
-  },
-  "field": "name",
-  "uz": "Frontend"
+  "uz": "Tizim administratori sifatidagi kundalik ishim ham shu"
  },
  {
   "model": "SkillGroup",
@@ -1882,63 +1352,7 @@
    "name_en": "Frontend"
   },
   "field": "note",
-  "uz": "Mahsulotni boshidan oxirigacha mustaqil yaratishga yetarli"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "Uzbek"
-  },
-  "field": "name",
-  "uz": "O'zbek"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "Uzbek"
-  },
-  "field": "level",
-  "uz": "Ona tili"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "English"
-  },
-  "field": "name",
-  "uz": "Ingliz"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "English"
-  },
-  "field": "level",
-  "uz": "IELTS 6.0 · B2"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "Russian"
-  },
-  "field": "name",
-  "uz": "Rus"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "Russian"
-  },
-  "field": "level",
-  "uz": "Erkin"
- },
- {
-  "model": "LanguageSkill",
-  "key": {
-   "name_en": "German"
-  },
-  "field": "name",
-  "uz": "Nemis"
+  "uz": "Mahsulotni boshidan oxirigacha yolg'iz chiqarishga yetarli"
  },
  {
   "model": "LanguageSkill",
@@ -1946,15 +1360,7 @@
    "name_en": "German"
   },
   "field": "level",
-  "uz": "A2 → B1, o'rganmoqdaman"
- },
- {
-  "model": "Award",
-  "key": {
-   "title_en": "Research grant — Silk Road Health Data Science"
-  },
-  "field": "title",
-  "uz": "Ilmiy grant — Silk Road Health Data Science"
+  "uz": "A2 → B1, o'rganyapman"
  },
  {
   "model": "Award",
