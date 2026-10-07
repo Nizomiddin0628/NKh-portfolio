@@ -12,7 +12,7 @@ Model chain: settings.GEMINI_MODELS (comma separated). A model that answers
 404 (unknown), 429 (quota) or 503 (overloaded) is skipped and the next one is
 tried; the last model that worked is remembered for 30 minutes so it is tried
 first next time. A 429 that is only a per-minute limit (Google sends the
-quota id and a retryDelay) is waited out once before moving on, and the main
+quota id and a retryDelay) is waited out before moving on, and the main
 chain falls back to the lite models when every configured model is out of
 quota — the owner's 8-step tool loop hits the free-tier per-minute limit far
 sooner than a single guest question does.
@@ -37,7 +37,6 @@ DEFAULT_MODELS = ("gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash",
 LITE_MODELS = ("gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash")
 REMEMBER_SECONDS = 30 * 60
 RETRY_MAX_WAIT = 20          # seconds: a longer retryDelay means "try another model"
-RETRY_DEFAULT_WAIT = 6       # 429 without a retryDelay
 RETRIES_PER_MODEL = 2
 
 
@@ -89,6 +88,18 @@ def quota_info(text):
     if m:
         delay = int(float(m.group(1)) + 0.999)
     return period, delay
+
+
+def google_message(text):
+    """The human-readable `error.message` of a Google error body (key scrubbed)."""
+    msg = ""
+    try:
+        msg = (json.loads(text).get("error") or {}).get("message") or ""
+    except (ValueError, AttributeError):
+        msg = text or ""
+    msg = " ".join(msg.split())[:300]
+    key = api_key()
+    return msg.replace(key, "***") if len(key) >= 16 else msg
 
 
 def _wait(seconds, stop):
@@ -244,7 +255,7 @@ def generate(contents, *, system=None, tools=None, temperature=0.3, max_tokens=4
     if kind == "main":
         chain += [m for m in models("lite") if m not in chain]   # last resort: the cheap models
     last = AiError("generic", "no model answered")
-    failed = []
+    failed, google = [], ""
     for model in chain:
         method = "streamGenerateContent?alt=sse" if on_text else "generateContent"
         url = f"{BASE}/models/{model}:{method}"
@@ -269,19 +280,21 @@ def generate(contents, *, system=None, tools=None, temperature=0.3, max_tokens=4
                     continue
                 code = _classify(exc.code, text)
                 why = f"HTTP {exc.code}"
+                google = google_message(text) or google
                 if code == "quota":
                     period, delay = quota_info(text)
                     why = period or why
-                    wait = delay if delay is not None else RETRY_DEFAULT_WAIT
-                    logger.warning("Gemini %s -> 429 %s, retryDelay=%s", model, period or "?", delay)
-                    if period != "PerDay" and wait <= RETRY_MAX_WAIT and retries < RETRIES_PER_MODEL:
+                    logger.warning("Gemini %s -> 429 %s, retryDelay=%s: %s", model, period or "?", delay, google)
+                    # Retry the same model only when Google said how long to wait.
+                    if period != "PerDay" and delay is not None and delay <= RETRY_MAX_WAIT \
+                            and retries < RETRIES_PER_MODEL:
                         retries += 1
-                        _wait(wait, stop)
-                        continue  # same model, after the pause Google asked for
+                        _wait(delay, stop)
+                        continue
                 else:
-                    logger.warning("Gemini %s -> HTTP %s (%s)", model, exc.code, code)
+                    logger.warning("Gemini %s -> HTTP %s (%s): %s", model, exc.code, code, google)
                 failed.append(f"{model}: {why}")
-                last = AiError(code, "; ".join(failed))
+                last = AiError(code, "; ".join(failed) + (f" | Google: {google}" if google else ""))
                 if code in ("no_model", "quota", "busy"):
                     break  # next model
                 raise last from exc

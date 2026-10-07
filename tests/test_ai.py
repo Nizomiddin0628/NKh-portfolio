@@ -559,7 +559,27 @@ def test_per_day_429_falls_through_to_lite_and_reports_models(monkeypatch):
     monkeypatch.setattr(gemini, "_request", lambda url, body=None, timeout=90: (_ for _ in ()).throw(_http_error(429, PER_DAY)))
     with pytest.raises(gemini.AiError) as exc:
         gemini.generate([{"role": "user", "parts": [{"text": "hi"}]}])
-    assert exc.value.code == "quota" and exc.value.detail == "m-a: PerDay; m-b: PerDay; m-lite: PerDay"
+    assert exc.value.code == "quota"
+    assert exc.value.detail.startswith("m-a: PerDay; m-b: PerDay; m-lite: PerDay")
+
+
+BARE_429 = '{"error":{"code":429,"message":"Resource has been exhausted (e.g. check quota).","status":"RESOURCE_EXHAUSTED"}}'
+
+
+@override_settings(GEMINI_API_KEY="k", GEMINI_MODELS=["m-a", "m-b"], GEMINI_LITE_MODELS=["m-a"])
+def test_bare_429_moves_on_without_waiting_and_keeps_google_message(monkeypatch):
+    calls = []
+
+    def fake_request(url, body=None, timeout=90):
+        calls.append(url.split("/models/")[1].split(":")[0])
+        raise _http_error(429, BARE_429)
+
+    monkeypatch.setattr(gemini, "_request", fake_request)
+    monkeypatch.setattr(gemini, "_wait", lambda seconds, stop: pytest.fail("no retryDelay: must not wait"))
+    with pytest.raises(gemini.AiError) as exc:
+        gemini.generate([{"role": "user", "parts": [{"text": "hi"}]}])
+    assert calls == ["m-a", "m-b"]
+    assert exc.value.detail == "m-a: HTTP 429; m-b: HTTP 429 | Google: Resource has been exhausted (e.g. check quota)."
 
 
 def test_owner_error_text_is_honest():
