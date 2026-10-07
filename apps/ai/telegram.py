@@ -347,7 +347,7 @@ def handle_message(msg):
         try:
             heard = gemini.transcribe(raw, media.get("mime_type") or "audio/ogg")
         except AiError as exc:
-            send(chat_id, _error(exc.code, chat.lang))
+            send(chat_id, _error(exc.code, chat.lang, exc.detail))
             return
         if not heard:
             send(chat_id, tt["file_bad"].format(why="silence"))
@@ -374,9 +374,9 @@ def handle_message(msg):
     run_ai(chat, question, attachments, kind)
 
 
-def _error(code, lang):
+def _error(code, lang, detail=""):
     from .prompts import error_text
-    return "⚠️ " + error_text(code, lang)
+    return "⚠️ " + html.escape(error_text(code, lang, "owner", detail))
 
 
 # ── Running the model with a live-edited message ────────────────────────────
@@ -434,7 +434,8 @@ def _run(chat_pk, run, question, attachments, kind, mid):
             if res.get("code") == "stopped":
                 text = f"{tt['stopped']}\n<code>{html.escape(question[:1000])}</code>" if question else tt["stopped"]
             else:
-                text = _error(res.get("code", "generic"), chat.lang)
+                text = "⚠️ " + html.escape(res.get("error") or "") if res.get("error") \
+                    else _error(res.get("code", "generic"), chat.lang)
             if mid:
                 edit(chat_id, mid, text)
             else:

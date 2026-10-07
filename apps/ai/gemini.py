@@ -11,11 +11,16 @@ request header; it never appears in logs, errors or responses.
 Model chain: settings.GEMINI_MODELS (comma separated). A model that answers
 404 (unknown), 429 (quota) or 503 (overloaded) is skipped and the next one is
 tried; the last model that worked is remembered for 30 minutes so it is tried
-first next time.
+first next time. A 429 that is only a per-minute limit (Google sends the
+quota id and a retryDelay) is waited out once before moving on, and the main
+chain falls back to the lite models when every configured model is out of
+quota — the owner's 8-step tool loop hits the free-tier per-minute limit far
+sooner than a single guest question does.
 """
 import base64
 import json
 import logging
+import re
 import ssl
 import time
 import urllib.error
@@ -31,6 +36,9 @@ DEFAULT_MODELS = ("gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash",
                   "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite")
 LITE_MODELS = ("gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash")
 REMEMBER_SECONDS = 30 * 60
+RETRY_MAX_WAIT = 20          # seconds: a longer retryDelay means "try another model"
+RETRY_DEFAULT_WAIT = 6       # 429 without a retryDelay
+RETRIES_PER_MODEL = 2
 
 
 class AiError(Exception):
@@ -66,6 +74,30 @@ def models(kind="main"):
 
 def _remember(kind, model):
     cache.set(f"ai:model:{kind}", model, REMEMBER_SECONDS)
+
+
+def quota_info(text):
+    """Pick the useful bits out of a 429 body: ("PerMinute"/"PerDay"/"", retry seconds or None)."""
+    low = text or ""
+    period = ""
+    ids = re.findall(r'"quotaId"\s*:\s*"([^"]+)"', low)
+    if ids:   # a body can list several violations; the daily one decides
+        joined = " ".join(ids)
+        period = "PerDay" if "PerDay" in joined else "PerMinute" if "PerMinute" in joined else ids[0][:40]
+    delay = None
+    m = re.search(r'"retryDelay"\s*:\s*"([\d.]+)s"', low)
+    if m:
+        delay = int(float(m.group(1)) + 0.999)
+    return period, delay
+
+
+def _wait(seconds, stop):
+    """Sleep up to `seconds`, waking every half second to honour a stop request."""
+    end = time.time() + seconds
+    while time.time() < end:
+        if stop and stop():
+            raise AiError("stopped")
+        time.sleep(min(0.5, max(0.0, end - time.time())))
 
 
 def _classify(status, text):
@@ -208,11 +240,16 @@ def generate(contents, *, system=None, tools=None, temperature=0.3, max_tokens=4
     if tools:
         body["tools"] = tools
 
+    chain = models(kind)
+    if kind == "main":
+        chain += [m for m in models("lite") if m not in chain]   # last resort: the cheap models
     last = AiError("generic", "no model answered")
-    for model in models(kind):
+    failed = []
+    for model in chain:
         method = "streamGenerateContent?alt=sse" if on_text else "generateContent"
         url = f"{BASE}/models/{model}:{method}"
         tried_without_thinking = False
+        retries = 0
         while True:
             try:
                 if stop and stop():
@@ -231,21 +268,36 @@ def generate(contents, *, system=None, tools=None, temperature=0.3, max_tokens=4
                     tried_without_thinking = True
                     continue
                 code = _classify(exc.code, text)
-                logger.warning("Gemini %s -> HTTP %s (%s)", model, exc.code, code)
-                last = AiError(code, f"HTTP {exc.code}")
+                why = f"HTTP {exc.code}"
+                if code == "quota":
+                    period, delay = quota_info(text)
+                    why = period or why
+                    wait = delay if delay is not None else RETRY_DEFAULT_WAIT
+                    logger.warning("Gemini %s -> 429 %s, retryDelay=%s", model, period or "?", delay)
+                    if period != "PerDay" and wait <= RETRY_MAX_WAIT and retries < RETRIES_PER_MODEL:
+                        retries += 1
+                        _wait(wait, stop)
+                        continue  # same model, after the pause Google asked for
+                else:
+                    logger.warning("Gemini %s -> HTTP %s (%s)", model, exc.code, code)
+                failed.append(f"{model}: {why}")
+                last = AiError(code, "; ".join(failed))
                 if code in ("no_model", "quota", "busy"):
                     break  # next model
                 raise last from exc
             except AiError:
                 raise
             except TimeoutError as exc:
+                failed.append(f"{model}: timeout")
                 last = AiError("timeout", str(exc))
                 break
             except Exception as exc:
                 if "timed out" in str(exc).lower():
+                    failed.append(f"{model}: timeout")
                     last = AiError("timeout", str(exc))
                     break
                 logger.warning("Gemini %s failed: %s", model, exc)
+                failed.append(f"{model}: {type(exc).__name__}")
                 last = AiError("generic", type(exc).__name__)
                 break
     raise last

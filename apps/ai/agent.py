@@ -106,7 +106,7 @@ def ask(*, role="guest", channel="site", lang="en", question="", history=(), att
         log.ms = int((time.time() - started) * 1000)
         if exc.code != "stopped":
             log.save()
-        return {"ok": False, "code": exc.code, "error": prompts.error_text(exc.code, lang),
+        return {"ok": False, "code": exc.code, "error": prompts.error_text(exc.code, lang, role, exc.detail),
                 "actions": [as_dict(a) for a in ctx.actions]}
 
     answer, noinfo = strip_marker(answer)

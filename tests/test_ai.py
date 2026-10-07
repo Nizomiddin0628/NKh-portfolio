@@ -491,3 +491,92 @@ def test_lead_message_has_buttons_and_draft_goes_to_ai(db, monkeypatch):
     assert f"m:ldraft:{lead.pk}" in datas
     telegram.process_update(_press(f"m:ldraft:{lead.pk}"))
     assert AiLog.objects.get().role == "owner" and f"#{lead.pk}" in AiLog.objects.get().question
+
+
+# ── Gemini 429 handling ──────────────────────────────────────────────────────
+
+def _http_error(status, body):
+    import io
+    import urllib.error
+    return urllib.error.HTTPError("https://x", status, "err", {}, io.BytesIO(body.encode()))
+
+
+def _ok_response(text="ok"):
+    import io
+    data = json.dumps({"candidates": [{"content": {"role": "model", "parts": [{"text": text}]},
+                                       "finishReason": "STOP"}], "usageMetadata": {}})
+    return io.BytesIO(data.encode())
+
+
+PER_MINUTE = ('{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","details":[{"violations":[{"quotaId":'
+              '"GenerateRequestsPerMinutePerProjectPerModel-FreeTier"}]},{"retryDelay":"2s"}]}}')
+PER_DAY = ('{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","details":[{"violations":[{"quotaId":'
+           '"GenerateRequestsPerDayPerProjectPerModel-FreeTier"}]},{"retryDelay":"39s"}]}}')
+
+
+def test_quota_info_parses_google_body():
+    assert gemini.quota_info(PER_MINUTE) == ("PerMinute", 2)
+    assert gemini.quota_info(PER_DAY) == ("PerDay", 39)
+    assert gemini.quota_info("") == ("", None)
+
+
+@override_settings(GEMINI_API_KEY="k", GEMINI_MODELS=["m-a", "m-b"], GEMINI_LITE_MODELS=["m-lite"])
+def test_per_minute_429_is_retried_on_same_model(monkeypatch):
+    calls = []
+    answers = [_http_error(429, PER_MINUTE), _ok_response("after wait")]
+
+    def fake_request(url, body=None, timeout=90):
+        calls.append(url.split("/models/")[1].split(":")[0])
+        r = answers.pop(0)
+        if isinstance(r, Exception):
+            raise r
+        return r
+
+    monkeypatch.setattr(gemini, "_request", fake_request)
+    monkeypatch.setattr(gemini, "_wait", lambda seconds, stop: calls.append(f"wait{seconds}"))
+    res = gemini.generate([{"role": "user", "parts": [{"text": "hi"}]}])
+    assert res["model"] == "m-a" and gemini.text_of(res["data"]) == "after wait"
+    assert calls == ["m-a", "wait2", "m-a"]
+
+
+@override_settings(GEMINI_API_KEY="k", GEMINI_MODELS=["m-a", "m-b"], GEMINI_LITE_MODELS=["m-lite"])
+def test_per_day_429_falls_through_to_lite_and_reports_models(monkeypatch):
+    calls = []
+
+    def fake_request(url, body=None, timeout=90):
+        model = url.split("/models/")[1].split(":")[0]
+        calls.append(model)
+        if model == "m-lite":
+            return _ok_response("lite answer")
+        raise _http_error(429, PER_DAY)
+
+    monkeypatch.setattr(gemini, "_request", fake_request)
+    monkeypatch.setattr(gemini, "_wait", lambda seconds, stop: pytest.fail("must not wait on a daily limit"))
+    res = gemini.generate([{"role": "user", "parts": [{"text": "hi"}]}])
+    assert res["model"] == "m-lite" and calls == ["m-a", "m-b", "m-lite"]
+
+    # everything out of quota: the error names every model
+    monkeypatch.setattr(gemini, "_request", lambda url, body=None, timeout=90: (_ for _ in ()).throw(_http_error(429, PER_DAY)))
+    with pytest.raises(gemini.AiError) as exc:
+        gemini.generate([{"role": "user", "parts": [{"text": "hi"}]}])
+    assert exc.value.code == "quota" and exc.value.detail == "m-a: PerDay; m-b: PerDay; m-lite: PerDay"
+
+
+def test_owner_error_text_is_honest():
+    from apps.ai.prompts import error_text
+    guest = error_text("quota", "uz")
+    owner = error_text("quota", "uz", "owner", "m-a: PerMinute")
+    assert "kontakt" in guest and "Gemini" in owner and "kontakt" not in owner and "m-a: PerMinute" in owner
+    assert error_text("timeout", "uz", "owner") == error_text("timeout", "uz")
+
+
+@override_settings(**AI)
+def test_telegram_owner_sees_real_quota_reason(db, monkeypatch):
+    sent = fake_telegram(monkeypatch)
+
+    def boom(*a, **k):
+        raise gemini.AiError("quota", "gemini-3.8-flash: PerMinute; gemini-3.7-flash: PerDay")
+    monkeypatch.setattr(gemini, "generate", boom)
+    telegram.process_update({"message": {"chat": {"id": 777}, "from": {"id": 777}, "text": "salom"}})
+    final = [p for m, p in sent if m == "editMessageText"][-1]["text"]
+    assert "Gemini kvotasi" in final and "gemini-3.7-flash: PerDay" in final and "kontakt" not in final

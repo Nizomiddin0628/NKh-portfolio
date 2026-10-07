@@ -10,7 +10,7 @@ Rol promptda emas, kodda aniqlanadi (`views._role`, `telegram.is_owner`).
 | Kalit | Nima uchun |
 |---|---|
 | `GEMINI_API_KEY` | Google AI Studio kaliti. Bo'sh bo'lsa assistent o'chiq (tugma "vaqtincha band" deydi). |
-| `GEMINI_MODELS` | Ixtiyoriy. Modellar zanjiri, vergul bilan. 404/429/503 bo'lsa keyingisi sinaladi. |
+| `GEMINI_MODELS` | Ixtiyoriy. Modellar zanjiri, vergul bilan. 404/429/503 bo'lsa keyingisi sinaladi. 429 daqiqalik limit bo'lsa (Google `retryDelay` yuboradi, ≤20 s) o'sha model 2 martagacha kutib qayta sinaladi; hammasi tugasa lite modellar sinaladi. Egaga xatoning haqiqiy sababi (qaysi model nima dedi) ko'rsatiladi. |
 | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | Oldingi xabarnoma boti — assistent shu botda ishlaydi. |
 | `TELEGRAM_WEBHOOK_SECRET` | Webhook sarlavhasi (`X-Telegram-Bot-Api-Secret-Token`). Bo'sh bo'lsa webhook 403 qaytaradi. |
 | `AI_OWNER_TELEGRAM_ID` | Ixtiyoriy. Bo'sh bo'lsa `TELEGRAM_CHAT_ID`. |

@@ -141,9 +141,24 @@ ERRORS = {
 }
 
 
-def error_text(code, lang):
-    table = ERRORS.get(code) or ERRORS["generic"]
-    return table.get(lang) or table["en"]
+OWNER_ERRORS = {
+    "quota": {"uz": "Gemini kvotasi tugadi (bepul tarif). Bir-ikki daqiqadan keyin qayta urinib ko'ring.",
+              "ru": "Квота Gemini исчерпана (бесплатный тариф). Попробуйте через минуту-другую.",
+              "en": "Gemini quota exhausted (free tier). Try again in a minute or two."},
+    "busy": {"uz": "Gemini hozir band (503). Bir daqiqadan keyin qayta urinib ko'ring.",
+             "ru": "Gemini сейчас перегружен (503). Попробуйте через минуту.",
+             "en": "Gemini is overloaded right now (503). Try again in a minute."},
+}
+
+
+def error_text(code, lang, role="guest", detail=""):
+    """Localised error. The owner sees what really happened (which models answered
+    what) instead of the guest wording that points at the contact form."""
+    table = (OWNER_ERRORS.get(code) if role == "owner" else None) or ERRORS.get(code) or ERRORS["generic"]
+    text = table.get(lang) or table["en"]
+    if role == "owner" and detail:
+        text += f"\n({detail[:300]})"
+    return text
 
 
 def pick(table, lang):
