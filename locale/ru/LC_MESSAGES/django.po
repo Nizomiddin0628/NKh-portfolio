@@ -362,3 +362,9 @@ msgstr "Сертификаты"
 
 msgid "View"
 msgstr "Открыть"
+
+msgid "How it works"
+msgstr "Как это работает"
+
+msgid "Live demo"
+msgstr "Живая демонстрация"

@@ -80,8 +80,8 @@
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    padding-inline: 12vw;
-    scroll-padding-inline: 12vw;
+    padding-inline: 8vw;
+    scroll-padding-inline: 8vw;
     padding-block: 0.75rem 1.25rem;
     margin-inline: calc(var(--gutter) * -1);
     scrollbar-width: none;
@@ -92,8 +92,8 @@
   .carousel__track:focus-visible { outline-offset: -2px; }
 
   .carousel__item {
-    flex: 0 0 76vw;
-    max-width: 380px;
+    flex: 0 0 84vw;
+    max-width: 420px;
     scroll-snap-align: center;
     transform: scale(0.93);
     opacity: 0.55;

@@ -37,6 +37,20 @@
     </div>
   </header>
 
+  {# ── Live demo: the project explaining itself ─────────────────────────── #}
+  {% if project|has_demo %}
+  <section class="wrap demo-panel" data-demo-panel data-reveal aria-label="{% trans 'How it works' %}">
+    <div class="demo-panel__stage">
+      <div class="demo" data-demo="{{ project.slug }}" role="img" aria-label="{{ project|tr:'tagline' }}"></div>
+    </div>
+    <div class="demo-panel__side">
+      <p class="demo-panel__live">{% trans "Live demo" %} · {% trans "How it works" %}</p>
+      <ol class="demo-steps" data-demo-steps></ol>
+      <p class="demo-panel__caption" data-demo-caption aria-live="polite"></p>
+    </div>
+  </section>
+  {% endif %}
+
   {# ── Galereya ──────────────────────────────────────────────────────────── #}
   {% if images %}
   <section class="wrap" style="margin-bottom:clamp(2.5rem,6vw,4.5rem)" data-reveal>

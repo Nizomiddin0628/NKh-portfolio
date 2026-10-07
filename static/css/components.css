@@ -949,7 +949,9 @@
 
 .card__foot { flex-wrap: wrap; row-gap: 0.75rem; }
 /* Only inside a project card: one clipped row. On the detail page (.facts) the chips wrap. */
-.card .card__tech { flex-wrap: nowrap; overflow: hidden; }
+.card .card__tech { flex-wrap: nowrap; overflow: hidden; min-width: 0;
+  -webkit-mask: linear-gradient(90deg, #000 85%, transparent); mask: linear-gradient(90deg, #000 85%, transparent); }
+.card .card__tech .chip { flex: none; white-space: nowrap; }
 .chip--more { color: var(--text-faint); background: transparent; }
 
 .card__cta {

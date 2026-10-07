@@ -15,6 +15,20 @@ def markdown_filter(value):
     return mark_safe(_MD.convert(value))  # noqa: S308 — kontent faqat admin tomonidan kiritiladi
 
 
+# Projects that have a live SVG demo in static/js/demos/<slug>.js
+DEMO_SLUGS = frozenset({
+    "smart-yard-gate-automation", "medical-ai-cancer-detection", "ai-portfolio-assistant",
+    "driver-drowsiness-detector", "restaurant-erp", "ai-kotib-restaurant",
+    "live-truck-map", "roadside-service-locator",
+})
+
+
+@register.filter
+def has_demo(project):
+    """`{% if project|has_demo %}` — the card shows the live demo instead of the cover."""
+    return getattr(project, "slug", "") in DEMO_SLUGS
+
+
 @register.filter
 def tr(obj, field):
     """`{{ project|tr:"tagline" }}` — shablonda aniq til maydonini olish."""

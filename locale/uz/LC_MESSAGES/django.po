@@ -362,3 +362,9 @@ msgstr "Sertifikatlar"
 
 msgid "View"
 msgstr "Ko'rish"
+
+msgid "How it works"
+msgstr "Qanday ishlaydi"
+
+msgid "Live demo"
+msgstr "Jonli namoyish"

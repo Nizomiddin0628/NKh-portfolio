@@ -1,8 +1,13 @@
 {% load i18n site_extras %}
-<a class="card{% if not project.cover %} card--text{% endif %}" href="{{ project.get_absolute_url }}"
+{% with demo=project|has_demo %}
+<a class="card{% if not project.cover and not demo %} card--text{% endif %}" href="{{ project.get_absolute_url }}"
    data-tech="{% for t in project.technologies.all %}{{ t.slug }} {% endfor %}">
   {% with cover=project.cover %}
-    {% if cover %}
+    {% if demo %}
+      <div class="card__img card__img--demo">
+        <div class="demo" data-demo="{{ project.slug }}" role="img" aria-label="{{ project|tr:'tagline' }}"></div>
+      </div>
+    {% elif cover %}
       <div class="card__img">
         <img class="card__img-bg" src="{{ cover.image.url }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <img class="card__img-main" src="{{ cover.image.url }}" alt="{{ cover|tr:'alt_text' }}"
@@ -32,3 +37,4 @@
     </div>
   </div>
 </a>
+{% endwith %}

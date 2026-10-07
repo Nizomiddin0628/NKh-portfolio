@@ -63,13 +63,20 @@ function setup(root) {
     root.dataset.playing = "false";
   }
 
+  // A card with a live demo stays in front until its story ends (the demo
+  // fires "demo:end"); the dot fills over the demo's length and the timer
+  // is only a safety net.
+  const demoOf = (i) => items[i]?.querySelector("[data-demo]");
+
   function start() {
     stop();
     if (!mode || !visible || holding || reduced || document.hidden) return;
-    root.style.setProperty("--autoplay", `${INTERVAL[mode]}ms`);
+    const demo = demoOf(index);
+    const ms = demo ? Number(demo.dataset.demoMs || 10000) + 500 : INTERVAL[mode];
+    root.style.setProperty("--autoplay", `${ms}ms`);
     void root.offsetWidth;                  // restart the dot fill
     root.dataset.playing = "true";
-    timer = setTimeout(() => goTo(index + 1), INTERVAL[mode]);
+    timer = setTimeout(() => goTo(index + 1), demo ? ms + 2500 : ms);
   }
 
   const hold = () => { holding = true; stop(); };
@@ -161,6 +168,12 @@ function setup(root) {
       fitHeight();
     }
   }
+
+  track.addEventListener("demo:end", (e) => {
+    if (root.dataset.playing !== "true") return;
+    if (e.target.closest("[data-carousel-item]") !== items[index]) return;
+    goTo(index + 1);
+  });
 
   /* -- Events -- */
   prevBtn?.addEventListener("click", () => goTo(index - 1));

@@ -1,0 +1,170 @@
+/* ══ Live project demos ══════════════════════════════════════════════════
+   SVG scenes drawn by static/js/demos/*. Every colour comes from the site
+   tokens, so the scenes follow the light and dark themes on their own.
+   Camera and tissue views keep their own colours: they stand for images.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.demo {
+  --d-ok: #16a06a;
+  --d-bad: #e5484d;
+  --d-warn: var(--brass);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--turquoise) 9%, transparent), transparent 60%),
+    radial-gradient(110% 90% at 100% 100%, color-mix(in srgb, var(--indigo) 9%, transparent), transparent 60%),
+    var(--surface-2);
+}
+:root[data-theme="dark"] .demo { --d-ok: #3fcf8e; --d-bad: #ff6b6f; }
+
+.demo__svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  opacity: 1;
+  transition: opacity 450ms var(--ease);
+  font-family: var(--font-body);
+  user-select: none;
+}
+.demo__svg.is-leaving { opacity: 0; }
+.demo__svg * { transform-box: fill-box; transform-origin: center; }
+.demo__svg .o-tl { transform-origin: 0 0; }
+.demo__svg .o-l  { transform-origin: 0 50%; }
+.demo__svg .o-b  { transform-origin: 50% 100%; }
+.demo__svg .vb   { transform-box: view-box; transform-origin: 0 0; }
+
+/* Waiting for the scene module: a calm shimmer, never a spinner */
+.demo:not(.is-ready)::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 30%,
+              color-mix(in srgb, var(--text) 5%, transparent) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: demo-shimmer 1.6s linear infinite;
+}
+@keyframes demo-shimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+
+/* Palette */
+.demo .d-bg     { fill: var(--surface-2); }
+.demo .d-card   { fill: var(--surface); stroke: var(--border); stroke-width: 1; }
+.demo .d-card2  { fill: var(--surface-2); }
+.demo .d-line   { fill: none; stroke: var(--border-strong); stroke-width: 1; }
+.demo .d-tx     { fill: var(--text); }
+.demo .d-tx2    { fill: var(--text-soft); }
+.demo .d-tx3    { fill: var(--text-faint); }
+.demo .d-acc    { fill: var(--indigo); }
+.demo .d-tq     { fill: var(--turquoise); }
+.demo .d-ok     { fill: var(--d-ok); }
+.demo .d-warn   { fill: var(--d-warn); }
+.demo .d-bad    { fill: var(--d-bad); }
+.demo .d-inv    { fill: var(--bg); }
+.demo .s-acc    { stroke: var(--indigo); }
+.demo .s-tq     { stroke: var(--turquoise); }
+.demo .s-ok     { stroke: var(--d-ok); }
+.demo .s-warn   { stroke: var(--d-warn); }
+.demo .s-bad    { stroke: var(--d-bad); }
+.demo .s-tx3    { stroke: var(--text-faint); }
+.demo .s-line   { stroke: var(--border-strong); }
+.demo .nofill   { fill: none; }
+.demo .dm       { font-family: var(--font-mono); }
+.demo .dd       { font-family: var(--font-display); }
+.demo .db       { font-weight: 600; }
+
+/* Gradients defined in the scenes use these stops */
+.demo .st-tq  { stop-color: var(--turquoise); }
+.demo .st-acc { stop-color: var(--indigo); }
+
+/* ── Card: the demo replaces the cover image ─────────────────────────── */
+.card__img--demo { background: var(--surface-2); }
+.card__img--demo .demo { position: absolute; inset: 0; }
+
+/* ── Project page: stage + steps ─────────────────────────────────────── */
+.demo-panel {
+  display: grid;
+  gap: clamp(1rem, 2.4vw, 2rem);
+  align-items: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+@media (min-width: 900px) {
+  .demo-panel { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); }
+}
+
+.demo-panel__stage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.demo-panel__live {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  margin: 0 0 0.9rem;
+  font-family: var(--font-mono); font-size: var(--step--2); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-soft);
+}
+.demo-panel__live::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--turquoise);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--turquoise) 60%, transparent);
+  animation: demo-live 1.8s ease-out infinite;
+}
+@keyframes demo-live {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--turquoise) 55%, transparent); }
+  100% { box-shadow: 0 0 0 7px transparent; }
+}
+
+
+.demo-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.15rem; counter-reset: none; }
+.demo-steps__item {
+  position: relative;
+  display: grid; grid-template-columns: 2.4rem 1fr; align-items: baseline;
+  padding: 0.7rem 0.9rem 0.75rem 0;
+  color: var(--text-faint);
+  transition: color 400ms var(--ease);
+}
+.demo-steps__item::after {
+  /* progress hairline under each step */
+  content: ""; position: absolute; left: 2.4rem; right: 0; bottom: 0; height: 1px;
+  background: var(--border);
+}
+.demo-steps__item::before {
+  content: ""; position: absolute; left: 2.4rem; bottom: 0; height: 1px; width: 0;
+  background: linear-gradient(90deg, var(--turquoise), var(--indigo));
+  z-index: 1;
+  transition: width 900ms var(--ease-out);
+}
+.demo-steps__n { font-family: var(--font-mono); font-size: var(--step--2); letter-spacing: 0.06em; }
+.demo-steps__text { font-size: var(--step-0); line-height: 1.4; }
+.demo-steps__item.is-done { color: var(--text-soft); }
+.demo-steps__item.is-done::before { width: calc(100% - 2.4rem); opacity: 0.35; }
+.demo-steps__item.is-current { color: var(--text); }
+.demo-steps__item.is-current::before { width: calc(100% - 2.4rem); }
+.demo-steps__item.is-current .demo-steps__n { color: var(--turquoise); }
+
+.demo-panel__caption { display: none; }
+
+/* Phones: one caption under the stage instead of the full list */
+@media (max-width: 899px) {
+  .demo-steps { display: none; }
+  .demo-panel__live { margin-bottom: 0.5rem; }
+  .demo-panel__caption {
+    display: flex; gap: 0.75rem; align-items: baseline;
+    min-height: 3.1em;
+    font-size: var(--step-0); line-height: 1.4; color: var(--text);
+  }
+  .demo-panel__caption::before {
+    content: attr(data-step);
+    flex: none;
+    font-family: var(--font-mono); font-size: var(--step--2);
+    color: var(--turquoise); letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-panel__live::before { animation: none; }
+  .demo:not(.is-ready)::after { animation: none; }
+}
